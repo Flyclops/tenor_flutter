@@ -1,8 +1,8 @@
-import 'package:tenor_flutter/src/components/tenor_tab_view_detail.dart';
+import 'package:flutter/material.dart';
 
 class TenorTab {
   final String name;
-  final TenorTabViewDetail view;
+  final Widget view;
 
   const TenorTab({
     required this.name,

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/sheet_provider.dart';
-import 'package:tenor_flutter/src/providers/tab_provider.dart';
 import 'package:tenor_flutter/src/tools/debouncer.dart';
 
 class TenorSearchField extends StatefulWidget {
@@ -25,7 +24,6 @@ class TenorSearchField extends StatefulWidget {
 }
 
 class _TenorSearchFieldState extends State<TenorSearchField> {
-  late TenorTabProvider _tabProvider;
   late TenorAppBarProvider _appBarProvider;
   late TenorSheetProvider _sheetProvider;
   late TextEditingController _textEditingController;
@@ -70,8 +68,6 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
   @override
   void didChangeDependencies() {
-    // Providers
-    _tabProvider = Provider.of<TenorTabProvider>(context);
     _sheetProvider = Provider.of<TenorSheetProvider>(context);
     _appBarProvider = Provider.of<TenorAppBarProvider>(context);
     super.didChangeDependencies();
@@ -92,23 +88,10 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
       padding: const EdgeInsets.only(
         left: 8,
         right: 8,
-        bottom: 10,
+        bottom: 8,
       ),
       child: _searchWidget(),
     );
-  }
-
-  String getHintText() {
-    return 'GIFs';
-    // switch (_tabProvider.tabType) {
-    //   case 'stickers':
-    //     return 'Stickers';
-    //   case 'emoji':
-    //     return 'Emoji';
-    //   case 'Emoji':
-    //   default:
-    //     return 'GIFs';
-    // }
   }
 
   Widget _searchWidget() {
@@ -117,19 +100,8 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
           alignment: Alignment.center,
           children: [
             TextField(
-              cursorHeight: 18,
-              // expands: true,
-              // prefixIcon: Icons.search,
               controller: _textEditingController,
-              style: const TextStyle(
-                color: Color(0xFF000000),
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                height: 1,
-              ),
               decoration: InputDecoration(
-                isDense: true,
-                contentPadding: const EdgeInsets.fromLTRB(28, 10, 32, 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
@@ -137,28 +109,25 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                     style: BorderStyle.none,
                   ),
                 ),
-                filled: true,
-                isCollapsed: true,
+                contentPadding: const EdgeInsets.fromLTRB(28, 10, 32, 10),
                 fillColor: Colors.white,
+                filled: true,
+                hintStyle: const TextStyle(
+                  color: Color(0xFF8A8A86),
+                  fontSize: 16,
+                  height: 1,
+                ),
                 hintText: 'Search Tenor',
-                // hintStyle: widget._textStyle?.copyWith(
-                //       color: theme.secondaryTextColor,
-                //     ) ??
-                //     style.fontStyle.textStyle(
-                //       color: theme.secondaryTextColor,
-                //     ),
+                isCollapsed: true,
+                isDense: true,
               ),
-              // hintText: getHintText(),
-              // textStyle: theme.chatInputStyle.textStyle,
-              // style: theme.textFormFieldStyle.copyWith(
-              //   boxPadding: const EdgeInsets.only(
-              //     top: 6,
-              //     bottom: 6,
-              //     left: 9,
-              //     right: 24 + 9,
-              //   ),
-              // ),
+              style: const TextStyle(
+                color: Color(0xFF000000),
+                fontSize: 16,
+                height: 1,
+              ),
             ),
+            // because prefix icons suck for positioning
             const Positioned(
               left: 4,
               child: Icon(
@@ -167,6 +136,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                 size: 22,
               ),
             ),
+            // because suffix icons suck for positioning
             if (_textEditingController.text.isNotEmpty)
               Positioned(
                 child: GestureDetector(

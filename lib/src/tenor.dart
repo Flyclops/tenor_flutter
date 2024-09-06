@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 import 'package:tenor_dart/tenor_dart.dart';
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/components/tenor_tab_view_detail.dart';
+import 'package:tenor_flutter/src/components/tenor_tab_view.dart';
 import 'package:tenor_flutter/src/models/attribution.dart';
 import 'package:tenor_flutter/src/models/tenor_tab.dart';
 import 'package:tenor_flutter/src/models/type.dart';
@@ -17,7 +17,7 @@ class TenorStyle {
   /// Box that displays a single category.
   final TenorCategoryStyle? categoryStyle;
 
-  final TenorTabViewDetailStyle? tabViewDetailStyle;
+  final TenorTabViewStyle? tabViewDetailStyle;
 
   const TenorStyle({
     this.tabColor,

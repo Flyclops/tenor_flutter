@@ -7,28 +7,16 @@ import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/models/attribution.dart';
 import 'package:tenor_flutter/src/models/type.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
-import 'package:tenor_flutter/src/providers/sheet_provider.dart';
 import 'package:tenor_flutter/src/providers/style_provider.dart';
 import 'package:tenor_flutter/src/providers/tab_provider.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
-class TenorTabViewDetailStyle {
-  final double emojiWidth;
-
-  final double stickerWidth;
-
-  final double gifWidth;
-
-  const TenorTabViewDetailStyle({
-    this.emojiWidth = 80,
-    this.stickerWidth = 150,
-    this.gifWidth = 200,
-  });
+class TenorTabViewStyle {
+  const TenorTabViewStyle();
 }
 
 class TenorTabViewDetail extends StatefulWidget {
   final String type;
-  // final ScrollController scrollController;
   final Function(TenorResult? gif)? onSelected;
   final bool showCategories;
   final bool? keepAliveTabView;
@@ -37,7 +25,6 @@ class TenorTabViewDetail extends StatefulWidget {
   const TenorTabViewDetail({
     Key? key,
     required this.type,
-    // required this.scrollController,
     this.showCategories = false,
     this.onSelected,
     this.keepAliveTabView,
@@ -56,11 +43,9 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
   // Tab Provider
   late TenorTabProvider _tabProvider;
 
-  late TenorSheetProvider _sheetProvider;
-
   late TenorStyle _tenorStyle;
 
-  late TenorTabViewDetailStyle _style;
+  late TenorTabViewStyle _style;
 
   late final ScrollController scrollController;
 
@@ -97,7 +82,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
     super.initState();
 
     // sheet
-    _sheetProvider = Provider.of<TenorSheetProvider>(context, listen: false);
     scrollController = ScrollController();
 
     // Tab Provider
@@ -108,7 +92,7 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
 
     // Styles
     _tenorStyle = Provider.of<TenorStyleProvider>(context, listen: false).style;
-    _style = _tenorStyle.tabViewDetailStyle ?? const TenorTabViewDetailStyle();
+    _style = _tenorStyle.tabViewDetailStyle ?? const TenorTabViewStyle();
 
     // setup client
     client = _tabProvider.client;
@@ -395,7 +379,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
 
   // listener query
   void _listenerQuery() {
-    print('ALEX_DEBUG _listenerQuery');
     // Reset pagination
     _collection = null;
 
