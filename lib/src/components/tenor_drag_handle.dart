@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 
-class TenorDragHandle extends StatefulWidget {
-  const TenorDragHandle({Key? key}) : super(key: key);
+class TenorDragHandle extends StatelessWidget {
+  const TenorDragHandle({super.key});
 
-  @override
-  State<TenorDragHandle> createState() => _TenorDragHandleState();
-}
-
-class _TenorDragHandleState extends State<TenorDragHandle> {
   @override
   Widget build(BuildContext context) {
     return Container(

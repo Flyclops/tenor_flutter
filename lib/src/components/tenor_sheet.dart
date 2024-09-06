@@ -6,29 +6,23 @@ import 'package:tenor_flutter/src/components/tenor_attribution.dart';
 import 'package:tenor_flutter/src/components/tenor_drag_handle.dart';
 import 'package:tenor_flutter/src/components/tenor_search_field.dart';
 import 'package:tenor_flutter/src/components/tenor_tab_bar.dart';
-import 'package:tenor_flutter/src/components/tenor_tab_view.dart';
-import 'package:tenor_flutter/src/providers/tenor_sheet_provider.dart';
+import 'package:tenor_flutter/src/models/attribution.dart';
+import 'package:tenor_flutter/src/models/tenor_tab.dart';
+import 'package:tenor_flutter/src/providers/sheet_provider.dart';
 
 class TenorSheet extends StatefulWidget {
-  final bool _showEmojis;
-  final bool _showGIFs;
-  final bool _showStickers;
   final Widget? searchFieldWidget;
   final TextEditingController? searchFieldController;
-  final bool? keepAliveTabView;
+  final List<TenorTab> tabs;
+  final TenorAttributionType attributionType;
 
   const TenorSheet({
-    bool showEmojis = true,
-    bool showGIFs = true,
-    bool showStickers = true,
+    required this.tabs,
     this.searchFieldWidget,
     this.searchFieldController,
-    this.keepAliveTabView,
+    required this.attributionType,
     Key? key,
-  })  : _showEmojis = showEmojis,
-        _showGIFs = showGIFs,
-        _showStickers = showStickers,
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _TenorSheetState createState() => _TenorSheetState();
@@ -48,11 +42,7 @@ class _TenorSheetState extends State<TenorSheet>
 
     _tabController = TabController(
       initialIndex: 1,
-      length: [
-        widget._showEmojis,
-        widget._showGIFs,
-        widget._showStickers,
-      ].where((isShown) => isShown).length,
+      length: widget.tabs.length,
       vsync: this,
     );
   }
@@ -75,11 +65,12 @@ class _TenorSheetState extends State<TenorSheet>
   Widget build(BuildContext context) {
     final maxChildSize = _calculateMaxChildSize(context);
     return DraggableScrollableSheet(
-      snap: true,
+      controller: _sheetProvider.scrollController,
       expand: _sheetProvider.isExpanded,
-      minChildSize: TenorSheetProvider.minExtent,
-      maxChildSize: maxChildSize,
       initialChildSize: maxChildSize,
+      maxChildSize: maxChildSize,
+      minChildSize: TenorSheetProvider.minExtent,
+      snap: true,
       builder: (context, scrollController) {
         return Container(
           color: const Color(0xFFD2CEC3),
@@ -89,9 +80,7 @@ class _TenorSheetState extends State<TenorSheet>
               const TenorDragHandle(),
               TenorTabBar(
                 tabController: _tabController,
-                showGIFs: widget._showGIFs,
-                showStickers: widget._showStickers,
-                showEmojis: widget._showEmojis,
+                tabs: widget.tabs.map((tab) => tab.name).toList(),
               ),
               TenorSearchField(
                 scrollController: scrollController,
@@ -99,16 +88,13 @@ class _TenorSheetState extends State<TenorSheet>
                 searchFieldWidget: widget.searchFieldWidget,
               ),
               Expanded(
-                child: TenorTabView(
-                  keepAliveTabView: widget.keepAliveTabView,
-                  tabController: _tabController,
-                  scrollController: scrollController,
-                  showGIFs: widget._showGIFs,
-                  showStickers: widget._showStickers,
-                  showEmojis: widget._showEmojis,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: widget.tabs.map((tab) => tab.view).toList(),
                 ),
               ),
-              const TenorAttribution(),
+              if (widget.attributionType == TenorAttributionType.poweredBy)
+                const TenorAttribution(),
             ],
           ),
         );

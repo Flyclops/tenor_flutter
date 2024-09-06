@@ -30,4 +30,3 @@ Coming soon
 # What's next?
 
 - Documentation
-- Implement Posts endpoint

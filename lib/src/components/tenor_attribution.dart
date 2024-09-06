@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TenorAttribution extends StatelessWidget {
-  const TenorAttribution({
-    Key? key,
-  }) : super(key: key);
+  const TenorAttribution({super.key});
 
   @override
   Widget build(BuildContext context) {

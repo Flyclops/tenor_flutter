@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
+import 'package:tenor_flutter/src/models/attribution.dart';
 import 'package:tenor_flutter/src/models/type.dart';
-import 'package:tenor_flutter/src/providers/tenor_app_bar_provider.dart';
-import 'package:tenor_flutter/src/providers/tenor_style_provider.dart';
-import 'package:tenor_flutter/src/providers/tenor_tab_provider.dart';
+import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
+import 'package:tenor_flutter/src/providers/sheet_provider.dart';
+import 'package:tenor_flutter/src/providers/style_provider.dart';
+import 'package:tenor_flutter/src/providers/tab_provider.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorTabViewDetailStyle {
@@ -19,25 +21,27 @@ class TenorTabViewDetailStyle {
 
   const TenorTabViewDetailStyle({
     this.emojiWidth = 80,
-    this.stickerWidth = 1500,
+    this.stickerWidth = 150,
     this.gifWidth = 200,
   });
 }
 
 class TenorTabViewDetail extends StatefulWidget {
   final String type;
-  final ScrollController scrollController;
+  // final ScrollController scrollController;
   final Function(TenorResult? gif)? onSelected;
   final bool showCategories;
   final bool? keepAliveTabView;
+  final int gifWidth;
 
   const TenorTabViewDetail({
     Key? key,
     required this.type,
-    required this.scrollController,
+    // required this.scrollController,
     this.showCategories = false,
     this.onSelected,
     this.keepAliveTabView,
+    required this.gifWidth,
   }) : super(key: key);
 
   @override
@@ -52,9 +56,13 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
   // Tab Provider
   late TenorTabProvider _tabProvider;
 
+  late TenorSheetProvider _sheetProvider;
+
   late TenorStyle _tenorStyle;
 
   late TenorTabViewDetailStyle _style;
+
+  late final ScrollController scrollController;
 
   // AppBar Provider
   late TenorAppBarProvider _appBarProvider;
@@ -70,9 +78,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
 
   // Axis count
   late int _crossAxisCount;
-
-  // Default gif with
-  late double _gifWidth;
 
   // Limit of query
   late int _limit;
@@ -91,6 +96,10 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
   void initState() {
     super.initState();
 
+    // sheet
+    _sheetProvider = Provider.of<TenorSheetProvider>(context, listen: false);
+    scrollController = ScrollController();
+
     // Tab Provider
     _tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
 
@@ -102,24 +111,16 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
     _style = _tenorStyle.tabViewDetailStyle ?? const TenorTabViewDetailStyle();
 
     // setup client
-    client = Tenor(
-      apiKey: _tabProvider.apiKey,
-    );
+    client = _tabProvider.client;
 
-    // Gif WIDTH
-    switch (widget.type) {
-      case TenorType.gifs:
-        _gifWidth = _style.gifWidth;
-        break;
-      case TenorType.stickers:
-        _gifWidth = _style.stickerWidth;
-        break;
-      case TenorType.emoji:
-        _gifWidth = _style.emojiWidth;
-        break;
-      default:
-        break;
-    }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getCount();
+      if (widget.showCategories == false) {
+        _loadMore();
+      } else {
+        _loadCatagories();
+      }
+    });
   }
 
   @override
@@ -127,36 +128,36 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
     super.didChangeDependencies();
 
     // ScrollController
-    widget.scrollController.addListener(_scrollListener);
+    scrollController.addListener(_scrollListener);
 
     // Listen query
     _appBarProvider.addListener(_listenerQuery);
 
+    getCount();
+
+    // Initial offset
+    offset = null;
+  }
+
+  void getCount() {
     // Set items count responsive
-    _crossAxisCount = (MediaQuery.of(context).size.width / _gifWidth).round();
+    _crossAxisCount =
+        (MediaQuery.of(context).size.width / widget.gifWidth).round();
 
     // Set vertical max items count
     int _mainAxisCount =
-        ((MediaQuery.of(context).size.height - 30) / _gifWidth).round();
+        ((MediaQuery.of(context).size.height - 30) / widget.gifWidth).round();
 
+    // Calculate the visible limit
     _limit = _crossAxisCount * _mainAxisCount;
-    if (_limit > 100) _limit = 100;
-    // Initial offset
-    offset = null;
 
-    if (widget.showCategories == false) {
-      // Load Initial Data
-      _loadMore();
-    } else {
-      _loadCatagories();
-    }
+    // Tenor has a hard limit of 50
+    if (_limit > 50) _limit = 50;
   }
 
   @override
   void dispose() {
-    // dispose listener
-    // Important
-    widget.scrollController.removeListener(_scrollListener);
+    scrollController.removeListener(_scrollListener);
     _appBarProvider.removeListener(_listenerQuery);
     super.dispose();
   }
@@ -170,11 +171,11 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       );
     }
 
-    if (_appBarProvider.queryText == '' && widget.showCategories) {
+    if (_appBarProvider.queryText.isEmpty && widget.showCategories) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: MasonryGridView.count(
-          controller: widget.scrollController,
+          controller: scrollController,
           crossAxisCount: _crossAxisCount,
           crossAxisSpacing: 8,
           itemBuilder: (ctx, idx) {
@@ -188,40 +189,33 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
           },
           itemCount: _categories.length,
           mainAxisSpacing: 8,
-          padding: EdgeInsets.zero,
+          // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
+          padding:
+              _tabProvider.attributionType == TenorAttributionType.poweredBy
+                  ? null
+                  : EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom,
+                    ),
           scrollDirection: _scrollDirection,
         ),
-      );
-
-      final list = <Widget>[];
-      for (var category in _categories) {
-        list.add(
-          FractionallySizedBox(
-            widthFactor: 0.5,
-            child: Container(
-              color: Colors.red,
-              child: Text(
-                category?.name ?? '',
-              ),
-            ),
-          ),
-        );
-      }
-      return Column(
-        children: list,
       );
     }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: MasonryGridView.count(
-        controller: widget.scrollController,
+        controller: scrollController,
         crossAxisCount: _crossAxisCount,
         crossAxisSpacing: 8,
         itemBuilder: (ctx, idx) => _item(_list[idx]),
         itemCount: _list.length,
         mainAxisSpacing: 8,
-        padding: EdgeInsets.zero,
+        // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
+        padding: _tabProvider.attributionType == TenorAttributionType.poweredBy
+            ? null
+            : EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
         scrollDirection: _scrollDirection,
       ),
     );
@@ -234,50 +228,45 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       return Container();
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
-      child: InkWell(
-        onTap: () => _selectedGif(gif),
-        child: ExtendedImage.network(
-          someGif.url,
-          cache: true,
-          gaplessPlayback: true,
-          fit: BoxFit.fill,
-          headers: const {'accept': 'image/*'},
-          loadStateChanged: (state) => AnimatedSwitcher(
-            duration: const Duration(milliseconds: 350),
-            child: gif.media == null
-                ? Container()
-                : case2(
-                    state.extendedImageLoadState,
-                    {
-                      LoadState.loading: AspectRatio(
-                        aspectRatio: someGif.aspectRatio,
-                        child: Container(
-                          color: Theme.of(context).cardColor,
-                        ),
-                      ),
-                      LoadState.completed: AspectRatio(
-                        aspectRatio: someGif.aspectRatio,
-                        child: ExtendedRawImage(
-                          fit: BoxFit.fill,
-                          image: state.extendedImageInfo?.image,
-                        ),
-                      ),
-                      LoadState.failed: AspectRatio(
-                        aspectRatio: someGif.aspectRatio,
-                        child: Container(
-                          color: Theme.of(context).cardColor,
-                        ),
-                      ),
-                    },
-                    AspectRatio(
-                      aspectRatio: someGif.aspectRatio,
-                      child: Container(
-                        color: Theme.of(context).cardColor,
-                      ),
-                    ),
-                  ),
+    return GestureDetector(
+      onTap: () => _selectedGif(gif),
+      child: ExtendedImage.network(
+        someGif.url,
+        cache: true,
+        gaplessPlayback: true,
+        fit: BoxFit.fill,
+        headers: const {'accept': 'image/*'},
+        loadStateChanged: (state) => AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          child: case2(
+            state.extendedImageLoadState,
+            {
+              LoadState.loading: AspectRatio(
+                aspectRatio: someGif.aspectRatio,
+                child: Container(
+                  color: Theme.of(context).cardColor,
+                ),
+              ),
+              LoadState.completed: AspectRatio(
+                aspectRatio: someGif.aspectRatio,
+                child: ExtendedRawImage(
+                  fit: BoxFit.fill,
+                  image: state.extendedImageInfo?.image,
+                ),
+              ),
+              LoadState.failed: AspectRatio(
+                aspectRatio: someGif.aspectRatio,
+                child: Container(
+                  color: Theme.of(context).cardColor,
+                ),
+              ),
+            },
+            AspectRatio(
+              aspectRatio: someGif.aspectRatio,
+              child: Container(
+                color: Theme.of(context).cardColor,
+              ),
+            ),
           ),
         ),
       ),
@@ -312,6 +301,8 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       return;
     }
 
+    print('ALEX_DEBUG ${_appBarProvider.queryText}');
+
     _isLoading = true;
 
     // Offset pagination for query
@@ -327,9 +318,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       if (widget.type == TenorType.emoji) {
         _collection = await client.search(
           'emoji',
-          // lang: _tabProvider.lang,
-          // offset: offset,
-          // rating: _tabProvider.rating,
           mediaFilter: const [TenorMediaFormat.tinygifTransparent],
           pos: offset,
           limit: _limit,
@@ -338,10 +326,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       } else if (widget.type == TenorType.stickers) {
         _collection = await client.search(
           _appBarProvider.queryText,
-          // lang: _tabProvider.lang,
-          // offset: offset,
-          // rating: _tabProvider.rating,
-          // type: TenorType.stickers,
           mediaFilter: const [TenorMediaFormat.tinygifTransparent],
           pos: offset,
           limit: _limit,
@@ -350,10 +334,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       } else {
         _collection = await client.search(
           _appBarProvider.queryText,
-          // lang: _tabProvider.lang,
-          // offset: offset,
-          // rating: _tabProvider.rating,
-          // type: widget.type,
           pos: offset,
           limit: _limit,
         );
@@ -361,10 +341,6 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
     } else if (widget.type == TenorType.emoji) {
       _collection = await client.search(
         'emoji',
-        // lang: _tabProvider.lang,
-        // offset: offset,
-        // rating: _tabProvider.rating,
-        // type: TenorType.stickers,
         pos: offset,
         limit: _limit,
         mediaFilter: const [TenorMediaFormat.tinygifTransparent],
@@ -372,21 +348,22 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
       );
     } else if (widget.type == TenorType.stickers) {
       _collection = await client.featured(
-        // lang: _tabProvider.lang,
-        // offset: offset,
-        // rating: _tabProvider.rating,
-        // type: TenorType.stickers,
         pos: offset,
         mediaFilter: const [TenorMediaFormat.tinygifTransparent],
         sticker: true,
       );
     } else {
+      // don't hit the api if we are showing categories
+      if (widget.showCategories) {
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // otherwise get the featured gifs when no search query
       _collection = await client.featured(
-        // lang: _tabProvider.lang,
-        // offset: offset,
-        // rating: _tabProvider.rating,
-        // type: widget.type,
-        // limit: _limit,
+        limit: _limit,
         pos: offset,
       );
     }
@@ -404,7 +381,7 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
   // Scroll listener. if scroll end load more gifs
   void _scrollListener() {
     if (_appBarProvider.queryText != '' || widget.showCategories == false) {
-      if (widget.scrollController.positions.last.extentAfter.lessThan(500) &&
+      if (scrollController.positions.last.extentAfter.lessThan(500) &&
           !_isLoading) {
         _loadMore();
       }
@@ -418,6 +395,7 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
 
   // listener query
   void _listenerQuery() {
+    print('ALEX_DEBUG _listenerQuery');
     // Reset pagination
     _collection = null;
 

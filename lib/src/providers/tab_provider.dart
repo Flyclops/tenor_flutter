@@ -1,31 +1,29 @@
 import 'package:flutter/widgets.dart';
+import 'package:tenor_flutter/src/models/attribution.dart';
+import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorTabProvider with ChangeNotifier {
-  String apiKey;
   Color? tabColor;
   Color? textSelectedColor;
   Color? textUnselectedColor;
   String? searchText;
-  String rating = 'g';
-  String lang = 'en_US';
-  String randomID = '';
+  Tenor client;
+  TenorAttributionType attributionType;
 
-  String? _tabType;
-  String get tabType => _tabType ?? '';
-  set tabType(String tabType) {
-    _tabType = tabType;
-    notifyListeners();
-  }
+  // String? _tabType;
+  // String get tabType => _tabType ?? '';
+  // set tabType(String tabType) {
+  //   _tabType = tabType;
+  //   notifyListeners();
+  // }
 
   TenorTabProvider({
-    required this.apiKey,
     this.tabColor,
     this.textSelectedColor,
     this.textUnselectedColor,
     this.searchText,
-    required this.rating,
-    required this.randomID,
-    required this.lang,
+    required this.client,
+    required this.attributionType,
   });
 
   void setTabColor(Color tabColor) {

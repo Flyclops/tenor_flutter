@@ -1,72 +1,55 @@
-// ignore_for_file: implementation_imports
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tenor_flutter/src/models/type.dart';
 
-import 'package:tenor_flutter/src/providers/tenor_tab_provider.dart';
+class TenorTabBarStyle {
+  final BoxDecoration indicator;
+  final TabBarIndicatorSize indicatorSize;
+  final Color labelColor;
+  final TextStyle labelStyle;
+  final Color unselectedLabelColor;
+  final TextStyle unselectedLabelStyle;
+
+  const TenorTabBarStyle({
+    this.indicator = const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      color: Color(0xFFFECD4E),
+    ),
+    this.indicatorSize = TabBarIndicatorSize.tab,
+    this.labelColor = const Color(0xFF3B3B3B),
+    this.labelStyle = const TextStyle(
+      decoration: TextDecoration.none,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
+    this.unselectedLabelColor = const Color(0xFF3B3B3B),
+    this.unselectedLabelStyle = const TextStyle(
+      decoration: TextDecoration.none,
+      fontSize: 16,
+      fontWeight: FontWeight.w300,
+    ),
+  });
+}
 
 class TenorTabBar extends StatefulWidget {
   final TabController tabController;
+  final TenorTabBarStyle style;
+
   const TenorTabBar({
     Key? key,
     required this.tabController,
-    this.showEmojis = true,
-    this.showGIFs = true,
-    this.showStickers = true,
+    required this.tabs,
+    this.style = const TenorTabBarStyle(),
   }) : super(key: key);
 
-  final bool showEmojis;
-  final bool showGIFs;
-  final bool showStickers;
+  final List<String> tabs;
 
   @override
   _TenorTabBarState createState() => _TenorTabBarState();
 }
 
-class TabWithType {
-  final Tab tab;
-  final String type;
-
-  TabWithType({
-    required this.tab,
-    required this.type,
-  });
-}
-
 class _TenorTabBarState extends State<TenorTabBar> {
-  late TenorTabProvider _tabProvider;
-  late List<TabWithType> _tabs;
-
   @override
   void initState() {
     super.initState();
-
-    // TabProvider
-    _tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
-
-    //  Listen Tab Controller
-    widget.tabController.addListener(() {
-      _setTabType(widget.tabController.index);
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _setTabType(1);
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    _tabs = [
-      if (widget.showEmojis)
-        TabWithType(tab: const Tab(text: 'Emojis'), type: TenorType.emoji),
-      if (widget.showGIFs)
-        TabWithType(tab: const Tab(text: 'Gifs'), type: TenorType.gifs),
-      if (widget.showStickers)
-        TabWithType(tab: const Tab(text: 'Stickers'), type: TenorType.stickers),
-    ];
-
-    super.didChangeDependencies();
   }
 
   @override
@@ -77,9 +60,7 @@ class _TenorTabBarState extends State<TenorTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    _tabProvider = Provider.of<TenorTabProvider>(context);
-
-    if (_tabs.length == 1) return const SizedBox();
+    if (widget.tabs.length == 1) return const SizedBox();
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -99,34 +80,21 @@ class _TenorTabBarState extends State<TenorTabBar> {
         child: SizedBox(
           height: 30,
           child: TabBar(
-            indicatorPadding: EdgeInsets.zero,
-            labelPadding: const EdgeInsets.all(0),
-            // unselectedLabelStyle: theme.textBody.textStyle(),
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              // color: theme.colorActive,
-            ),
-            indicatorWeight: 0,
-            // labelColor: theme.primaryTextColor,
-            // labelStyle: theme.textBody.textStyle(
-            //   fontWeight: FontWeight.bold,
-            // ),
-            // unselectedLabelColor: theme.primaryTextColor,
             controller: widget.tabController,
-            tabs: _tabs.map((e) => e.tab).toList(),
-            onTap: _setTabType,
+            dividerHeight: 0,
+            indicator: widget.style.indicator,
+            indicatorPadding: EdgeInsets.zero,
+            indicatorSize: widget.style.indicatorSize,
+            indicatorWeight: 0,
+            labelColor: widget.style.labelColor,
+            labelPadding: const EdgeInsets.all(0),
+            labelStyle: widget.style.labelStyle,
+            tabs: widget.tabs.map((tab) => Tab(text: tab)).toList(),
+            unselectedLabelColor: widget.style.unselectedLabelColor,
+            unselectedLabelStyle: widget.style.unselectedLabelStyle,
           ),
         ),
       ),
     );
-  }
-
-  _setTabType(int pos) {
-    // attempt to get the tab
-    final newTab = _tabs.firstWhereIndexedOrNull((index, _) => index == pos);
-    // do nothing if the tab was not found
-    if (newTab == null) return;
-    // set the tab type
-    _tabProvider.tabType = newTab.type;
   }
 }
