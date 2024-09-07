@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class TenorSheetProvider extends ChangeNotifier {
+  final double minExtent = 0.7;
+  final double maxExtent = 0.9;
+  double _initialExtent;
+
   TenorSheetProvider({
     required scrollController,
-  }) : _scrollController = scrollController;
+    required double minExtent,
+    required double maxExtent,
+  })  : _initialExtent = minExtent,
+        _scrollController = scrollController;
 
-  bool isExpanded = false;
-  static const double minExtent = 0.7;
-  static const double maxExtent = 0.9;
-  double _initialExtent = minExtent;
   DraggableScrollableController _scrollController;
 
   DraggableScrollableController get scrollController => _scrollController;
@@ -21,5 +24,11 @@ class TenorSheetProvider extends ChangeNotifier {
   set initialExtent(double iExtent) {
     _initialExtent = iExtent;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

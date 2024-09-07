@@ -158,29 +158,35 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
     if (_appBarProvider.queryText.isEmpty && widget.showCategories) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: MasonryGridView.count(
-          controller: scrollController,
-          crossAxisCount: _crossAxisCount,
-          crossAxisSpacing: 8,
-          itemBuilder: (ctx, idx) {
-            final category = _categories[idx];
-            return TenorCategoryWidget(
-              style: _tenorStyle.categoryStyle,
-              category: category,
-              onTap: () =>
-                  _appBarProvider.queryText = category?.searchTerm ?? '',
-            );
-          },
-          itemCount: _categories.length,
-          mainAxisSpacing: 8,
-          // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
-          padding:
-              _tabProvider.attributionType == TenorAttributionType.poweredBy
-                  ? null
-                  : EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom,
-                    ),
-          scrollDirection: _scrollDirection,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: MasonryGridView.count(
+            controller: scrollController,
+            crossAxisCount: _crossAxisCount,
+            crossAxisSpacing: 8,
+            itemBuilder: (ctx, idx) {
+              final category = _categories[idx];
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: TenorCategoryWidget(
+                  style: _tenorStyle.categoryStyle,
+                  category: category,
+                  onTap: () =>
+                      _appBarProvider.queryText = category?.searchTerm ?? '',
+                ),
+              );
+            },
+            itemCount: _categories.length,
+            mainAxisSpacing: 8,
+            // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
+            padding:
+                _tabProvider.attributionType == TenorAttributionType.poweredBy
+                    ? null
+                    : EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom,
+                      ),
+            scrollDirection: _scrollDirection,
+          ),
         ),
       );
     }
@@ -191,7 +197,8 @@ class _TenorTabViewDetailState extends State<TenorTabViewDetail>
         controller: scrollController,
         crossAxisCount: _crossAxisCount,
         crossAxisSpacing: 8,
-        itemBuilder: (ctx, idx) => _item(_list[idx]),
+        itemBuilder: (ctx, idx) => ClipRRect(
+            borderRadius: BorderRadius.circular(8), child: _item(_list[idx])),
         itemCount: _list.length,
         mainAxisSpacing: 8,
         // Add safe area padding if `TenorAttributionType.poweredBy` is disabled

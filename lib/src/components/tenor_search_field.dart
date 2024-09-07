@@ -6,6 +6,7 @@ import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/sheet_provider.dart';
 import 'package:tenor_flutter/src/tools/debouncer.dart';
 
+/// If you want to style this just pass in your own via the `searchFieldWidget` parameter.
 class TenorSearchField extends StatefulWidget {
   // Scroll Controller
   final ScrollController scrollController;
@@ -84,89 +85,87 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(
-        left: 8,
-        right: 8,
-        bottom: 8,
-      ),
-      child: _searchWidget(),
-    );
-  }
-
-  Widget _searchWidget() {
     return widget.searchFieldWidget ??
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            TextField(
-              controller: _textEditingController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 8,
+            left: 8,
+            right: 8,
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TextField(
+                focusNode: _focus,
+                controller: _textEditingController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
                   ),
+                  contentPadding: const EdgeInsets.fromLTRB(28, 10, 32, 10),
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintStyle: const TextStyle(
+                    color: Color(0xFF8A8A86),
+                    fontSize: 16,
+                    height: 1,
+                  ),
+                  hintText: 'Search Tenor',
+                  isCollapsed: true,
+                  isDense: true,
                 ),
-                contentPadding: const EdgeInsets.fromLTRB(28, 10, 32, 10),
-                fillColor: Colors.white,
-                filled: true,
-                hintStyle: const TextStyle(
-                  color: Color(0xFF8A8A86),
+                style: const TextStyle(
+                  color: Color(0xFF000000),
                   fontSize: 16,
                   height: 1,
                 ),
-                hintText: 'Search Tenor',
-                isCollapsed: true,
-                isDense: true,
               ),
-              style: const TextStyle(
-                color: Color(0xFF000000),
-                fontSize: 16,
-                height: 1,
-              ),
-            ),
-            // because prefix icons suck for positioning
-            const Positioned(
-              left: 4,
-              child: Icon(
-                Icons.search,
-                color: Color(0xFF8A8A86),
-                size: 22,
-              ),
-            ),
-            // because suffix icons suck for positioning
-            if (_textEditingController.text.isNotEmpty)
-              Positioned(
-                child: GestureDetector(
-                  child: const Padding(
-                    child: Icon(
-                      Icons.clear,
-                      color: Color(0xFF000000),
-                      size: 20,
-                    ),
-                    // make the tap target bigger
-                    padding: EdgeInsets.all(8),
-                  ),
-                  onTap: () {
-                    // unfocus and clear the search field
-                    FocusScope.of(context).unfocus();
-                    _textEditingController.clear();
-                  },
+              // because prefix icons suck for positioning
+              const Positioned(
+                left: 4,
+                child: Icon(
+                  Icons.search,
+                  color: Color(0xFF8A8A86),
+                  size: 22,
                 ),
-                right: 0,
               ),
-          ],
+              // because suffix icons suck for positioning
+              if (_textEditingController.text.isNotEmpty)
+                Positioned(
+                  child: GestureDetector(
+                    child: Container(
+                      // make the tap target bigger
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.clear,
+                        color: Color(0xFF000000),
+                        size: 20,
+                      ),
+                    ),
+                    onTap: () {
+                      // unfocus and clear the search field
+                      _focus.unfocus();
+                      _textEditingController.clear();
+                    },
+                  ),
+                  right: 0,
+                ),
+            ],
+          ),
         );
   }
 
   void _focusListener() {
-    // Set to max extent height if Textfield has focus
-
+    // Set to max extent height if the search field has focus
     if (_focus.hasFocus &&
-        _sheetProvider.initialExtent == TenorSheetProvider.minExtent) {
-      _sheetProvider.initialExtent = TenorSheetProvider.maxExtent;
+        _sheetProvider.initialExtent == _sheetProvider.minExtent) {
+      print('ALEX_DEBUG: _focusListener ${_sheetProvider.initialExtent}');
+      _sheetProvider.initialExtent = _sheetProvider.maxExtent;
+      print('ALEX_DEBUG: _focusListener ${_sheetProvider.initialExtent}');
     }
   }
 

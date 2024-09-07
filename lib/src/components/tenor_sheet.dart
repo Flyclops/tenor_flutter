@@ -5,24 +5,29 @@ import 'package:tenor_flutter/src/components/tenor_attribution.dart';
 
 import 'package:tenor_flutter/src/components/tenor_drag_handle.dart';
 import 'package:tenor_flutter/src/components/tenor_search_field.dart';
-import 'package:tenor_flutter/src/components/tenor_tab_bar.dart';
+import 'package:tenor_flutter/src/components/tab_bar.dart';
 import 'package:tenor_flutter/src/models/attribution.dart';
 import 'package:tenor_flutter/src/models/tenor_tab.dart';
-import 'package:tenor_flutter/src/providers/sheet_provider.dart';
+import 'package:tenor_flutter/src/providers/providers.dart';
+import 'package:tenor_flutter/src/tenor.dart';
 
 class TenorSheet extends StatefulWidget {
-  final Widget? searchFieldWidget;
-  final TextEditingController? searchFieldController;
-  final List<TenorTab> tabs;
   final TenorAttributionType attributionType;
+  final TextEditingController? searchFieldController;
+  final Widget? searchFieldWidget;
+  final TenorStyle _style;
+  final List<TenorTab> _tabs;
 
   const TenorSheet({
-    required this.tabs,
-    this.searchFieldWidget,
-    this.searchFieldController,
     required this.attributionType,
+    required TenorStyle style,
+    required List<TenorTab> tabs,
+    this.searchFieldController,
+    this.searchFieldWidget,
     Key? key,
-  }) : super(key: key);
+  })  : _style = style,
+        _tabs = tabs,
+        super(key: key);
 
   @override
   _TenorSheetState createState() => _TenorSheetState();
@@ -30,19 +35,15 @@ class TenorSheet extends StatefulWidget {
 
 class _TenorSheetState extends State<TenorSheet>
     with SingleTickerProviderStateMixin {
-  // Sheet Provider
-  late TenorSheetProvider _sheetProvider;
-
-  // Tab Controller
   late TabController _tabController;
+  late TenorSheetProvider _sheetProvider;
 
   @override
   void initState() {
     super.initState();
-
     _tabController = TabController(
       initialIndex: 1,
-      length: widget.tabs.length,
+      length: widget._tabs.length,
       vsync: this,
     );
   }
@@ -50,8 +51,13 @@ class _TenorSheetState extends State<TenorSheet>
   @override
   void didChangeDependencies() {
     _sheetProvider = Provider.of<TenorSheetProvider>(context, listen: false);
-
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   double _calculateMaxChildSize(BuildContext context) {
@@ -66,21 +72,24 @@ class _TenorSheetState extends State<TenorSheet>
     final maxChildSize = _calculateMaxChildSize(context);
     return DraggableScrollableSheet(
       controller: _sheetProvider.scrollController,
-      expand: _sheetProvider.isExpanded,
+      expand: false,
       initialChildSize: maxChildSize,
       maxChildSize: maxChildSize,
-      minChildSize: TenorSheetProvider.minExtent,
+      minChildSize: _sheetProvider.minExtent,
       snap: true,
       builder: (context, scrollController) {
         return Container(
-          color: const Color(0xFFD2CEC3),
+          color: widget._style.color,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TenorDragHandle(),
+              const TenorDragHandle(
+                style: TenorDragHandleStyle(),
+              ),
               TenorTabBar(
+                style: widget._style.tabBarStyle,
                 tabController: _tabController,
-                tabs: widget.tabs.map((tab) => tab.name).toList(),
+                tabs: widget._tabs.map((tab) => tab.name).toList(),
               ),
               TenorSearchField(
                 scrollController: scrollController,
@@ -89,12 +98,14 @@ class _TenorSheetState extends State<TenorSheet>
               ),
               Expanded(
                 child: TabBarView(
+                  children: widget._tabs.map((tab) => tab.view).toList(),
                   controller: _tabController,
-                  children: widget.tabs.map((tab) => tab.view).toList(),
                 ),
               ),
               if (widget.attributionType == TenorAttributionType.poweredBy)
-                const TenorAttribution(),
+                TenorAttribution(
+                  style: widget._style.attributionStyle,
+                ),
             ],
           ),
         );

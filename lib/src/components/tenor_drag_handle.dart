@@ -1,20 +1,41 @@
 import 'package:flutter/material.dart';
 
+class TenorDragHandleStyle {
+  final Decoration decoration;
+  final double height;
+  final EdgeInsets margin;
+  final double width;
+
+  const TenorDragHandleStyle({
+    this.decoration = const BoxDecoration(
+      color: Color(0xFF8A8A86),
+      borderRadius: BorderRadius.all(
+        Radius.circular(100),
+      ),
+    ),
+    this.height = 4,
+    this.margin = const EdgeInsets.symmetric(
+      vertical: 8,
+    ),
+    this.width = 134,
+  });
+}
+
 class TenorDragHandle extends StatelessWidget {
-  const TenorDragHandle({super.key});
+  final TenorDragHandleStyle _style;
+
+  const TenorDragHandle({
+    TenorDragHandleStyle style = const TenorDragHandleStyle(),
+    super.key,
+  }) : _style = style;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      margin: const EdgeInsets.symmetric(
-        vertical: 8,
-      ),
-      width: 134,
-      height: 4,
+      decoration: _style.decoration,
+      height: _style.height,
+      margin: _style.margin,
+      width: _style.width,
     );
   }
 }

@@ -5,6 +5,6 @@ class TenorStyleProvider extends ChangeNotifier {
   final TenorStyle style;
 
   TenorStyleProvider({
-    required this.style,
+    this.style = const TenorStyle(),
   });
 }

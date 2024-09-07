@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 
+class TenorAttributionStyle {
+  final double height;
+  final EdgeInsets padding;
+
+  const TenorAttributionStyle({
+    this.height = 15,
+    this.padding = const EdgeInsets.symmetric(
+      vertical: 8,
+    ),
+  });
+}
+
 class TenorAttribution extends StatelessWidget {
-  const TenorAttribution({super.key});
+  final TenorAttributionStyle _style;
+
+  const TenorAttribution({
+    TenorAttributionStyle style = const TenorAttributionStyle(),
+    super.key,
+  }) : _style = style;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        top: 10.0,
-        bottom: MediaQuery.of(context).padding.bottom > 0
-            ? MediaQuery.of(context).padding.bottom
-            : 8,
-      ),
+      // If safe area is required, add it.
+      padding: MediaQuery.of(context).padding.bottom > 0
+          ? _style.padding.copyWith(
+              bottom: MediaQuery.of(context).padding.bottom,
+            )
+          : _style.padding,
       child: Center(
         child: _logo(context),
       ),
@@ -19,23 +36,22 @@ class TenorAttribution extends StatelessWidget {
   }
 
   Widget _logo(BuildContext context) {
-    const basePath = "assets/";
     String logoPath = Theme.of(context).brightness == Brightness.light
         ? "powered_by_dark.png"
         : "powered_by_light.png";
 
     return Container(
-      width: double.maxFinite,
-      height: 15,
+      height: _style.height,
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fitHeight,
           image: AssetImage(
-            "$basePath$logoPath",
+            "assets/$logoPath",
             package: 'tenor_flutter',
           ),
         ),
       ),
+      width: double.infinity,
     );
   }
 }

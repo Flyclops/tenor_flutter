@@ -10,21 +10,27 @@ import 'package:tenor_flutter/src/models/type.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 
 class TenorStyle {
-  final Color? tabColor;
-  final Color? textSelectedColor;
-  final Color? textUnselectedColor;
+  final TenorAttributionStyle attributionStyle;
 
   /// Box that displays a single category.
-  final TenorCategoryStyle? categoryStyle;
+  final TenorCategoryStyle categoryStyle;
 
-  final TenorTabViewStyle? tabViewDetailStyle;
+  /// Background color of the sheet.
+  final Color color;
+
+  final TenorDragHandleStyle dragHandleStyle;
+
+  final TenorTabBarStyle tabBarStyle;
+
+  final TenorTabViewStyle tabViewDetailStyle;
 
   const TenorStyle({
-    this.tabColor,
-    this.textSelectedColor,
-    this.textUnselectedColor,
-    this.categoryStyle,
-    this.tabViewDetailStyle,
+    this.attributionStyle = const TenorAttributionStyle(),
+    this.categoryStyle = const TenorCategoryStyle(),
+    this.color = const Color(0xFFF9F8F2),
+    this.dragHandleStyle = const TenorDragHandleStyle(),
+    this.tabBarStyle = const TenorTabBarStyle(),
+    this.tabViewDetailStyle = const TenorTabViewStyle(),
   });
 }
 
@@ -39,12 +45,14 @@ class Tenor extends tenor_dart.Tenor {
 
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
-    TenorAttributionType attributionType = TenorAttributionType.searchTenor,
+    TenorAttributionType attributionType = TenorAttributionType.poweredBy,
+    double minExtent = 0.7,
+    double maxExtent = 0.9,
     String queryText = '',
     String searchText = '',
     int debounceTimeInMilliseconds = 350,
-    Widget? searchFieldWidget,
     TextEditingController? searchFieldController,
+    Widget? searchFieldWidget,
     TenorStyle style = const TenorStyle(),
     List<TenorTab> tabs = const [
       TenorTab(
@@ -85,35 +93,44 @@ class Tenor extends tenor_dart.Tenor {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => TenorAppBarProvider(
-                queryText,
-                debounceTimeInMilliseconds,
+        return Padding(
+          padding: EdgeInsets.only(
+            // move the sheet up when the keyboard is shown
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => TenorAppBarProvider(
+                  queryText,
+                  debounceTimeInMilliseconds,
+                ),
               ),
-            ),
-            ChangeNotifierProvider(
-              create: (context) => TenorStyleProvider(style: style),
-            ),
-            ChangeNotifierProvider(
-              create: (context) => TenorSheetProvider(
-                scrollController: DraggableScrollableController(),
+              ChangeNotifierProvider(
+                create: (context) => TenorStyleProvider(style: style),
               ),
-            ),
-            ChangeNotifierProvider(
-              create: (context) => TenorTabProvider(
-                attributionType: attributionType,
-                client: this,
-                searchText: searchText,
+              ChangeNotifierProvider(
+                create: (context) => TenorSheetProvider(
+                  maxExtent: maxExtent,
+                  minExtent: minExtent,
+                  scrollController: DraggableScrollableController(),
+                ),
               ),
+              ChangeNotifierProvider(
+                create: (context) => TenorTabProvider(
+                  attributionType: attributionType,
+                  client: this,
+                  searchText: searchText,
+                ),
+              ),
+            ],
+            child: TenorSheet(
+              attributionType: attributionType,
+              searchFieldController: searchFieldController,
+              searchFieldWidget: searchFieldWidget,
+              style: style,
+              tabs: tabs,
             ),
-          ],
-          child: TenorSheet(
-            attributionType: attributionType,
-            searchFieldController: searchFieldController,
-            searchFieldWidget: searchFieldWidget,
-            tabs: tabs,
           ),
         );
       },
