@@ -35,7 +35,7 @@ class TenorCategoryStyle {
 
 class TenorCategoryWidget extends StatelessWidget {
   final TenorCategory? category;
-  final Function()? onTap;
+  final Function(TenorCategory)? onTap;
   final TenorCategoryStyle _style;
 
   const TenorCategoryWidget({
@@ -56,7 +56,7 @@ class TenorCategoryWidget extends StatelessWidget {
     if (tenorCategory == null) return const SizedBox.shrink();
 
     return GestureDetector(
-      onTap: () => onTap?.call(),
+      onTap: () => onTap?.call(tenorCategory),
       child: Container(
         height: _style.height,
         decoration: _style.decoration,

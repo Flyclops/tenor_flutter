@@ -49,7 +49,6 @@ class TenorTabBarStyle {
       fontWeight: FontWeight.bold,
     ),
     this.margin = const EdgeInsets.only(
-      bottom: 8,
       left: 8,
       right: 8,
     ),

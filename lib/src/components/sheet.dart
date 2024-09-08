@@ -1,13 +1,13 @@
 // ignore_for_file: implementation_imports
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tenor_flutter/src/components/tenor_attribution.dart';
+import 'package:tenor_flutter/src/components/attribution.dart';
 
-import 'package:tenor_flutter/src/components/tenor_drag_handle.dart';
-import 'package:tenor_flutter/src/components/tenor_search_field.dart';
+import 'package:tenor_flutter/src/components/drag_handle.dart';
+import 'package:tenor_flutter/src/components/search_field.dart';
 import 'package:tenor_flutter/src/components/tab_bar.dart';
 import 'package:tenor_flutter/src/models/attribution.dart';
-import 'package:tenor_flutter/src/models/tenor_tab.dart';
+import 'package:tenor_flutter/src/models/tab.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/src/tenor.dart';
 

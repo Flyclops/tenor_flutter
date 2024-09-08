@@ -76,22 +76,53 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
   @override
   void dispose() {
-    _textEditingController.dispose();
     _focus.dispose();
+    _textEditingController.dispose();
     _appBarProvider.removeListener(_listenerQuery);
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedCategory = _appBarProvider.selectedCategory;
+    final queryText = _appBarProvider.queryText;
+
+    if (selectedCategory != null && queryText.isEmpty) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _appBarProvider.selectedCategory = null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 18,
+            horizontal: 14,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.arrow_back_ios_new,
+                size: 15,
+                color: Color(0xFF8A8A86),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                selectedCategory.name,
+                style: const TextStyle(
+                  color: Color(0xFF8A8A86),
+                  fontSize: 16,
+                  height: 1,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return widget.searchFieldWidget ??
         Padding(
-          padding: const EdgeInsets.only(
-            bottom: 8,
-            left: 8,
-            right: 8,
-          ),
+          padding: const EdgeInsets.all(8),
           child: Stack(
             alignment: Alignment.center,
             children: [

@@ -3,17 +3,16 @@ import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 import 'package:tenor_dart/tenor_dart.dart';
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/components/tenor_tab_view.dart';
+import 'package:tenor_flutter/src/components/tab_view.dart';
+import 'package:tenor_flutter/src/components/tab_view_emojis.dart';
+import 'package:tenor_flutter/src/components/tab_view_gifs.dart';
+import 'package:tenor_flutter/src/components/tab_view_stickers.dart';
 import 'package:tenor_flutter/src/models/attribution.dart';
-import 'package:tenor_flutter/src/models/tenor_tab.dart';
-import 'package:tenor_flutter/src/models/type.dart';
+import 'package:tenor_flutter/src/models/tab.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 
 class TenorStyle {
   final TenorAttributionStyle attributionStyle;
-
-  /// Box that displays a single category.
-  final TenorCategoryStyle categoryStyle;
 
   /// Background color of the sheet.
   final Color color;
@@ -26,7 +25,6 @@ class TenorStyle {
 
   const TenorStyle({
     this.attributionStyle = const TenorAttributionStyle(),
-    this.categoryStyle = const TenorCategoryStyle(),
     this.color = const Color(0xFFF9F8F2),
     this.dragHandleStyle = const TenorDragHandleStyle(),
     this.tabBarStyle = const TenorTabBarStyle(),
@@ -35,13 +33,13 @@ class TenorStyle {
 }
 
 class Tenor extends tenor_dart.Tenor {
-  Tenor({
+  const Tenor({
     required super.apiKey,
     super.clientKey,
     super.contentFilter = TenorContentFilter.off,
     super.country = 'US',
     super.locale = 'en_US',
-  }) : super();
+  });
 
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
@@ -54,33 +52,7 @@ class Tenor extends tenor_dart.Tenor {
     TextEditingController? searchFieldController,
     Widget? searchFieldWidget,
     TenorStyle style = const TenorStyle(),
-    List<TenorTab> tabs = const [
-      TenorTab(
-        name: 'Emojis',
-        view: TenorTabViewDetail(
-          type: TenorType.emoji,
-          keepAliveTabView: true,
-          gifWidth: 80,
-        ),
-      ),
-      TenorTab(
-        name: 'GIFs',
-        view: TenorTabViewDetail(
-          type: TenorType.gifs,
-          keepAliveTabView: true,
-          showCategories: true,
-          gifWidth: 200,
-        ),
-      ),
-      TenorTab(
-        name: 'Stickers',
-        view: TenorTabViewDetail(
-          type: TenorType.stickers,
-          keepAliveTabView: true,
-          gifWidth: 150,
-        ),
-      ),
-    ],
+    List<TenorTab>? tabs,
   }) {
     return showModalBottomSheet<TenorResult>(
       useSafeArea: true,
@@ -107,9 +79,6 @@ class Tenor extends tenor_dart.Tenor {
                 ),
               ),
               ChangeNotifierProvider(
-                create: (context) => TenorStyleProvider(style: style),
-              ),
-              ChangeNotifierProvider(
                 create: (context) => TenorSheetProvider(
                   maxExtent: maxExtent,
                   minExtent: minExtent,
@@ -129,7 +98,21 @@ class Tenor extends tenor_dart.Tenor {
               searchFieldController: searchFieldController,
               searchFieldWidget: searchFieldWidget,
               style: style,
-              tabs: tabs,
+              tabs: tabs ??
+                  [
+                    TenorTab(
+                      name: 'Emojis',
+                      view: TenorViewEmojis(client: this),
+                    ),
+                    TenorTab(
+                      name: 'GIFs',
+                      view: TenorViewGifs(client: this),
+                    ),
+                    TenorTab(
+                      name: 'Stickers',
+                      view: TenorViewStickers(client: this),
+                    ),
+                  ],
             ),
           ),
         );
