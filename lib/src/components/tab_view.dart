@@ -320,7 +320,6 @@ class _TenorTabViewState extends State<TenorTabView>
 
   // listener query
   void _listenerQuery() {
-    print('ALEX_DEBUG _listenerQuery');
     // Reset pagination
     _collection = null;
 

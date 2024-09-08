@@ -194,9 +194,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
     // Set to max extent height if the search field has focus
     if (_focus.hasFocus &&
         _sheetProvider.initialExtent == _sheetProvider.minExtent) {
-      print('ALEX_DEBUG: _focusListener ${_sheetProvider.initialExtent}');
       _sheetProvider.initialExtent = _sheetProvider.maxExtent;
-      print('ALEX_DEBUG: _focusListener ${_sheetProvider.initialExtent}');
     }
   }
 
