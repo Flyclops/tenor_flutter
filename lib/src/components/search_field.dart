@@ -44,15 +44,15 @@ class TenorSearchField extends StatefulWidget {
   final TenorSelectedCategoryStyle selectedCategoryStyle;
 
   const TenorSearchField({
-    Key? key,
+    super.key,
     required this.scrollController,
     this.searchFieldWidget,
     this.searchFieldController,
     this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
-  }) : super(key: key);
+  });
 
   @override
-  _TenorSearchFieldState createState() => _TenorSearchFieldState();
+  State<TenorSearchField> createState() => _TenorSearchFieldState();
 }
 
 class _TenorSearchFieldState extends State<TenorSearchField> {
@@ -80,7 +80,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Establish the debouncer
-      final _debouncer = Debouncer(
+      final debouncer = Debouncer(
         delay: Duration(
           milliseconds: _appBarProvider.debounceTimeInMilliseconds,
         ),
@@ -88,7 +88,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
       // Listener TextField
       _textEditingController.addListener(() {
-        _debouncer.call(() {
+        debouncer.call(() {
           if (_appBarProvider.queryText != _textEditingController.text) {
             _appBarProvider.queryText = _textEditingController.text;
           }
@@ -192,6 +192,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
               // because suffix icons suck for positioning
               if (_textEditingController.text.isNotEmpty)
                 Positioned(
+                  right: 0,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     child: Container(
@@ -209,7 +210,6 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                       _textEditingController.clear();
                     },
                   ),
-                  right: 0,
                 ),
             ],
           ),

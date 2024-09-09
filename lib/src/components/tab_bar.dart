@@ -70,8 +70,8 @@ class TenorTabBar extends StatelessWidget {
     required this.tabController,
     required this.tabs,
     this.style = const TenorTabBarStyle(),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

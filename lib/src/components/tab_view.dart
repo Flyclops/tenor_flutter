@@ -5,7 +5,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/components/selectable_gif.dart';
-import 'package:tenor_flutter/src/models/attribution.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/tab_provider.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
@@ -42,11 +41,11 @@ class TenorTabView extends StatefulWidget {
     this.categoryStyle = const TenorCategoryStyle(),
     this.onLoad,
     this.builder,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _TenorTabViewState createState() => _TenorTabViewState();
+  State<TenorTabView> createState() => _TenorTabViewState();
 }
 
 class _TenorTabViewState extends State<TenorTabView>
@@ -135,11 +134,11 @@ class _TenorTabViewState extends State<TenorTabView>
         (MediaQuery.of(context).size.width / widget.gifWidth).round();
 
     // Set vertical max items count
-    int _mainAxisCount =
+    int mainAxisCount =
         ((MediaQuery.of(context).size.height - 30) / widget.gifWidth).round();
 
     // Calculate the visible limit
-    _limit = _crossAxisCount * _mainAxisCount;
+    _limit = _crossAxisCount * mainAxisCount;
 
     // Tenor has a hard limit of 50
     if (_limit > 50) _limit = 50;

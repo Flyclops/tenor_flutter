@@ -24,13 +24,12 @@ class TenorSheet extends StatefulWidget {
     required List<TenorTab> tabs,
     this.searchFieldController,
     this.searchFieldWidget,
-    Key? key,
+    super.key,
   })  : _style = style,
-        _tabs = tabs,
-        super(key: key);
+        _tabs = tabs;
 
   @override
-  _TenorSheetState createState() => _TenorSheetState();
+  State<TenorSheet> createState() => _TenorSheetState();
 }
 
 class _TenorSheetState extends State<TenorSheet>
@@ -99,8 +98,8 @@ class _TenorSheetState extends State<TenorSheet>
               ),
               Expanded(
                 child: TabBarView(
-                  children: widget._tabs.map((tab) => tab.view).toList(),
                   controller: _tabController,
+                  children: widget._tabs.map((tab) => tab.view).toList(),
                 ),
               ),
               if (widget.attributionType == TenorAttributionType.poweredBy)

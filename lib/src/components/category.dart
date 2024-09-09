@@ -42,9 +42,8 @@ class TenorCategoryWidget extends StatelessWidget {
     this.category,
     this.onTap,
     TenorCategoryStyle? style,
-    Key? key,
-  })  : _style = style ?? const TenorCategoryStyle(),
-        super(key: key);
+    super.key,
+  }) : _style = style ?? const TenorCategoryStyle();
 
   @override
   Widget build(BuildContext context) {
