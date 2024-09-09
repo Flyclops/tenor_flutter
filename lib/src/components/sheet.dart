@@ -95,6 +95,7 @@ class _TenorSheetState extends State<TenorSheet>
                 scrollController: scrollController,
                 searchFieldController: widget.searchFieldController,
                 searchFieldWidget: widget.searchFieldWidget,
+                selectedCategoryStyle: widget._style.selectedCategoryStyle,
               ),
               Expanded(
                 child: TabBarView(

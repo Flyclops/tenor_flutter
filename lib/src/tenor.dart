@@ -23,12 +23,15 @@ class TenorStyle {
 
   final TenorTabViewStyle tabViewDetailStyle;
 
+  final TenorSelectedCategoryStyle selectedCategoryStyle;
+
   const TenorStyle({
     this.attributionStyle = const TenorAttributionStyle(),
     this.color = const Color(0xFFF9F8F2),
     this.dragHandleStyle = const TenorDragHandleStyle(),
     this.tabBarStyle = const TenorTabBarStyle(),
     this.tabViewDetailStyle = const TenorTabViewStyle(),
+    this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
   });
 }
 

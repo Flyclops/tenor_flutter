@@ -6,18 +6,49 @@ import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/sheet_provider.dart';
 import 'package:tenor_flutter/src/tools/debouncer.dart';
 
+class TenorSelectedCategoryStyle {
+  final double height;
+  final EdgeInsets padding;
+  final Icon? icon;
+  final TextStyle textStyle;
+
+  /// The space between icon and text.
+  final double spaceBetween;
+
+  const TenorSelectedCategoryStyle({
+    this.height = 52,
+    this.padding = const EdgeInsets.only(
+      left: 14,
+    ),
+    this.icon = const Icon(
+      Icons.arrow_back_ios_new,
+      size: 15,
+      color: Color(0xFF8A8A86),
+    ),
+    this.textStyle = const TextStyle(
+      color: Color(0xFF8A8A86),
+      fontSize: 16,
+      height: 1,
+      fontWeight: FontWeight.w500,
+    ),
+    this.spaceBetween = 8,
+  });
+}
+
 /// If you want to style this just pass in your own via the `searchFieldWidget` parameter.
 class TenorSearchField extends StatefulWidget {
   // Scroll Controller
   final ScrollController scrollController;
   final Widget? searchFieldWidget;
   final TextEditingController? searchFieldController;
+  final TenorSelectedCategoryStyle selectedCategoryStyle;
 
   const TenorSearchField({
     Key? key,
     required this.scrollController,
     this.searchFieldWidget,
     this.searchFieldController,
+    this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
   }) : super(key: key);
 
   @override
@@ -85,36 +116,30 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
   @override
   Widget build(BuildContext context) {
     final selectedCategory = _appBarProvider.selectedCategory;
+    final selectedCategoryStyle = widget.selectedCategoryStyle;
     final queryText = _appBarProvider.queryText;
 
     if (selectedCategory != null && queryText.isEmpty) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => _appBarProvider.selectedCategory = null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 18,
-            horizontal: 14,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.arrow_back_ios_new,
-                size: 15,
-                color: Color(0xFF8A8A86),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                selectedCategory.name,
-                style: const TextStyle(
-                  color: Color(0xFF8A8A86),
-                  fontSize: 16,
-                  height: 1,
-                  fontWeight: FontWeight.w500,
+        child: SizedBox(
+          height: selectedCategoryStyle.height,
+          child: Padding(
+            padding: selectedCategoryStyle.padding,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (selectedCategoryStyle.icon != null) ...[
+                  selectedCategoryStyle.icon!,
+                  SizedBox(width: selectedCategoryStyle.spaceBetween),
+                ],
+                Text(
+                  selectedCategory.name,
+                  style: selectedCategoryStyle.textStyle,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -168,6 +193,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
               if (_textEditingController.text.isNotEmpty)
                 Positioned(
                   child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     child: Container(
                       // make the tap target bigger
                       padding: const EdgeInsets.all(8),
