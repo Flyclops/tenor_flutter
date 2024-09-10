@@ -15,18 +15,19 @@ class TenorSheet extends StatefulWidget {
   final TenorAttributionType attributionType;
   final TextEditingController? searchFieldController;
   final Widget? searchFieldWidget;
-  final TenorStyle _style;
-  final List<TenorTab> _tabs;
+  final TenorStyle style;
+  final List<TenorTab> tabs;
+  final int initialTabIndex;
 
   const TenorSheet({
     required this.attributionType,
-    required TenorStyle style,
-    required List<TenorTab> tabs,
+    required this.style,
+    required this.tabs,
+    this.initialTabIndex = 1,
     this.searchFieldController,
     this.searchFieldWidget,
     super.key,
-  })  : _style = style,
-        _tabs = tabs;
+  });
 
   @override
   State<TenorSheet> createState() => _TenorSheetState();
@@ -41,8 +42,8 @@ class _TenorSheetState extends State<TenorSheet>
   void initState() {
     super.initState();
     _tabController = TabController(
-      initialIndex: 1,
-      length: widget._tabs.length,
+      initialIndex: 2,
+      length: widget.tabs.length,
       vsync: this,
     );
   }
@@ -78,7 +79,7 @@ class _TenorSheetState extends State<TenorSheet>
       snap: true,
       builder: (context, scrollController) {
         return Container(
-          color: widget._style.color,
+          color: widget.style.color,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -86,25 +87,25 @@ class _TenorSheetState extends State<TenorSheet>
                 style: TenorDragHandleStyle(),
               ),
               TenorTabBar(
-                style: widget._style.tabBarStyle,
+                style: widget.style.tabBarStyle,
                 tabController: _tabController,
-                tabs: widget._tabs.map((tab) => tab.name).toList(),
+                tabs: widget.tabs.map((tab) => tab.name).toList(),
               ),
               TenorSearchField(
                 scrollController: scrollController,
                 searchFieldController: widget.searchFieldController,
                 searchFieldWidget: widget.searchFieldWidget,
-                selectedCategoryStyle: widget._style.selectedCategoryStyle,
+                selectedCategoryStyle: widget.style.selectedCategoryStyle,
               ),
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
-                  children: widget._tabs.map((tab) => tab.view).toList(),
+                  children: widget.tabs.map((tab) => tab.view).toList(),
                 ),
               ),
               if (widget.attributionType == TenorAttributionType.poweredBy)
                 TenorAttribution(
-                  style: widget._style.attributionStyle,
+                  style: widget.style.attributionStyle,
                 ),
             ],
           ),

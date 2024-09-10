@@ -55,6 +55,7 @@ class Tenor extends tenor_dart.Tenor {
     Widget? searchFieldWidget,
     TenorStyle style = const TenorStyle(),
     List<TenorTab>? tabs,
+    int initialTabIndex = 1,
   }) {
     return showModalBottomSheet<TenorResult>(
       useSafeArea: true,
@@ -97,6 +98,7 @@ class Tenor extends tenor_dart.Tenor {
             ],
             child: TenorSheet(
               attributionType: attributionType,
+              initialTabIndex: initialTabIndex,
               searchFieldController: searchFieldController,
               searchFieldWidget: searchFieldWidget,
               style: style,
