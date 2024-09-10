@@ -322,6 +322,9 @@ class _TenorTabViewState extends State<TenorTabView>
 
   // Return selected gif
   void _selectedGif(TenorResult gif) {
+    // https://developers.google.com/tenor/guides/endpoints#register-share
+    client.registerShare(gif.id, search: _appBarProvider.queryText);
+    // return result to the consumer
     Navigator.pop(context, gif);
   }
 
