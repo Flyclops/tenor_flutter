@@ -49,6 +49,11 @@ class Tenor extends tenor_dart.Tenor {
     super.locale = 'en_US',
   });
 
+  /// Shows a bottom sheet modal that allows you to select a Tenor media object for use.
+  ///
+  /// If you pass in a `searchFieldWidget` you must also pass in a `searchFieldController`. The controller will automatically be disposed of.
+  ///
+  /// You must have one valid form of [Tenor attribution](https://developers.google.com/tenor/guides/attribution) in order to use this within your app.
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
     String queryText = '',
