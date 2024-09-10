@@ -5,10 +5,12 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 class TenorViewGifs extends StatelessWidget {
   final Tenor client;
   final bool showCategories;
+  final TenorTabViewStyle style;
 
   const TenorViewGifs({
     required this.client,
     this.showCategories = true,
+    this.style = const TenorTabViewStyle(),
     super.key,
   });
 
@@ -46,6 +48,7 @@ class TenorViewGifs extends StatelessWidget {
           );
         }
       },
+      style: style,
     );
   }
 }

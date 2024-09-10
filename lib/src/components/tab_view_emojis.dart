@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tenor_flutter/src/components/tab_view.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewEmojis extends StatelessWidget {
   final Tenor client;
+  final TenorTabViewStyle style;
 
   const TenorViewEmojis({
     required this.client,
+    this.style = const TenorTabViewStyle(),
     super.key,
   });
 
@@ -35,6 +36,7 @@ class TenorViewEmojis extends StatelessWidget {
           );
         }
       },
+      style: style,
     );
   }
 }

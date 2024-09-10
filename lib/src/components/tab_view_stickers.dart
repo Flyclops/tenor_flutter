@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tenor_flutter/src/components/tab_view.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewStickers extends StatelessWidget {
   final Tenor client;
+  final TenorTabViewStyle style;
 
   const TenorViewStickers({
     required this.client,
+    this.style = const TenorTabViewStyle(),
     super.key,
   });
 
@@ -34,6 +35,7 @@ class TenorViewStickers extends StatelessWidget {
           );
         }
       },
+      style: style,
     );
   }
 }

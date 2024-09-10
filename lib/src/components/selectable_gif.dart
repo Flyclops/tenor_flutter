@@ -5,10 +5,12 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 class TenorSelectableGif extends StatelessWidget {
   final TenorResult result;
   final Function(TenorResult)? _onTap;
+  final Color backgroundColor;
 
   const TenorSelectableGif({
     required this.result,
     Function(TenorResult)? onTap,
+    this.backgroundColor = Colors.transparent,
     super.key,
   }) : _onTap = onTap;
 
@@ -35,7 +37,7 @@ class TenorSelectableGif extends StatelessWidget {
               LoadState.loading: AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: Container(
-                  color: Theme.of(context).cardColor,
+                  color: backgroundColor,
                 ),
               ),
               LoadState.completed: AspectRatio(
@@ -48,14 +50,14 @@ class TenorSelectableGif extends StatelessWidget {
               LoadState.failed: AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: Container(
-                  color: Theme.of(context).cardColor,
+                  color: backgroundColor,
                 ),
               ),
             },
             AspectRatio(
               aspectRatio: mediaObject.dimensions.aspectRatio,
               child: Container(
-                color: Theme.of(context).cardColor,
+                color: backgroundColor,
               ),
             ),
           ),

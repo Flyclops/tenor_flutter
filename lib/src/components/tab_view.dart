@@ -1,3 +1,4 @@
+// TODO: Not super happy with how categories exist in this file. Refactor in the future.
 // ignore_for_file: implementation_imports
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -12,35 +13,39 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 const featuredCategoryPath = '##trending-gifs';
 
 class TenorTabViewStyle {
-  const TenorTabViewStyle();
+  final Color mediaBackgroundColor;
+
+  const TenorTabViewStyle({
+    this.mediaBackgroundColor = Colors.white,
+  });
 }
 
 class TenorTabView extends StatefulWidget {
-  final Function(TenorResult? gif)? onSelected;
-  final bool showCategories;
-  final bool? keepAliveTabView;
-  final int gifWidth;
+  final Widget Function(BuildContext, Widget?)? builder;
   final TenorCategoryStyle categoryStyle;
   final Tenor client;
+  final int gifWidth;
+  final bool? keepAliveTabView;
   final Future<TenorResponse?> Function(
     String queryText,
     String? pos,
     int limit,
     TenorCategory? category,
   )? onLoad;
-  // final Function? initialLoad;
-
-  final Widget Function(BuildContext, Widget?)? builder;
+  final Function(TenorResult? gif)? onSelected;
+  final bool showCategories;
+  final TenorTabViewStyle style;
 
   const TenorTabView({
-    required this.gifWidth,
     required this.client,
-    this.showCategories = false,
-    this.onSelected,
-    this.keepAliveTabView,
-    this.categoryStyle = const TenorCategoryStyle(),
-    this.onLoad,
+    required this.gifWidth,
     this.builder,
+    this.categoryStyle = const TenorCategoryStyle(),
+    this.keepAliveTabView,
+    this.onLoad,
+    this.onSelected,
+    this.showCategories = false,
+    this.style = const TenorTabViewStyle(),
     super.key,
   });
 
@@ -213,10 +218,11 @@ class _TenorTabViewState extends State<TenorTabView>
         itemBuilder: (ctx, idx) => ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: TenorSelectableGif(
-            result: _list[idx],
+            backgroundColor: widget.style.mediaBackgroundColor,
             onTap: (selectedResult) => _selectedGif(
               selectedResult,
             ),
+            result: _list[idx],
           ),
         ),
         itemCount: _list.length,

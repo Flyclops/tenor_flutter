@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/components/tab_view.dart';
 import 'package:tenor_flutter/src/components/tab_view_emojis.dart';
 import 'package:tenor_flutter/src/components/tab_view_gifs.dart';
 import 'package:tenor_flutter/src/components/tab_view_stickers.dart';
@@ -19,19 +18,19 @@ class TenorStyle {
 
   final TenorDragHandleStyle dragHandleStyle;
 
+  final TenorSelectedCategoryStyle selectedCategoryStyle;
+
   final TenorTabBarStyle tabBarStyle;
 
-  final TenorTabViewStyle tabViewDetailStyle;
-
-  final TenorSelectedCategoryStyle selectedCategoryStyle;
+  final TenorTabViewStyle tabViewStyle;
 
   const TenorStyle({
     this.attributionStyle = const TenorAttributionStyle(),
     this.color = const Color(0xFFF9F8F2),
     this.dragHandleStyle = const TenorDragHandleStyle(),
-    this.tabBarStyle = const TenorTabBarStyle(),
-    this.tabViewDetailStyle = const TenorTabViewStyle(),
     this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
+    this.tabBarStyle = const TenorTabBarStyle(),
+    this.tabViewStyle = const TenorTabViewStyle(),
   });
 }
 
@@ -105,15 +104,24 @@ class Tenor extends tenor_dart.Tenor {
                   [
                     TenorTab(
                       name: 'Emojis',
-                      view: TenorViewEmojis(client: this),
+                      view: TenorViewEmojis(
+                        client: this,
+                        style: style.tabViewStyle,
+                      ),
                     ),
                     TenorTab(
                       name: 'GIFs',
-                      view: TenorViewGifs(client: this),
+                      view: TenorViewGifs(
+                        client: this,
+                        style: style.tabViewStyle,
+                      ),
                     ),
                     TenorTab(
                       name: 'Stickers',
-                      view: TenorViewStickers(client: this),
+                      view: TenorViewStickers(
+                        client: this,
+                        style: style.tabViewStyle,
+                      ),
                     ),
                   ],
             ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TenorAttributionStyle {
+  final Brightness brightnes;
   final double height;
   final EdgeInsets padding;
 
   const TenorAttributionStyle({
+    this.brightnes = Brightness.light,
     this.height = 15,
     this.padding = const EdgeInsets.symmetric(
       vertical: 8,
@@ -36,7 +38,7 @@ class TenorAttribution extends StatelessWidget {
   }
 
   Widget _logo(BuildContext context) {
-    String logoPath = Theme.of(context).brightness == Brightness.light
+    String logoPath = _style.brightnes == Brightness.light
         ? "powered_by_dark.png"
         : "powered_by_light.png";
 

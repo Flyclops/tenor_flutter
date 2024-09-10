@@ -48,9 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _themedPicker() async {
     final result = await tenor.showAsBottomSheet(
-      attributionType: TenorAttributionType.searchTenor,
       context: context,
       style: TenorStyle(
+        attributionStyle: const TenorAttributionStyle(
+          brightnes: Brightness.dark,
+        ),
         color: const Color(0xFF2b2d31),
         tabBarStyle: TenorTabBarStyle(
           decoration: BoxDecoration(
@@ -85,6 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.w500,
             height: 1,
           ),
+        ),
+        tabViewStyle: const TenorTabViewStyle(
+          mediaBackgroundColor: Color(0xFF404249),
         ),
       ),
     );
