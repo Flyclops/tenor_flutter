@@ -8,4 +8,7 @@ export 'src/components/drag_handle.dart' show TenorDragHandleStyle;
 export 'src/components/search_field.dart' show TenorSelectedCategoryStyle;
 export 'src/components/tab_bar.dart' show TenorTabBarStyle;
 export 'src/components/tab_view.dart' show TenorTabView, TenorTabViewStyle;
-export 'src/models/attribution.dart';
+export 'src/components/tab_view_emojis.dart';
+export 'src/components/tab_view_gifs.dart';
+export 'src/components/tab_view_stickers.dart';
+export 'src/models/tab.dart';

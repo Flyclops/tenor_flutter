@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:tenor_flutter/src/models/models.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorTabProvider with ChangeNotifier {

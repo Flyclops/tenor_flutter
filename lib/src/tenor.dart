@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/models/tab.dart';
+import 'package:tenor_flutter/src/models/models.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
@@ -12,6 +12,9 @@ class TenorStyle {
 
   /// Background color of the sheet.
   final Color color;
+
+  /// Shape for the sheet.
+  final ShapeBorder shape;
 
   final TenorDragHandleStyle dragHandleStyle;
 
@@ -22,8 +25,13 @@ class TenorStyle {
   final TenorTabViewStyle tabViewStyle;
 
   const TenorStyle({
-    this.attributionStyle = const TenorAttributionStyle(),
     this.color = const Color(0xFFF9F8F2),
+    this.shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(8),
+      ),
+    ),
+    this.attributionStyle = const TenorAttributionStyle(),
     this.dragHandleStyle = const TenorDragHandleStyle(),
     this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
     this.tabBarStyle = const TenorTabBarStyle(),
@@ -46,7 +54,7 @@ class Tenor extends tenor_dart.Tenor {
     double minExtent = 0.7,
     double maxExtent = 0.9,
     int initialTabIndex = 1,
-    Duration debounce = const Duration(milliseconds: 350),
+    Duration debounce = const Duration(milliseconds: 300),
     TenorStyle style = const TenorStyle(),
     List<TenorTab>? tabs,
     TenorAttributionType attributionType = TenorAttributionType.poweredBy,
@@ -54,15 +62,11 @@ class Tenor extends tenor_dart.Tenor {
     Widget? searchFieldWidget,
   }) {
     return showModalBottomSheet<TenorResult>(
-      useSafeArea: true,
       clipBehavior: Clip.antiAlias,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10.0),
-        ),
-      ),
-      isScrollControlled: true,
       context: context,
+      isScrollControlled: true,
+      shape: style.shape,
+      useSafeArea: true,
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
