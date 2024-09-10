@@ -56,14 +56,12 @@ class _MyHomePageState extends State<MyHomePage> {
           hintStyle: TextStyle(
             color: Color(0xFFb5bac1),
             fontSize: 16,
-            height: 1,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.normal,
           ),
           textStyle: TextStyle(
             color: Colors.white,
             fontSize: 16,
-            height: 1,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.normal,
           ),
         ),
         attributionStyle: const TenorAttributionStyle(
@@ -99,8 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
           textStyle: TextStyle(
             color: Colors.white,
             fontSize: 16,
-            fontWeight: FontWeight.w500,
-            height: 1,
+            fontWeight: FontWeight.normal,
           ),
         ),
         tabViewStyle: const TenorTabViewStyle(

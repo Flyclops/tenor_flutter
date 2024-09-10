@@ -19,6 +19,7 @@ class TenorSelectedCategoryStyle {
     this.height = 52,
     this.padding = const EdgeInsets.only(
       left: 14,
+      top: 1,
     ),
     this.icon = const Icon(
       Icons.arrow_back_ios_new,
@@ -28,7 +29,6 @@ class TenorSelectedCategoryStyle {
     this.textStyle = const TextStyle(
       color: Color(0xFF8A8A86),
       fontSize: 16,
-      height: 1,
       fontWeight: FontWeight.normal,
     ),
     this.spaceBetween = 8,
@@ -45,12 +45,12 @@ class TenorSearchFieldStyle {
     this.hintStyle = const TextStyle(
       color: Color(0xFF8A8A86),
       fontSize: 16,
-      height: 1,
+      fontWeight: FontWeight.normal,
     ),
     this.textStyle = const TextStyle(
       color: Color(0xFF000000),
       fontSize: 16,
-      height: 1,
+      fontWeight: FontWeight.normal,
     ),
   });
 }
@@ -182,7 +182,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                       style: BorderStyle.none,
                     ),
                   ),
-                  contentPadding: const EdgeInsets.fromLTRB(28, 10, 32, 10),
+                  contentPadding: const EdgeInsets.fromLTRB(28, 5, 32, 7),
                   fillColor: widget.style.fillColor,
                   filled: true,
                   hintStyle: widget.style.hintStyle,
@@ -190,6 +190,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                   isCollapsed: true,
                   isDense: true,
                 ),
+                style: widget.style.textStyle,
               ),
               // because prefix icons suck for positioning
               Positioned(

@@ -69,7 +69,7 @@ class Tenor extends tenor_dart.Tenor {
       shape: style.shape,
       useSafeArea: true,
       builder: (context) {
-        return DefaultTextStyle(
+        return DefaultTextStyle.merge(
           style: TextStyle(
             fontFamily: style.fontFamily,
           ),
