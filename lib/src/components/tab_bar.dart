@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TenorTabBarStyle {
-  final double height;
-  final BoxDecoration indicator;
+  final Decoration decoration;
+  final Decoration indicator;
+  final Color labelColor;
   final EdgeInsets indicatorPadding;
   final TabBarIndicatorSize indicatorSize;
-  final Color labelColor;
   final TextStyle labelStyle;
+  final double height;
 
   /// Space between the tab bar and surrounding content.
   final EdgeInsets margin;
@@ -14,7 +15,20 @@ class TenorTabBarStyle {
   final TextStyle unselectedLabelStyle;
 
   const TenorTabBarStyle({
-    this.height = 30,
+    this.decoration = const BoxDecoration(
+      color: Color(0xFFEDE7D7),
+      border: Border.symmetric(
+        horizontal: BorderSide(
+          color: Color(0xFFEDE7D7),
+          width: 2,
+        ),
+        vertical: BorderSide(
+          color: Color(0xFFEDE7D7),
+          width: 2,
+        ),
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
     this.indicator = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(7)),
       gradient: LinearGradient(
@@ -48,6 +62,7 @@ class TenorTabBarStyle {
       fontSize: 16,
       fontWeight: FontWeight.bold,
     ),
+    this.height = 30,
     this.margin = const EdgeInsets.only(
       left: 8,
       right: 8,
@@ -80,14 +95,7 @@ class TenorTabBar extends StatelessWidget {
     return Padding(
       padding: style.margin,
       child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFFEDE7D7),
-          border: Border.all(
-            color: const Color(0xFFEDE7D7),
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        decoration: style.decoration,
         child: SizedBox(
           height: style.height,
           child: TabBar(
