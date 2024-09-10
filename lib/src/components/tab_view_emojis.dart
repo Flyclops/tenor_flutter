@@ -3,10 +3,12 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewEmojis extends StatelessWidget {
   final Tenor client;
+  final int mediaWidth;
   final TenorTabViewStyle style;
 
   const TenorViewEmojis({
     required this.client,
+    this.mediaWidth = 80,
     this.style = const TenorTabViewStyle(),
     super.key,
   });
@@ -16,7 +18,7 @@ class TenorViewEmojis extends StatelessWidget {
     return TenorTabView(
       client: client,
       keepAliveTabView: true,
-      gifWidth: 80,
+      mediaWidth: mediaWidth,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {
           return await client.search(

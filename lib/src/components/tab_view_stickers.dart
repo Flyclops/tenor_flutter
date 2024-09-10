@@ -3,10 +3,12 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewStickers extends StatelessWidget {
   final Tenor client;
+  final int mediaWidth;
   final TenorTabViewStyle style;
 
   const TenorViewStickers({
     required this.client,
+    this.mediaWidth = 150,
     this.style = const TenorTabViewStyle(),
     super.key,
   });
@@ -16,7 +18,7 @@ class TenorViewStickers extends StatelessWidget {
     return TenorTabView(
       client: client,
       keepAliveTabView: true,
-      gifWidth: 150,
+      mediaWidth: mediaWidth,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {
           return await client.search(

@@ -4,11 +4,13 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewGifs extends StatelessWidget {
   final Tenor client;
+  final int mediaWidth;
   final bool showCategories;
   final TenorTabViewStyle style;
 
   const TenorViewGifs({
     required this.client,
+    this.mediaWidth = 200,
     this.showCategories = true,
     this.style = const TenorTabViewStyle(),
     super.key,
@@ -19,8 +21,8 @@ class TenorViewGifs extends StatelessWidget {
     return TenorTabView(
       client: client,
       keepAliveTabView: true,
+      mediaWidth: mediaWidth,
       showCategories: showCategories,
-      gifWidth: 200,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {
           return await client.search(

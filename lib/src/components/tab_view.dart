@@ -24,7 +24,7 @@ class TenorTabView extends StatefulWidget {
   final Widget Function(BuildContext, Widget?)? builder;
   final TenorCategoryStyle categoryStyle;
   final Tenor client;
-  final int gifWidth;
+  final int mediaWidth;
   final bool? keepAliveTabView;
   final Future<TenorResponse?> Function(
     String queryText,
@@ -38,7 +38,7 @@ class TenorTabView extends StatefulWidget {
 
   const TenorTabView({
     required this.client,
-    required this.gifWidth,
+    required this.mediaWidth,
     this.builder,
     this.categoryStyle = const TenorCategoryStyle(),
     this.keepAliveTabView,
@@ -139,11 +139,11 @@ class _TenorTabViewState extends State<TenorTabView>
   void getCount() {
     // Set items count responsive
     _crossAxisCount =
-        (MediaQuery.of(context).size.width / widget.gifWidth).round();
+        (MediaQuery.of(context).size.width / widget.mediaWidth).round();
 
     // Set vertical max items count
     int mainAxisCount =
-        ((MediaQuery.of(context).size.height - 30) / widget.gifWidth).round();
+        ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
 
     // Calculate the visible limit
     _limit = _crossAxisCount * mainAxisCount;
