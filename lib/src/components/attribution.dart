@@ -15,22 +15,22 @@ class TenorAttributionStyle {
 }
 
 class TenorAttribution extends StatelessWidget {
-  final TenorAttributionStyle _style;
+  final TenorAttributionStyle style;
 
   const TenorAttribution({
-    TenorAttributionStyle style = const TenorAttributionStyle(),
+    this.style = const TenorAttributionStyle(),
     super.key,
-  }) : _style = style;
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       // If safe area is required, add it.
       padding: MediaQuery.of(context).padding.bottom > 0
-          ? _style.padding.copyWith(
+          ? style.padding.copyWith(
               bottom: MediaQuery.of(context).padding.bottom,
             )
-          : _style.padding,
+          : style.padding,
       child: Center(
         child: _logo(context),
       ),
@@ -38,12 +38,12 @@ class TenorAttribution extends StatelessWidget {
   }
 
   Widget _logo(BuildContext context) {
-    String logoPath = _style.brightnes == Brightness.light
+    String logoPath = style.brightnes == Brightness.light
         ? 'powered_by_dark.png'
         : 'powered_by_light.png';
 
     return Container(
-      height: _style.height,
+      height: style.height,
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fitHeight,

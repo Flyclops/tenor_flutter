@@ -1,6 +1,11 @@
 export 'attribution.dart';
+export 'category.dart';
 export 'drag_handle.dart';
 export 'search_field.dart';
+export 'selectable_gif.dart';
 export 'sheet.dart';
 export 'tab_bar.dart';
-export 'category.dart';
+export 'tab_view.dart';
+export 'tab_view_emojis.dart';
+export 'tab_view_gifs.dart';
+export 'tab_view_stickers.dart';

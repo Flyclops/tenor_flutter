@@ -81,9 +81,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Establish the debouncer
       final debouncer = Debouncer(
-        delay: Duration(
-          milliseconds: _appBarProvider.debounceTimeInMilliseconds,
-        ),
+        delay: _appBarProvider.debounce,
       );
 
       // Listener TextField

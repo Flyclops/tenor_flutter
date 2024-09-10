@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/components/selectable_gif.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/tab_provider.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';

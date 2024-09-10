@@ -6,8 +6,8 @@ class TenorAppBarProvider with ChangeNotifier {
   String get queryText => _queryText;
   TenorCategory? _selectedCategory;
 
-  int _debounceTimeInMilliseconds = 0;
-  int get debounceTimeInMilliseconds => _debounceTimeInMilliseconds;
+  Duration _debounce = Duration.zero;
+  Duration get debounce => _debounce;
 
   set queryText(String queryText) {
     _queryText = queryText;
@@ -20,12 +20,12 @@ class TenorAppBarProvider with ChangeNotifier {
 
   TenorAppBarProvider(
     String queryText,
-    int debounceTimeInMilliseconds, {
+    Duration debounce, {
     TenorCategory? selectedCategory,
   })  : _selectedCategory = selectedCategory,
         super() {
     _queryText = queryText;
-    _debounceTimeInMilliseconds = debounceTimeInMilliseconds;
+    _debounce = debounce;
   }
 
   TenorCategory? get selectedCategory => _selectedCategory;

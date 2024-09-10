@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorSelectableGif extends StatelessWidget {
-  final TenorResult result;
-  final Function(TenorResult)? _onTap;
   final Color backgroundColor;
+  final Function(TenorResult)? onTap;
+  final TenorResult result;
 
   const TenorSelectableGif({
     required this.result,
-    Function(TenorResult)? onTap,
     this.backgroundColor = Colors.transparent,
+    this.onTap,
     super.key,
-  }) : _onTap = onTap;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class TenorSelectableGif extends StatelessWidget {
     if (mediaObject == null) return const SizedBox.shrink();
 
     return GestureDetector(
-      onTap: () => _onTap?.call(result),
+      onTap: () => onTap?.call(result),
       child: ExtendedImage.network(
         mediaObject.url,
         cache: true,

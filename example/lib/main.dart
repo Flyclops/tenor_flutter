@@ -48,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _themedPicker() async {
     final result = await tenor.showAsBottomSheet(
-      queryText: 'happy',
       context: context,
       style: TenorStyle(
         attributionStyle: const TenorAttributionStyle(

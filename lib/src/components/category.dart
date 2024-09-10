@@ -36,14 +36,14 @@ class TenorCategoryStyle {
 class TenorCategoryWidget extends StatelessWidget {
   final TenorCategory? category;
   final Function(TenorCategory)? onTap;
-  final TenorCategoryStyle _style;
+  final TenorCategoryStyle style;
 
   const TenorCategoryWidget({
     this.category,
     this.onTap,
-    TenorCategoryStyle? style,
+    this.style = const TenorCategoryStyle(),
     super.key,
-  }) : _style = style ?? const TenorCategoryStyle();
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +57,8 @@ class TenorCategoryWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap?.call(tenorCategory),
       child: Container(
-        height: _style.height,
-        decoration: _style.decoration,
+        height: style.height,
+        decoration: style.decoration,
         clipBehavior: Clip.hardEdge,
         child: Stack(
           fit: StackFit.expand,
@@ -71,14 +71,14 @@ class TenorCategoryWidget extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             Container(
-              color: _style.imageOverlayColor,
+              color: style.imageOverlayColor,
               alignment: Alignment.center,
-              padding: _style.padding,
+              padding: style.padding,
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
                   tenorCategory.searchTerm,
-                  style: _style.textStyle,
+                  style: style.textStyle,
                 ),
               ),
             ),

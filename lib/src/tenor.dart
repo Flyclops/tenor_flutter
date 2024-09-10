@@ -3,9 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/components/tab_view_emojis.dart';
-import 'package:tenor_flutter/src/components/tab_view_gifs.dart';
-import 'package:tenor_flutter/src/components/tab_view_stickers.dart';
 import 'package:tenor_flutter/src/models/tab.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
@@ -45,17 +42,16 @@ class Tenor extends tenor_dart.Tenor {
 
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
-    TenorAttributionType attributionType = TenorAttributionType.poweredBy,
+    String queryText = '',
     double minExtent = 0.7,
     double maxExtent = 0.9,
-    String queryText = '',
-    String searchText = '',
-    int debounceTimeInMilliseconds = 350,
-    TextEditingController? searchFieldController,
-    Widget? searchFieldWidget,
+    int initialTabIndex = 1,
+    Duration debounce = const Duration(milliseconds: 350),
     TenorStyle style = const TenorStyle(),
     List<TenorTab>? tabs,
-    int initialTabIndex = 1,
+    TenorAttributionType attributionType = TenorAttributionType.poweredBy,
+    TextEditingController? searchFieldController,
+    Widget? searchFieldWidget,
   }) {
     return showModalBottomSheet<TenorResult>(
       useSafeArea: true,
@@ -78,7 +74,7 @@ class Tenor extends tenor_dart.Tenor {
               ChangeNotifierProvider(
                 create: (context) => TenorAppBarProvider(
                   queryText,
-                  debounceTimeInMilliseconds,
+                  debounce,
                 ),
               ),
               ChangeNotifierProvider(
@@ -92,7 +88,6 @@ class Tenor extends tenor_dart.Tenor {
                 create: (context) => TenorTabProvider(
                   attributionType: attributionType,
                   client: this,
-                  searchText: searchText,
                 ),
               ),
             ],
