@@ -71,7 +71,7 @@ class TenorTabBarStyle {
     this.unselectedLabelStyle = const TextStyle(
       decoration: TextDecoration.none,
       fontSize: 16,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.normal,
     ),
   });
 }

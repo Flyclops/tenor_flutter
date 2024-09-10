@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/models/models.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
@@ -13,19 +12,20 @@ class TenorStyle {
   /// Background color of the sheet.
   final Color color;
 
+  final String? fontFamily;
+
   /// Shape for the sheet.
   final ShapeBorder shape;
 
   final TenorDragHandleStyle dragHandleStyle;
-
+  final TenorSearchFieldStyle searchFieldStyle;
   final TenorSelectedCategoryStyle selectedCategoryStyle;
-
   final TenorTabBarStyle tabBarStyle;
-
   final TenorTabViewStyle tabViewStyle;
 
   const TenorStyle({
     this.color = const Color(0xFFF9F8F2),
+    this.fontFamily,
     this.shape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(8),
@@ -33,6 +33,7 @@ class TenorStyle {
     ),
     this.attributionStyle = const TenorAttributionStyle(),
     this.dragHandleStyle = const TenorDragHandleStyle(),
+    this.searchFieldStyle = const TenorSearchFieldStyle(),
     this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
     this.tabBarStyle = const TenorTabBarStyle(),
     this.tabViewStyle = const TenorTabViewStyle(),
@@ -68,63 +69,68 @@ class Tenor extends tenor_dart.Tenor {
       shape: style.shape,
       useSafeArea: true,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            // move the sheet up when the keyboard is shown
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+        return DefaultTextStyle(
+          style: TextStyle(
+            fontFamily: style.fontFamily,
           ),
-          child: MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (context) => TenorAppBarProvider(
-                  queryText,
-                  debounce,
+          child: Padding(
+            padding: EdgeInsets.only(
+              // move the sheet up when the keyboard is shown
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (context) => TenorAppBarProvider(
+                    queryText,
+                    debounce,
+                  ),
                 ),
-              ),
-              ChangeNotifierProvider(
-                create: (context) => TenorSheetProvider(
-                  maxExtent: maxExtent,
-                  minExtent: minExtent,
-                  scrollController: DraggableScrollableController(),
+                ChangeNotifierProvider(
+                  create: (context) => TenorSheetProvider(
+                    maxExtent: maxExtent,
+                    minExtent: minExtent,
+                    scrollController: DraggableScrollableController(),
+                  ),
                 ),
-              ),
-              ChangeNotifierProvider(
-                create: (context) => TenorTabProvider(
-                  attributionType: attributionType,
-                  client: this,
+                ChangeNotifierProvider(
+                  create: (context) => TenorTabProvider(
+                    attributionType: attributionType,
+                    client: this,
+                  ),
                 ),
+              ],
+              child: TenorSheet(
+                attributionType: attributionType,
+                initialTabIndex: initialTabIndex,
+                searchFieldController: searchFieldController,
+                searchFieldWidget: searchFieldWidget,
+                style: style,
+                tabs: tabs ??
+                    [
+                      TenorTab(
+                        name: 'Emojis',
+                        view: TenorViewEmojis(
+                          client: this,
+                          style: style.tabViewStyle,
+                        ),
+                      ),
+                      TenorTab(
+                        name: 'GIFs',
+                        view: TenorViewGifs(
+                          client: this,
+                          style: style.tabViewStyle,
+                        ),
+                      ),
+                      TenorTab(
+                        name: 'Stickers',
+                        view: TenorViewStickers(
+                          client: this,
+                          style: style.tabViewStyle,
+                        ),
+                      ),
+                    ],
               ),
-            ],
-            child: TenorSheet(
-              attributionType: attributionType,
-              initialTabIndex: initialTabIndex,
-              searchFieldController: searchFieldController,
-              searchFieldWidget: searchFieldWidget,
-              style: style,
-              tabs: tabs ??
-                  [
-                    TenorTab(
-                      name: 'Emojis',
-                      view: TenorViewEmojis(
-                        client: this,
-                        style: style.tabViewStyle,
-                      ),
-                    ),
-                    TenorTab(
-                      name: 'GIFs',
-                      view: TenorViewGifs(
-                        client: this,
-                        style: style.tabViewStyle,
-                      ),
-                    ),
-                    TenorTab(
-                      name: 'Stickers',
-                      view: TenorViewStickers(
-                        client: this,
-                        style: style.tabViewStyle,
-                      ),
-                    ),
-                  ],
             ),
           ),
         );

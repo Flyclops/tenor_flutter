@@ -50,10 +50,25 @@ class _MyHomePageState extends State<MyHomePage> {
     final result = await tenor.showAsBottomSheet(
       context: context,
       style: TenorStyle(
+        color: const Color(0xFF2b2d31),
+        searchFieldStyle: const TenorSearchFieldStyle(
+          fillColor: Color(0xFF1e1f22),
+          hintStyle: TextStyle(
+            color: Color(0xFFb5bac1),
+            fontSize: 16,
+            height: 1,
+            fontWeight: FontWeight.w500,
+          ),
+          textStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            height: 1,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         attributionStyle: const TenorAttributionStyle(
           brightnes: Brightness.dark,
         ),
-        color: const Color(0xFF2b2d31),
         tabBarStyle: TenorTabBarStyle(
           decoration: BoxDecoration(
             color: const Color(0xFF1e1f22),

@@ -29,9 +29,29 @@ class TenorSelectedCategoryStyle {
       color: Color(0xFF8A8A86),
       fontSize: 16,
       height: 1,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.normal,
     ),
     this.spaceBetween = 8,
+  });
+}
+
+class TenorSearchFieldStyle {
+  final Color fillColor;
+  final TextStyle textStyle;
+  final TextStyle hintStyle;
+
+  const TenorSearchFieldStyle({
+    this.fillColor = Colors.white,
+    this.hintStyle = const TextStyle(
+      color: Color(0xFF8A8A86),
+      fontSize: 16,
+      height: 1,
+    ),
+    this.textStyle = const TextStyle(
+      color: Color(0xFF000000),
+      fontSize: 16,
+      height: 1,
+    ),
   });
 }
 
@@ -39,16 +59,18 @@ class TenorSelectedCategoryStyle {
 class TenorSearchField extends StatefulWidget {
   // Scroll Controller
   final ScrollController scrollController;
-  final Widget? searchFieldWidget;
   final TextEditingController? searchFieldController;
+  final Widget? searchFieldWidget;
   final TenorSelectedCategoryStyle selectedCategoryStyle;
+  final TenorSearchFieldStyle style;
 
   const TenorSearchField({
     super.key,
     required this.scrollController,
-    this.searchFieldWidget,
     this.searchFieldController,
+    this.searchFieldWidget,
     this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
+    this.style = const TenorSearchFieldStyle(),
   });
 
   @override
@@ -161,29 +183,21 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                     ),
                   ),
                   contentPadding: const EdgeInsets.fromLTRB(28, 10, 32, 10),
-                  fillColor: Colors.white,
+                  fillColor: widget.style.fillColor,
                   filled: true,
-                  hintStyle: const TextStyle(
-                    color: Color(0xFF8A8A86),
-                    fontSize: 16,
-                    height: 1,
-                  ),
+                  hintStyle: widget.style.hintStyle,
                   hintText: 'Search Tenor',
                   isCollapsed: true,
                   isDense: true,
                 ),
-                style: const TextStyle(
-                  color: Color(0xFF000000),
-                  fontSize: 16,
-                  height: 1,
-                ),
               ),
               // because prefix icons suck for positioning
-              const Positioned(
+              Positioned(
                 left: 4,
                 child: Icon(
                   Icons.search,
-                  color: Color(0xFF8A8A86),
+                  color:
+                      widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
                   size: 22,
                 ),
               ),
@@ -196,9 +210,10 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                     child: Container(
                       // make the tap target bigger
                       padding: const EdgeInsets.all(8),
-                      child: const Icon(
+                      child: Icon(
                         Icons.clear,
-                        color: Color(0xFF000000),
+                        color: widget.style.hintStyle.color ??
+                            const Color(0xFF8A8A86),
                         size: 20,
                       ),
                     ),
