@@ -39,8 +39,8 @@ class TenorAttribution extends StatelessWidget {
 
   Widget _logo(BuildContext context) {
     String logoPath = _style.brightnes == Brightness.light
-        ? "powered_by_dark.png"
-        : "powered_by_light.png";
+        ? 'powered_by_dark.png'
+        : 'powered_by_light.png';
 
     return Container(
       height: _style.height,
@@ -48,7 +48,7 @@ class TenorAttribution extends StatelessWidget {
         image: DecorationImage(
           fit: BoxFit.fitHeight,
           image: AssetImage(
-            "assets/$logoPath",
+            'assets/$logoPath',
             package: 'tenor_flutter',
           ),
         ),

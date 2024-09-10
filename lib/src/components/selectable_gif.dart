@@ -29,52 +29,40 @@ class TenorSelectableGif extends StatelessWidget {
         gaplessPlayback: true,
         fit: BoxFit.fill,
         headers: const {'accept': 'image/*'},
-        loadStateChanged: (state) => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 350),
-          child: case2(
-            state.extendedImageLoadState,
-            {
-              LoadState.loading: AspectRatio(
+        loadStateChanged: (state) {
+          switch (state.extendedImageLoadState) {
+            case LoadState.loading:
+              return AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: Container(
                   color: backgroundColor,
                 ),
-              ),
-              LoadState.completed: AspectRatio(
+              );
+            case LoadState.completed:
+              return AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: ExtendedRawImage(
                   fit: BoxFit.fill,
                   image: state.extendedImageInfo?.image,
                 ),
-              ),
-              LoadState.failed: AspectRatio(
+              );
+            case LoadState.failed:
+              return AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: Container(
                   color: backgroundColor,
                 ),
-              ),
-            },
-            AspectRatio(
-              aspectRatio: mediaObject.dimensions.aspectRatio,
-              child: Container(
-                color: backgroundColor,
-              ),
-            ),
-          ),
-        ),
+              );
+            default:
+              return AspectRatio(
+                aspectRatio: mediaObject.dimensions.aspectRatio,
+                child: Container(
+                  color: backgroundColor,
+                ),
+              );
+          }
+        },
       ),
     );
-  }
-
-  TValue? case2<TOptionType, TValue>(
-    TOptionType selectedOption,
-    Map<TOptionType, TValue> branches, [
-    TValue? defaultValue,
-  ]) {
-    if (!branches.containsKey(selectedOption)) {
-      return defaultValue;
-    }
-
-    return branches[selectedOption];
   }
 }
