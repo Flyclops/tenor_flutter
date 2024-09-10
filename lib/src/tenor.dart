@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
-import 'package:tenor_dart/tenor_dart.dart';
+
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/components/tab_view.dart';
 import 'package:tenor_flutter/src/components/tab_view_emojis.dart';
 import 'package:tenor_flutter/src/components/tab_view_gifs.dart';
 import 'package:tenor_flutter/src/components/tab_view_stickers.dart';
-import 'package:tenor_flutter/src/models/attribution.dart';
 import 'package:tenor_flutter/src/models/tab.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
+import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorStyle {
   final TenorAttributionStyle attributionStyle;

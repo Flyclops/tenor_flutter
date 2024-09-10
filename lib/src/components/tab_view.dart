@@ -267,7 +267,7 @@ class _TenorTabViewState extends State<TenorTabView>
       offset = null;
     } else {
       // _collection.next
-      offset = _collection?.next;
+      offset = _collection!.next;
     }
 
     if (widget.onLoad != null) {

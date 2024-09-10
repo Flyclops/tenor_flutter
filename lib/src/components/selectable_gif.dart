@@ -33,27 +33,27 @@ class TenorSelectableGif extends StatelessWidget {
             state.extendedImageLoadState,
             {
               LoadState.loading: AspectRatio(
-                aspectRatio: mediaObject.aspectRatio,
+                aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: Container(
                   color: Theme.of(context).cardColor,
                 ),
               ),
               LoadState.completed: AspectRatio(
-                aspectRatio: mediaObject.aspectRatio,
+                aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: ExtendedRawImage(
                   fit: BoxFit.fill,
                   image: state.extendedImageInfo?.image,
                 ),
               ),
               LoadState.failed: AspectRatio(
-                aspectRatio: mediaObject.aspectRatio,
+                aspectRatio: mediaObject.dimensions.aspectRatio,
                 child: Container(
                   color: Theme.of(context).cardColor,
                 ),
               ),
             },
             AspectRatio(
-              aspectRatio: mediaObject.aspectRatio,
+              aspectRatio: mediaObject.dimensions.aspectRatio,
               child: Container(
                 color: Theme.of(context).cardColor,
               ),
