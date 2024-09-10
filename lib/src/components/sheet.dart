@@ -42,7 +42,7 @@ class _TenorSheetState extends State<TenorSheet>
   void initState() {
     super.initState();
     _tabController = TabController(
-      initialIndex: 2,
+      initialIndex: widget.initialTabIndex,
       length: widget.tabs.length,
       vsync: this,
     );

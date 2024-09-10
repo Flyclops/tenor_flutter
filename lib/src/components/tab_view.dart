@@ -109,10 +109,13 @@ class _TenorTabViewState extends State<TenorTabView>
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getCount();
-      if (widget.showCategories == false) {
-        _loadMore();
-      } else {
+      // load categories
+      if (widget.showCategories) {
         _loadCatagories();
+      }
+      // load gifs if the query text starts populated or if show categories is disabled
+      if (_appBarProvider.queryText != '' || widget.showCategories == false) {
+        _loadMore();
       }
     });
   }
