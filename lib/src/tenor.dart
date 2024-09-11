@@ -47,6 +47,7 @@ class Tenor extends tenor_dart.Tenor {
     super.contentFilter = TenorContentFilter.off,
     super.country = 'US',
     super.locale = 'en_US',
+    super.networkTimeout = const Duration(seconds: 5),
   });
 
   /// Shows a bottom sheet modal that allows you to select a Tenor media object for use.

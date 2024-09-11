@@ -241,66 +241,86 @@ class _TenorTabViewState extends State<TenorTabView>
   }
 
   Future<void> _loadCatagories() async {
-    final fromTenor = await client.categories();
+    try {
+      final fromTenor = await client.categories();
+      final featuredGifResponse = await client.featured(limit: 1);
+      final featuredGif = featuredGifResponse?.results.first;
+      if (featuredGif != null) {
+        fromTenor.insert(
+          0,
+          TenorCategory(
+            name: 'Featured',
+            searchTerm: '📈 Featured',
+            image: featuredGif.media.tinygif?.url ?? '',
+            path: featuredCategoryPath,
+          ),
+        );
+      }
 
-    final featuredGifResponse = await client.featured(limit: 1);
-    final featuredGif = featuredGifResponse?.results.first;
-    if (featuredGif != null) {
-      fromTenor.insert(
-        0,
-        TenorCategory(
-          name: 'Featured',
-          searchTerm: '📈 Featured',
-          image: featuredGif.media.tinygif?.url ?? '',
-          path: featuredCategoryPath,
-        ),
-      );
+      setState(() {
+        _categories = fromTenor;
+      });
+    } catch (e) {
+      //
     }
-
-    setState(() {
-      _categories = fromTenor;
-    });
   }
 
   Future<void> _loadMore() async {
-    // return if is loading or no more gifs
-    if (_isLoading || _collection?.next == '') {
-      return;
-    }
+    try {
+      // return if loading
+      if (_isLoading) return;
 
-    _isLoading = true;
-
-    // Offset pagination for query
-    if (_collection == null) {
-      offset = null;
-    } else {
-      // _collection.next
-      offset = _collection!.next;
-    }
-
-    if (widget.onLoad != null) {
-      final response = await widget.onLoad?.call(
-        _appBarProvider.queryText,
-        offset,
-        _limit,
-        _appBarProvider.selectedCategory,
-      );
-      if (response != null) {
-        _collection = response;
+      // failsafe if categories are empty when we load more (network issues)
+      if (widget.showCategories && _categories.isEmpty) {
+        _loadCatagories();
       }
-    }
 
-    // Set result to list
-    if (_collection != null && _collection!.results.isNotEmpty && mounted) {
-      setState(() {
-        _list.addAll(_collection!.results);
-        _isLoading = false;
-      });
-    } else {
-      // so it refreshes on something like categories
-      setState(() {
-        _isLoading = false;
-      });
+      // return no more gifs
+      if (_collection?.next == '') {
+        return;
+      }
+
+      _isLoading = true;
+
+      // Offset pagination for query
+      if (_collection == null) {
+        offset = null;
+      } else {
+        // _collection.next
+        offset = _collection!.next;
+      }
+
+      if (widget.onLoad != null) {
+        final response = await widget.onLoad?.call(
+          _appBarProvider.queryText,
+          offset,
+          _limit,
+          _appBarProvider.selectedCategory,
+        );
+        if (response != null) {
+          _collection = response;
+        }
+      }
+
+      // Set result to list
+      if (_collection != null && _collection!.results.isNotEmpty && mounted) {
+        setState(() {
+          _list.addAll(_collection!.results);
+          _isLoading = false;
+        });
+      } else {
+        // so it refreshes on something like categories
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } on TenorNetworkException {
+      _isLoading = false;
+    } on TenorApiException {
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      rethrow;
     }
   }
 
@@ -322,8 +342,12 @@ class _TenorTabViewState extends State<TenorTabView>
 
   // Return selected gif
   void _selectedGif(TenorResult gif) {
-    // https://developers.google.com/tenor/guides/endpoints#register-share
-    client.registerShare(gif.id, search: _appBarProvider.queryText);
+    try {
+      // https://developers.google.com/tenor/guides/endpoints#register-share
+      client.registerShare(gif.id, search: _appBarProvider.queryText);
+    } catch (e) {
+      // do nothing if it fails
+    }
     // return result to the consumer
     Navigator.pop(context, gif);
   }
