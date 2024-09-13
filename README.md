@@ -71,7 +71,7 @@ print(result?.media.tinygif?.url);
 
 ## Don't need the UI?
 
-If you're seeking a solution that allows for full customization without the need of dependencies then consider [Tenor Dart](https://pub.dartlang.org/packages/tenor_dart).
+If you're seeking a solution that allows for full customization without the need of dependencies then consider [Tenor Dart](https://github.com/Flyclops/tenor_dart).
 
 ## Sponsors
 
