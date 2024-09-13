@@ -3,6 +3,7 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 void main() async {
+  // only used to load api key from .env file, not required
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
 
@@ -17,8 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tenor Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Tenor Flutter Demo'),
     );
