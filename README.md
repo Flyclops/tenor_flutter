@@ -1,6 +1,5 @@
 # Tenor Flutter
 
-
 > An opinionated yet customizable Flutter package for searching and selecting from a list of GIFs/Stickers from the [Tenor GIF search API](https://developers.google.com/tenor/guides/quickstart).
 
 <p align="center">
@@ -9,7 +8,6 @@
   <a href="https://github.com/flyclops/tenor_flutter/stargazers"><img src="https://img.shields.io/github/stars/flyclops/tenor_flutter?style=flat" alt="Tenor Flutter Issues" /></a>
   <a href="https://github.com/flyclops/tenor_flutter/issues"><img src="https://img.shields.io/github/issues/flyclops/tenor_flutter" alt="Tenor Flutter Issues" /></a>
 </p>
-
 
 <p align="center"><img src="https://github.com/flyclops/tenor_flutter/raw/main/example/assets/demo.gif" width="200" alt="Tenor Flutter Demo"/></p>
 
@@ -82,12 +80,12 @@ If you're seeking a solution that allows for full customization without the need
   </tr>
   <tr>
     <td><p align="center"><a href="https://flyclops.com/">Flyclops</a> is a independent mobile games studio specializing in casual multi-player games, both asynchronous turn-based, and real-time. Flyclops’s games have been played by millions across&nbsp;the&nbsp;globe.</p></td>
-    <td><p align="center"><a href="https://flyclops.com/games/domino.html">Domino!</a> is super addictive, fast-paced, multiplayer dominoes done right for <a href="http://j.mp/domino_FREE">iOS</a> and <a href="http://flycl.ps/domino_android">Android</a>. This easy-to-learn but impossible-to-master strategy game is beautifully designed and endlessly&nbsp;entertaining!</p></td>
+    <td><p align="center"><a href="https://flyclops.com/games/domino.html">Domino!</a> is super addictive, fast-paced, multiplayer dominoes done right for <a href="https://j.mp/domino_FREE">iOS</a> and <a href="https://flycl.ps/domino_android">Android</a>. This easy-to-learn but impossible-to-master strategy game is beautifully designed and endlessly&nbsp;entertaining!</p></td>
   </tr>
 </table>
 
 ## What's next?
 
 - Documentation
-- Tests *([Contributions](https://github.com/Flyclops/tenor_flutter/blob/main/CONTRIBUTING.md) welcome)* ^_^
+- Tests _([Contributions](https://github.com/Flyclops/tenor_flutter/blob/main/CONTRIBUTING.md) welcome)_ ^\_^
 - Further improvements
