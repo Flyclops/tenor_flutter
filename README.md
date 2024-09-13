@@ -29,7 +29,7 @@
 5. In the navigation menu, go to the `APIs & Services` tab and select [Credentials](https://console.cloud.google.com/apis/credentials)
 6. Click `+ Create Credentials` and choose `API key`
 7. Copy the generated API key
-8. Provide this API key as a parameter to `TenorClient`
+8. Provide this API key as a parameter to `Tenor(apiKey: 'YOUR_API_KEY')`
 
 ## Usage
 
