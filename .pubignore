@@ -1,0 +1,13 @@
+/example/android
+/example/ios
+/example/linux
+/example/macos
+/example/web
+/example/windows
+/example/README.md
+/example/analysis_options.yaml
+/example/assets
+/example/pubspec.yaml
+
+/ci
+/coverage
