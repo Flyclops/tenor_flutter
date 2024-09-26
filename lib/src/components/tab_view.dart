@@ -251,7 +251,7 @@ class _TenorTabViewState extends State<TenorTabView>
           TenorCategory(
             name: 'Featured',
             searchTerm: '📈 Featured',
-            image: featuredGif.media.tinygif?.url ?? '',
+            image: featuredGif.media.tinyGif?.url ?? '',
             path: featuredCategoryPath,
           ),
         );
