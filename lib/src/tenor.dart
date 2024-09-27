@@ -43,6 +43,7 @@ class TenorStyle {
 class Tenor extends tenor_dart.Tenor {
   const Tenor({
     required super.apiKey,
+    super.client = const tenor_dart.TenorHttpClient(),
     super.clientKey,
     super.contentFilter = TenorContentFilter.off,
     super.country = 'US',
@@ -68,6 +69,7 @@ class Tenor extends tenor_dart.Tenor {
     TextEditingController? searchFieldController,
     Widget? searchFieldWidget,
   }) {
+    print('TEST');
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,
@@ -75,6 +77,7 @@ class Tenor extends tenor_dart.Tenor {
       shape: style.shape,
       useSafeArea: true,
       builder: (context) {
+        print('TEST 2');
         return DefaultTextStyle.merge(
           style: TextStyle(
             fontFamily: style.fontFamily,
