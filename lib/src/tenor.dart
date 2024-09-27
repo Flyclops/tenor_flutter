@@ -69,7 +69,6 @@ class Tenor extends tenor_dart.Tenor {
     TextEditingController? searchFieldController,
     Widget? searchFieldWidget,
   }) {
-    print('TEST');
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,
@@ -77,7 +76,6 @@ class Tenor extends tenor_dart.Tenor {
       shape: style.shape,
       useSafeArea: true,
       builder: (context) {
-        print('TEST 2');
         return DefaultTextStyle.merge(
           style: TextStyle(
             fontFamily: style.fontFamily,

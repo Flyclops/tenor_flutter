@@ -69,7 +69,6 @@ class _TenorSheetState extends State<TenorSheet>
 
   @override
   Widget build(BuildContext context) {
-    print('TEST 3');
     final maxChildSize = _calculateMaxChildSize(context);
     return DraggableScrollableSheet(
       controller: _sheetProvider.scrollController,
