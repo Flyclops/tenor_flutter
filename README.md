@@ -1,12 +1,15 @@
 # Tenor Flutter
 
-> An opinionated yet customizable Flutter package for searching and selecting from a list of GIFs/Stickers from the [Tenor GIF search API](https://developers.google.com/tenor/guides/quickstart).
+This package integrates [Tenor GIF search](https://tenor.com/) into [Flutter](https://flutter.dev/) by utilizing the [tenor_dart](https://pub.dev/packages/tenor_dart) package to communicate directly with the [Tenor API V2](https://developers.google.com/tenor/guides/quickstart) via [http](https://pub.dev/packages/http).
+
+The package currently provides an opinionated yet customizable UI experience for searching and selecting from a list of GIFs/Stickers from the Tenor GIF search API.
 
 <p align="center">
   <a href="https://pub.dartlang.org/packages/tenor_flutter"><img src="https://img.shields.io/pub/v/tenor_flutter.svg" alt="Tenor Flutter Pub Package" /></a>
-  <a href="https://opensource.org/license/bsd-3-clause"><img src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg" alt="License BSD 3-Clause" /></a>
-  <a href="https://github.com/flyclops/tenor_flutter/stargazers"><img src="https://img.shields.io/github/stars/flyclops/tenor_flutter?style=flat" alt="Tenor Flutter Issues" /></a>
+  <a href="https://github.com/Flyclops/tenor_flutter/actions/workflows/main.yml"><img src="https://github.com/flyclops/tenor_flutter/actions/workflows/main.yml/badge.svg" alt="Build Status" /></a>
+  <a href="https://coveralls.io/github/Flyclops/tenor_flutter?branch=main"><img src="https://coveralls.io/repos/github/Flyclops/tenor_flutter/badge.svg?branch=main" alt="Coverage Status" /></a>
   <a href="https://github.com/flyclops/tenor_flutter/issues"><img src="https://img.shields.io/github/issues/flyclops/tenor_flutter" alt="Tenor Flutter Issues" /></a>
+  <a href="https://github.com/Flyclops/tenor_flutter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg" alt="License BSD 3-Clause" /></a>
 </p>
 
 <p align="center"><img src="https://github.com/flyclops/tenor_flutter/raw/main/example/assets/demo.gif" width="200" alt="Tenor Flutter Demo"/></p>
@@ -89,3 +92,14 @@ If you're seeking a solution that allows for full customization without the need
 - Documentation
 - Tests _([Contributions](https://github.com/Flyclops/tenor_flutter/blob/main/CONTRIBUTING.md) welcome)_ ^\_^
 - Further improvements
+
+## Contributing
+
+If you read this far then you are awesome! There are a multiple ways in which you can [contribute](https://github.com/Flyclops/tenor_flutter/blob/main/CONTRIBUTING.md):
+
+- Pick up any issue marked with "[good first issue](https://github.com/flyclops/tenor_flutter/issues?q=is:open+is:issue+label:%22good+first+issue%22)"
+- Propose any feature, enhancement
+- Report a bug
+- Fix a bug
+- Write and improve some documentation
+- Send in a Pull Request 🙏

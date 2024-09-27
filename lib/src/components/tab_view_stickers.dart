@@ -23,14 +23,14 @@ class TenorViewStickers extends StatelessWidget {
         if (queryText.isNotEmpty) {
           return await client.search(
             queryText,
-            mediaFilter: const [TenorMediaFormat.tinygifTransparent],
+            mediaFilter: const [TenorMediaFormat.tinyGifTransparent],
             pos: pos,
             limit: limit,
             sticker: true,
           );
         } else {
           return await client.featured(
-            mediaFilter: const [TenorMediaFormat.tinygifTransparent],
+            mediaFilter: const [TenorMediaFormat.tinyGifTransparent],
             pos: pos,
             limit: limit,
             sticker: true,

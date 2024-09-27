@@ -43,6 +43,7 @@ class TenorStyle {
 class Tenor extends tenor_dart.Tenor {
   const Tenor({
     required super.apiKey,
+    super.client = const tenor_dart.TenorHttpClient(),
     super.clientKey,
     super.contentFilter = TenorContentFilter.off,
     super.country = 'US',

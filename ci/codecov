@@ -1,0 +1,5 @@
+rm -rf coverage
+flutter test --coverage
+genhtml coverage/lcov.info --output=coverage/output
+open coverage/output/index.html
+# coveralls report coverage/lcov.info --debug --dry-run

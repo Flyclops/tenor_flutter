@@ -23,7 +23,7 @@ class TenorViewEmojis extends StatelessWidget {
         if (queryText.isNotEmpty) {
           return await client.search(
             '$queryText emoji',
-            mediaFilter: const [TenorMediaFormat.tinygifTransparent],
+            mediaFilter: const [TenorMediaFormat.tinyGifTransparent],
             pos: pos,
             limit: limit,
             sticker: true,
@@ -31,7 +31,7 @@ class TenorViewEmojis extends StatelessWidget {
         } else {
           return await client.search(
             'emoji',
-            mediaFilter: const [TenorMediaFormat.tinygifTransparent],
+            mediaFilter: const [TenorMediaFormat.tinyGifTransparent],
             pos: pos,
             limit: limit,
             sticker: true,

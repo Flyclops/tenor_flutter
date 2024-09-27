@@ -16,7 +16,7 @@ class TenorSelectableGif extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaObject = result.media.tinygifTransparent ?? result.media.tinygif;
+    final mediaObject = result.media.tinyGifTransparent ?? result.media.tinyGif;
 
     // If no media object is found, early out
     if (mediaObject == null) return const SizedBox.shrink();
