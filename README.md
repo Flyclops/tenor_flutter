@@ -1,6 +1,8 @@
 # Tenor Flutter
 
-> An opinionated yet customizable Flutter package for searching and selecting from a list of GIFs/Stickers from the [Tenor GIF search API](https://developers.google.com/tenor/guides/quickstart).
+This package integrates [Tenor GIF search](https://tenor.com/) into [Flutter](https://flutter.dev/) by utilizing the [tenor_dart](https://pub.dev/packages/tenor_dart) package to communicate directly with the [Tenor API V2](https://developers.google.com/tenor/guides/quickstart) via [http](https://pub.dev/packages/http).
+
+The package currently provides an opinionated yet customizable UI experience for searching and selecting from a list of GIFs/Stickers from the Tenor GIF search API.
 
 <p align="center">
   <a href="https://pub.dartlang.org/packages/tenor_flutter"><img src="https://img.shields.io/pub/v/tenor_flutter.svg" alt="Tenor Flutter Pub Package" /></a>
