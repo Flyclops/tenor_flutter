@@ -18,27 +18,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - uses: subosito/flutter-action@v2.16.0
 
       - name: Install dependencies
-        run: dart pub get --no-example
+        run: flutter pub get --no-example
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         working-directory: ./lib
-        run: dart analyze
+        run: flutter analyze
 
       - name: Run tests
-        run: dart test --coverage=./coverage
-      - name: Convert coverage to lcov
-        run: dart run coverage:format_coverage -i ./coverage -o ./coverage/lcov.info --lcov --check-ignore --report-on lib/
+        run: flutter test --coverage
+
       - name: Send coverage to Coveralls
         uses: coverallsapp/github-action@v2
