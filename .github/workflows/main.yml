@@ -25,7 +25,7 @@ jobs:
           channel: stable
 
       - name: Install dependencies
-        run: flutter pub get --no-example
+        run: flutter pub get
 
       - name: Analyze project source
         working-directory: ./lib
