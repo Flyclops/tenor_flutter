@@ -1,0 +1,6 @@
+rm -rf coverage
+dart test --coverage=./coverage
+dart run coverage:format_coverage -i ./coverage -o ./coverage/lcov.info --lcov --check-ignore --report-on lib/
+genhtml coverage/lcov.info --output=coverage/output
+open coverage/output/index.html
+# coveralls report coverage/lcov.info --debug --dry-run
