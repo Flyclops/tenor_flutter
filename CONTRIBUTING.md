@@ -4,6 +4,15 @@
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests. These are guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
+## How Can You Contribute?
+
+- Pick up any issue marked with "[good first issue](https://github.com/flyclops/tenor_flutter/issues?q=is:open+is:issue+label:%22good+first+issue%22)"
+- Propose any feature, enhancement
+- Report a bug
+- Fix a bug
+- Write and improve some documentation
+- Send in a Pull Request 🙏
+
 ## Creating a Pull Request
 
 Before creating a pull request please:

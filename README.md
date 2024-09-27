@@ -8,7 +8,7 @@ The package currently provides an opinionated yet customizable UI experience for
   <a href="https://pub.dartlang.org/packages/tenor_flutter"><img src="https://img.shields.io/pub/v/tenor_flutter.svg" alt="Tenor Flutter Pub Package" /></a>
   <a href="https://github.com/Flyclops/tenor_flutter/actions/workflows/main.yml"><img src="https://github.com/flyclops/tenor_flutter/actions/workflows/main.yml/badge.svg" alt="Build Status" /></a>
   <a href="https://coveralls.io/github/Flyclops/tenor_flutter?branch=main"><img src="https://coveralls.io/repos/github/Flyclops/tenor_flutter/badge.svg?branch=main" alt="Coverage Status" /></a>
-  <a href="https://github.com/flyclops/tenor_flutter/issues"><img src="https://img.shields.io/github/issues/flyclops/tenor_flutter" alt="Tenor Flutter Issues" /></a>
+ <a href="https://github.com/flyclops/tenor_flutter/stargazers"><img src="https://img.shields.io/github/stars/flyclops/tenor_flutter?style=flat" alt="Tenor Dart Stars" /></a>
   <a href="https://github.com/Flyclops/tenor_flutter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg" alt="License BSD 3-Clause" /></a>
 </p>
 
