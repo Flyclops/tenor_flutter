@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tenor_flutter/src/components/components.dart';
-import 'package:tenor_flutter/src/tools/debouncer.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
@@ -9,7 +7,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Category Widget >', () {
-    testWidgets('If TenorCategory is null, find nothing', (tester) async {
+    testWidgets('If category is null, find nothing', (tester) async {
       await tester.pumpWidget(
         const TenorCategoryWidget(),
       );
