@@ -1,10 +1,10 @@
 import 'dart:async';
 
-class Debouncer {
+class TenorDebouncer {
   final Duration _delay;
   Timer? _timer;
 
-  Debouncer({
+  TenorDebouncer({
     Duration delay = const Duration(milliseconds: 300),
   }) : _delay = delay;
 

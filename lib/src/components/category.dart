@@ -63,7 +63,7 @@ class TenorCategoryWidget extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (tenorCategoryImage != null)
+            if (tenorCategoryImage != null && tenorCategoryImage.isNotEmpty)
               ExtendedImage.network(
                 tenorCategoryImage,
                 cache: true,
