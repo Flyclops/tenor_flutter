@@ -1,9 +1,5 @@
 # Tenor Flutter
 
-This package integrates [Tenor GIF search](https://tenor.com/) into [Flutter](https://flutter.dev/) by utilizing the [tenor_dart](https://pub.dev/packages/tenor_dart) package to communicate directly with the [Tenor API V2](https://developers.google.com/tenor/guides/quickstart) via [http](https://pub.dev/packages/http).
-
-The package currently provides an opinionated yet customizable UI experience for searching and selecting from a list of GIFs/Stickers from the Tenor GIF search API.
-
 <p align="center">
   <a href="https://pub.dartlang.org/packages/tenor_flutter"><img src="https://img.shields.io/pub/v/tenor_flutter.svg" alt="Tenor Flutter Pub Package" /></a>
   <a href="https://github.com/Flyclops/tenor_flutter/actions/workflows/main.yml"><img src="https://github.com/flyclops/tenor_flutter/actions/workflows/main.yml/badge.svg" alt="Build Status" /></a>
@@ -11,6 +7,10 @@ The package currently provides an opinionated yet customizable UI experience for
  <a href="https://github.com/flyclops/tenor_flutter/stargazers"><img src="https://img.shields.io/github/stars/flyclops/tenor_flutter?style=flat" alt="Tenor Dart Stars" /></a>
   <a href="https://github.com/Flyclops/tenor_flutter/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-BSD_3--Clause-blue.svg" alt="License BSD 3-Clause" /></a>
 </p>
+
+This package integrates [Tenor GIF search](https://tenor.com/) into [Flutter](https://flutter.dev/) by utilizing the [tenor_dart](https://pub.dev/packages/tenor_dart) package to communicate directly with the [Tenor API V2](https://developers.google.com/tenor/guides/quickstart) via [http](https://pub.dev/packages/http).
+
+The package currently provides an opinionated yet customizable UI experience for searching and selecting from a list of GIFs/Stickers from the Tenor GIF search API.
 
 <p align="center"><img src="https://github.com/flyclops/tenor_flutter/raw/main/example/assets/demo.gif" width="200" alt="Tenor Flutter Demo"/></p>
 
