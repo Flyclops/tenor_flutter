@@ -4,12 +4,14 @@ import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewGifs extends StatelessWidget {
   final Tenor client;
+  final String? featuredCategory;
   final int mediaWidth;
   final bool showCategories;
   final TenorTabViewStyle style;
 
   const TenorViewGifs({
     required this.client,
+    this.featuredCategory,
     this.mediaWidth = 200,
     this.showCategories = true,
     this.style = const TenorTabViewStyle(),
@@ -20,6 +22,7 @@ class TenorViewGifs extends StatelessWidget {
   Widget build(BuildContext context) {
     return TenorTabView(
       client: client,
+      featuredCategory: featuredCategory,
       keepAliveTabView: true,
       mediaWidth: mediaWidth,
       showCategories: showCategories,
