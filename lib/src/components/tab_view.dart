@@ -180,6 +180,7 @@ class _TenorTabViewState extends State<TenorTabView>
             controller: scrollController,
             crossAxisCount: _crossAxisCount,
             crossAxisSpacing: 8,
+            keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
             itemBuilder: (ctx, idx) {
               final category = _categories[idx];
               return ClipRRect(
@@ -219,6 +220,7 @@ class _TenorTabViewState extends State<TenorTabView>
         controller: scrollController,
         crossAxisCount: _crossAxisCount,
         crossAxisSpacing: 8,
+        keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
         itemBuilder: (ctx, idx) => ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: TenorSelectableGif(
