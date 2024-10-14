@@ -14,6 +14,7 @@ import 'package:tenor_flutter/src/tenor.dart';
 class TenorSheet extends StatefulWidget {
   final TenorAttributionType attributionType;
   final TextEditingController? searchFieldController;
+  final String searchFieldHintText;
   final Widget? searchFieldWidget;
   final TenorStyle style;
   final List<TenorTab> tabs;
@@ -21,11 +22,12 @@ class TenorSheet extends StatefulWidget {
 
   const TenorSheet({
     required this.attributionType,
+    required this.searchFieldHintText,
+    required this.searchFieldWidget,
     required this.style,
     required this.tabs,
     this.initialTabIndex = 1,
     this.searchFieldController,
-    this.searchFieldWidget,
     super.key,
   });
 
@@ -92,6 +94,7 @@ class _TenorSheetState extends State<TenorSheet>
                 tabs: widget.tabs.map((tab) => tab.name).toList(),
               ),
               TenorSearchField(
+                hintText: widget.searchFieldHintText,
                 scrollController: scrollController,
                 searchFieldController: widget.searchFieldController,
                 searchFieldWidget: widget.searchFieldWidget,

@@ -68,6 +68,7 @@ class Tenor extends tenor_dart.Tenor {
     TenorAttributionType attributionType = TenorAttributionType.poweredBy,
     TextEditingController? searchFieldController,
     Widget? searchFieldWidget,
+    String searchFieldHintText = 'Search Tenor',
   }) {
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
@@ -112,6 +113,7 @@ class Tenor extends tenor_dart.Tenor {
                 initialTabIndex: initialTabIndex,
                 searchFieldController: searchFieldController,
                 searchFieldWidget: searchFieldWidget,
+                searchFieldHintText: searchFieldHintText,
                 style: style,
                 tabs: tabs ??
                     [
