@@ -52,7 +52,7 @@ class LocalizationState extends State<Localization> {
                 searchFieldHintText: 'Buscar Tenor',
                 tabs: [
                   TenorTab(
-                    name: 'Caras',
+                    name: 'Caritas',
                     view: TenorViewEmojis(
                       client: tenor,
                     ),
