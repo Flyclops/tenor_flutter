@@ -58,16 +58,19 @@ class Tenor extends tenor_dart.Tenor {
   /// You must have one valid form of [Tenor attribution](https://developers.google.com/tenor/guides/attribution) in order to use this within your app.
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
-    String queryText = '',
-    double minExtent = 0.7,
-    double maxExtent = 0.9,
-    int initialTabIndex = 1,
+    TenorAttributionType attributionType = TenorAttributionType.poweredBy,
     Duration debounce = const Duration(milliseconds: 300),
+    int initialTabIndex = 1,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    double maxExtent = 0.9,
+    double minExtent = 0.7,
+    String queryText = '',
+    TextEditingController? searchFieldController,
+    String searchFieldHintText = 'Search Tenor',
+    Widget? searchFieldWidget,
     TenorStyle style = const TenorStyle(),
     List<TenorTab>? tabs,
-    TenorAttributionType attributionType = TenorAttributionType.poweredBy,
-    TextEditingController? searchFieldController,
-    Widget? searchFieldWidget,
   }) {
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
@@ -91,6 +94,7 @@ class Tenor extends tenor_dart.Tenor {
                   create: (context) => TenorAppBarProvider(
                     queryText,
                     debounce,
+                    keyboardDismissBehavior: keyboardDismissBehavior,
                   ),
                 ),
                 ChangeNotifierProvider(
@@ -112,6 +116,7 @@ class Tenor extends tenor_dart.Tenor {
                 initialTabIndex: initialTabIndex,
                 searchFieldController: searchFieldController,
                 searchFieldWidget: searchFieldWidget,
+                searchFieldHintText: searchFieldHintText,
                 style: style,
                 tabs: tabs ??
                     [

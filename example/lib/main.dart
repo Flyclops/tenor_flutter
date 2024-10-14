@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
+import 'package:tenor_flutter_example/examples/dark_theme.dart';
+import 'package:tenor_flutter_example/examples/localization.dart';
 
 void main() async {
   // only used to load api key from .env file, not required
@@ -20,14 +22,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Tenor Flutter Demo'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -36,128 +37,94 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // replace apiKey with an api key provided by Tenor > https://developers.google.com/tenor/guides/quickstart
   var tenor = Tenor(apiKey: FlutterConfig.get('TENOR_API_KEY'));
-
+  // define a result that we can display later
   TenorResult? selectedResult;
-
-  void _defaultPicker() async {
-    final result = await tenor.showAsBottomSheet(context: context);
-    setState(() {
-      selectedResult = result;
-    });
-  }
-
-  void _themedPicker() async {
-    final result = await tenor.showAsBottomSheet(
-      context: context,
-      style: TenorStyle(
-        color: const Color(0xFF2b2d31),
-        searchFieldStyle: const TenorSearchFieldStyle(
-          fillColor: Color(0xFF1e1f22),
-          hintStyle: TextStyle(
-            color: Color(0xFFb5bac1),
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-        attributionStyle: const TenorAttributionStyle(
-          brightnes: Brightness.dark,
-        ),
-        tabBarStyle: TenorTabBarStyle(
-          decoration: BoxDecoration(
-            color: const Color(0xFF1e1f22),
-            border: Border.all(
-              color: const Color(0xFF2b2d31),
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          indicator: BoxDecoration(
-            color: const Color(0xFF404249),
-            borderRadius: BorderRadius.circular(7),
-          ),
-          labelStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          unselectedLabelColor: const Color(0xFFb5bac1),
-          labelColor: Colors.white,
-        ),
-        selectedCategoryStyle: const TenorSelectedCategoryStyle(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            size: 15,
-            color: Colors.white,
-          ),
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-        tabViewStyle: const TenorTabViewStyle(
-          mediaBackgroundColor: Color(0xFF404249),
-        ),
-      ),
-    );
-    setState(() {
-      selectedResult = result;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    final selectedGif = selectedResult?.media.tinyGif ??
-        selectedResult?.media.tinyGifTransparent;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text('Tenor Flutter Demo'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            selectedResult != null && selectedGif != null
-                ? Image.network(
-                    selectedGif.url,
-                    width: selectedGif.dimensions.width,
-                    height: selectedGif.dimensions.height,
-                  )
-                : const Text('No GIF selected'),
-          ],
-        ),
-      ),
+      body: _exampleBody(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // A default implementation of tenor flutter. Displays the gif picker
+          // as a bottom sheet and then updates the selectedResult in state.
           FloatingActionButton(
-            onPressed: _defaultPicker,
+            onPressed: () async {
+              final result = await tenor.showAsBottomSheet(context: context);
+              setState(() {
+                selectedResult = result;
+              });
+            },
             tooltip: 'Default',
             child: const Icon(Icons.add),
           ),
-          const SizedBox(width: 16),
-          Theme(
-            data: ThemeData(
-              brightness: Brightness.dark,
-              useMaterial3: true,
-            ),
-            child: FloatingActionButton(
-              backgroundColor: Colors.black,
-              onPressed: _themedPicker,
-              tooltip: 'Themed',
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
+        ],
+      ),
+    );
+  }
+
+  // Additional examples, see: https://github.com/Flyclops/tenor_flutter/tree/main/example/lib/examples
+  Widget _exampleBody() {
+    final selectedGif = selectedResult?.media.tinyGif ??
+        selectedResult?.media.tinyGifTransparent;
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Column(
+              children: [
+                const SizedBox(height: 8),
+                const Text('Additional Examples'),
+                const SizedBox(height: 8),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  children: [
+                    // https://github.com/Flyclops/tenor_flutter/tree/main/example/lib/examples/dark_theme.dart
+                    ElevatedButton(
+                      onPressed: () => push(const DarkTheme()),
+                      child: const Text('Dark Theme'),
+                    ),
+                    // https://github.com/Flyclops/tenor_flutter/tree/main/example/lib/examples/localization.dart
+                    ElevatedButton(
+                      onPressed: () => push(const Localization()),
+                      child: const Text('Localization'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              selectedResult != null && selectedGif != null
+                  ? Image.network(
+                      selectedGif.url,
+                      width: selectedGif.dimensions.width,
+                      height: selectedGif.dimensions.height,
+                    )
+                  : const Text('No GIF selected'),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  void push(Widget page) {
+    Navigator.of(context).push(
+      MaterialPageRoute<String>(
+        builder: (BuildContext context) {
+          return page;
+        },
       ),
     );
   }

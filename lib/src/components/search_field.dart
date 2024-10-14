@@ -63,9 +63,11 @@ class TenorSearchField extends StatefulWidget {
   final Widget? searchFieldWidget;
   final TenorSelectedCategoryStyle selectedCategoryStyle;
   final TenorSearchFieldStyle style;
+  final String hintText;
 
   const TenorSearchField({
     super.key,
+    required this.hintText,
     required this.scrollController,
     this.searchFieldController,
     this.searchFieldWidget,
@@ -102,7 +104,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Establish the debouncer
-      final debouncer = Debouncer(
+      final debouncer = TenorDebouncer(
         delay: _appBarProvider.debounce,
       );
 
@@ -186,7 +188,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                   fillColor: widget.style.fillColor,
                   filled: true,
                   hintStyle: widget.style.hintStyle,
-                  hintText: 'Search Tenor',
+                  hintText: widget.hintText,
                   isCollapsed: true,
                   isDense: true,
                 ),

@@ -23,6 +23,7 @@ class TenorTabView extends StatefulWidget {
   final Widget Function(BuildContext, Widget?)? builder;
   final TenorCategoryStyle categoryStyle;
   final Tenor client;
+  final String featuredCategory;
   final int mediaWidth;
   final bool? keepAliveTabView;
   final Future<TenorResponse?> Function(
@@ -40,13 +41,14 @@ class TenorTabView extends StatefulWidget {
     required this.mediaWidth,
     this.builder,
     this.categoryStyle = const TenorCategoryStyle(),
+    String? featuredCategory,
     this.keepAliveTabView,
     this.onLoad,
     this.onSelected,
     this.showCategories = false,
     this.style = const TenorTabViewStyle(),
     super.key,
-  });
+  }) : featuredCategory = featuredCategory ?? '📈 Featured';
 
   @override
   State<TenorTabView> createState() => _TenorTabViewState();
@@ -178,6 +180,7 @@ class _TenorTabViewState extends State<TenorTabView>
             controller: scrollController,
             crossAxisCount: _crossAxisCount,
             crossAxisSpacing: 8,
+            keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
             itemBuilder: (ctx, idx) {
               final category = _categories[idx];
               return ClipRRect(
@@ -217,6 +220,7 @@ class _TenorTabViewState extends State<TenorTabView>
         controller: scrollController,
         crossAxisCount: _crossAxisCount,
         crossAxisSpacing: 8,
+        keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
         itemBuilder: (ctx, idx) => ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: TenorSelectableGif(
@@ -249,10 +253,10 @@ class _TenorTabViewState extends State<TenorTabView>
         fromTenor.insert(
           0,
           TenorCategory(
-            name: 'Featured',
-            searchTerm: '📈 Featured',
             image: featuredGif.media.tinyGif?.url ?? '',
+            name: widget.featuredCategory,
             path: featuredCategoryPath,
+            searchTerm: 'featured',
           ),
         );
       }

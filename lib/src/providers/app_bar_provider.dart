@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorAppBarProvider with ChangeNotifier {
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+
   String _queryText = '';
   String get queryText => _queryText;
   TenorCategory? _selectedCategory;
@@ -21,6 +23,7 @@ class TenorAppBarProvider with ChangeNotifier {
   TenorAppBarProvider(
     String queryText,
     Duration debounce, {
+    required this.keyboardDismissBehavior,
     TenorCategory? selectedCategory,
   })  : _selectedCategory = selectedCategory,
         super() {

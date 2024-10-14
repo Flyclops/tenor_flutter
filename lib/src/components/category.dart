@@ -12,6 +12,9 @@ class TenorCategoryStyle {
   /// Color that shows between the category text and image.
   final Color imageOverlayColor;
 
+  /// Tenor returns "#" back with the category name, this will strip it.
+  final bool stripHashtag;
+
   /// Control how the category text looks.
   final TextStyle textStyle;
 
@@ -25,6 +28,7 @@ class TenorCategoryStyle {
     this.height = 100,
     this.imageOverlayColor = const Color.fromRGBO(0, 0, 0, 0.5),
     this.padding = const EdgeInsets.all(8),
+    this.stripHashtag = true,
     this.textStyle = const TextStyle(
       color: Colors.white,
       fontSize: 20,
@@ -63,7 +67,7 @@ class TenorCategoryWidget extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (tenorCategoryImage != null)
+            if (tenorCategoryImage != null && tenorCategoryImage.isNotEmpty)
               ExtendedImage.network(
                 tenorCategoryImage,
                 cache: true,
@@ -77,7 +81,9 @@ class TenorCategoryWidget extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
-                  tenorCategory.searchTerm,
+                  style.stripHashtag && tenorCategory.name.startsWith('#')
+                      ? tenorCategory.name.substring(1)
+                      : tenorCategory.name,
                   style: style.textStyle,
                 ),
               ),
