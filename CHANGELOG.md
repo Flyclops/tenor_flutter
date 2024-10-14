@@ -1,4 +1,4 @@
-## 0.0.2
+## 0.0.3
 
 - chore: write tests
 - chore: updated/added examples and broke them up for a better experience
@@ -7,6 +7,12 @@
 - fix: issue where featured category could not be localized
 - refactor: expose `keyboardDismissBehavior` as a parameter of `showAsBottomSheet()`
 - refactor: expose `searchFieldHintText` as a parameter of `showAsBottomSheet()` to make localization easier
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.2...0.0.3)
+
+## 0.0.2
+
+- chore: write tests
 - refactor: support `tenor_dart` changes
 
 [All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.1...0.0.2)
