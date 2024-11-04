@@ -67,7 +67,7 @@ Here's how to display the UI as a bottom sheet and then print the user's selecti
 ```
 final tenorClient = Tenor(apiKey: 'YOUR_API_KEY', clientKey: 'YOUR_PROJECT_NAME');
 final TenorResult? result = await tenorClient.showAsBottomSheet(context: context);
-print(result?.media.tinygif?.url);
+print(result?.media.tinyGif?.url);
 ```
 
 ## Don't need the UI?
