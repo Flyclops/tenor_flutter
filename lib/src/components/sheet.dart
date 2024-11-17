@@ -14,12 +14,13 @@ import 'package:tenor_flutter/src/tenor.dart';
 class TenorSheet extends StatefulWidget {
   final TenorAttributionType attributionType;
   final bool coverAppBar;
+  final int initialTabIndex;
   final TextEditingController? searchFieldController;
   final String searchFieldHintText;
   final Widget? searchFieldWidget;
   final TenorStyle style;
+  final List<double>? snapSizes;
   final List<TenorTab> tabs;
-  final int initialTabIndex;
 
   const TenorSheet({
     required this.attributionType,
@@ -30,6 +31,7 @@ class TenorSheet extends StatefulWidget {
     required this.tabs,
     this.initialTabIndex = 1,
     this.searchFieldController,
+    this.snapSizes,
     super.key,
   });
 
@@ -79,63 +81,79 @@ class _TenorSheetState extends State<TenorSheet>
   @override
   Widget build(BuildContext context) {
     final maxChildSize = _calculateMaxChildSize(context);
-    return DraggableScrollableSheet(
-      controller: _sheetProvider.scrollController,
-      expand: false,
-      // just in case we calculate a smaller maxChildSize than initialChildSize
-      initialChildSize: _sheetProvider.initialExtent > maxChildSize
-          ? maxChildSize
-          : _sheetProvider.initialExtent,
-      maxChildSize: maxChildSize,
-      minChildSize: _sheetProvider.minExtent,
-      snap: true,
-      builder: (context, scrollController) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              controller: scrollController,
-              child: Container(
-                height: constraints.maxHeight,
-                color: widget.style.color,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const TenorDragHandle(
-                      style: TenorDragHandleStyle(),
-                    ),
-                    TenorTabBar(
-                      style: widget.style.tabBarStyle,
-                      tabController: _tabController,
-                      tabs: widget.tabs.map((tab) => tab.name).toList(),
-                    ),
-                    TenorSearchField(
-                      animationStyle: widget.style.animationStyle,
-                      hintText: widget.searchFieldHintText,
-                      scrollController: scrollController,
-                      searchFieldController: widget.searchFieldController,
-                      searchFieldWidget: widget.searchFieldWidget,
-                      selectedCategoryStyle: widget.style.selectedCategoryStyle,
-                      style: widget.style.searchFieldStyle,
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: widget.tabs.map((tab) => tab.view).toList(),
-                      ),
-                    ),
-                    if (widget.attributionType ==
-                        TenorAttributionType.poweredBy)
-                      TenorAttribution(
-                        style: widget.style.attributionStyle,
-                      ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+    return NotificationListener<DraggableScrollableNotification>(
+      onNotification: (notification) {
+        // Fix a weird bug where the sheet doesn't snap to the minExtent
+        // Ends in something like 0.5000000000000001 instead of 0.5
+        final extent =
+            double.parse(notification.extent.toStringAsPrecision(15));
+        if (extent == _sheetProvider.minExtent) {
+          _sheetProvider.scrollController.jumpTo(_sheetProvider.minExtent);
+        }
+        return false;
       },
+      child: DraggableScrollableSheet(
+        controller: _sheetProvider.scrollController,
+        expand: false,
+        // just in case we calculate a smaller maxChildSize than initialChildSize
+        initialChildSize: _sheetProvider.initialExtent > maxChildSize
+            ? maxChildSize
+            : _sheetProvider.initialExtent,
+        maxChildSize: maxChildSize,
+        minChildSize: _sheetProvider.minExtent > maxChildSize
+            ? maxChildSize
+            : _sheetProvider.minExtent,
+        snap: true,
+        snapSizes: widget.snapSizes,
+        builder: (context, scrollController) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                controller: scrollController,
+                child: Container(
+                  height: constraints.maxHeight,
+                  color: widget.style.color,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const TenorDragHandle(
+                        style: TenorDragHandleStyle(),
+                      ),
+                      TenorTabBar(
+                        style: widget.style.tabBarStyle,
+                        tabController: _tabController,
+                        tabs: widget.tabs.map((tab) => tab.name).toList(),
+                      ),
+                      TenorSearchField(
+                        animationStyle: widget.style.animationStyle,
+                        hintText: widget.searchFieldHintText,
+                        scrollController: scrollController,
+                        searchFieldController: widget.searchFieldController,
+                        searchFieldWidget: widget.searchFieldWidget,
+                        selectedCategoryStyle:
+                            widget.style.selectedCategoryStyle,
+                        style: widget.style.searchFieldStyle,
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: widget.tabs.map((tab) => tab.view).toList(),
+                        ),
+                      ),
+                      if (widget.attributionType ==
+                          TenorAttributionType.poweredBy)
+                        TenorAttribution(
+                          style: widget.style.attributionStyle,
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

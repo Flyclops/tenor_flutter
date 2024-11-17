@@ -50,3 +50,4 @@ pubspec.lock
 .env
 .dart-tool/
 coverage/
+devtools_options.yaml

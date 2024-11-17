@@ -77,6 +77,9 @@ class Tenor extends tenor_dart.Tenor {
     TextEditingController? searchFieldController,
     String searchFieldHintText = 'Search Tenor',
     Widget? searchFieldWidget,
+    // A list of target sizes that the showModalBottomSheet should snap to.
+    // The [minChildSize] and [maxChildSize] are implicitly included in snap sizes and do not need to be specified here.
+    List<double>? snapSizes,
     TenorStyle style = const TenorStyle(),
     List<TenorTab>? tabs,
     bool useSafeArea = true,
@@ -129,6 +132,7 @@ class Tenor extends tenor_dart.Tenor {
                 searchFieldController: searchFieldController,
                 searchFieldHintText: searchFieldHintText,
                 searchFieldWidget: searchFieldWidget,
+                snapSizes: snapSizes,
                 style: style,
                 tabs: tabs ??
                     [
