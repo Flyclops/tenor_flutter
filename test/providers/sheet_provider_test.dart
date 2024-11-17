@@ -21,21 +21,6 @@ void main() {
       expect(provider.scrollController, testScrollController);
     });
 
-    test('Can set initialExtent', () async {
-      const updatedInitialExtent = 0.5;
-      final provider = TenorSheetProvider(
-        maxExtent: testMaxExtent,
-        minExtent: testMinExtent,
-        scrollController: testScrollController,
-      );
-
-      expect(provider.initialExtent, testMinExtent);
-
-      provider.initialExtent = updatedInitialExtent;
-
-      expect(provider.initialExtent, updatedInitialExtent);
-    });
-
     test('Can set scrollController', () async {
       final updatedScrollController = DraggableScrollableController();
       final provider = TenorSheetProvider(

@@ -13,6 +13,7 @@ import 'package:tenor_flutter/src/tenor.dart';
 
 class TenorSheet extends StatefulWidget {
   final TenorAttributionType attributionType;
+  final bool coverAppBar;
   final TextEditingController? searchFieldController;
   final String searchFieldHintText;
   final Widget? searchFieldWidget;
@@ -22,6 +23,7 @@ class TenorSheet extends StatefulWidget {
 
   const TenorSheet({
     required this.attributionType,
+    required this.coverAppBar,
     required this.searchFieldHintText,
     required this.searchFieldWidget,
     required this.style,
@@ -63,10 +65,15 @@ class _TenorSheetState extends State<TenorSheet>
   }
 
   double _calculateMaxChildSize(BuildContext context) {
+    if (widget.coverAppBar) return _sheetProvider.maxExtent;
+
     final height = MediaQuery.of(context).size.height;
     final availableHeight = height - kToolbarHeight;
     final percentage = availableHeight / height;
-    return percentage;
+    // only use the percentage if the maxExtent would cover the AppBar
+    return _sheetProvider.maxExtent < percentage
+        ? _sheetProvider.maxExtent
+        : percentage;
   }
 
   @override
@@ -75,7 +82,10 @@ class _TenorSheetState extends State<TenorSheet>
     return DraggableScrollableSheet(
       controller: _sheetProvider.scrollController,
       expand: false,
-      initialChildSize: maxChildSize,
+      // just in case we calculate a smaller maxChildSize than initialChildSize
+      initialChildSize: _sheetProvider.initialExtent > maxChildSize
+          ? maxChildSize
+          : _sheetProvider.initialExtent,
       maxChildSize: maxChildSize,
       minChildSize: _sheetProvider.minExtent,
       snap: true,
@@ -100,6 +110,7 @@ class _TenorSheetState extends State<TenorSheet>
                       tabs: widget.tabs.map((tab) => tab.name).toList(),
                     ),
                     TenorSearchField(
+                      animationStyle: widget.style.animationStyle,
                       hintText: widget.searchFieldHintText,
                       scrollController: scrollController,
                       searchFieldController: widget.searchFieldController,

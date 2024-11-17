@@ -1,3 +1,12 @@
+## 0.0.4
+
+- feature: add `coverAppBar` to disable calculations preventing bottom sheet from covering AppBar. Defaulted to false to preserve current functionality.
+- refactor: expose `useSafeArea` as a parameter of `showAsBottomSheet()`
+- refactor: expose `initialExtent` as a parameter of `showAsBottomSheet()`, defaults to `maxExtent` if not
+- refactor: expose `animationStyle` as a parameter of `TenorStyle`
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.3...0.0.4)
+
 ## 0.0.3
 
 - chore: write tests
