@@ -9,7 +9,7 @@ class TenorSheetProvider extends ChangeNotifier {
     required DraggableScrollableController scrollController,
     required double minExtent,
     required double maxExtent,
-  })  : _initialExtent = minExtent,
+  })  : _initialExtent = 0.4,
         _scrollController = scrollController;
 
   DraggableScrollableController _scrollController;

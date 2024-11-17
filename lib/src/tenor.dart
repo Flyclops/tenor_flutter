@@ -58,7 +58,7 @@ class Tenor extends tenor_dart.Tenor {
   /// You must have one valid form of [Tenor attribution](https://developers.google.com/tenor/guides/attribution) in order to use this within your app.
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
-    TenorAttributionType attributionType = TenorAttributionType.poweredBy,
+    TenorAttributionType attributionType = TenorAttributionType.searchTenor,
     Duration debounce = const Duration(milliseconds: 300),
     int initialTabIndex = 1,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =

@@ -80,39 +80,49 @@ class _TenorSheetState extends State<TenorSheet>
       minChildSize: _sheetProvider.minExtent,
       snap: true,
       builder: (context, scrollController) {
-        return Container(
-          color: widget.style.color,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const TenorDragHandle(
-                style: TenorDragHandleStyle(),
-              ),
-              TenorTabBar(
-                style: widget.style.tabBarStyle,
-                tabController: _tabController,
-                tabs: widget.tabs.map((tab) => tab.name).toList(),
-              ),
-              TenorSearchField(
-                hintText: widget.searchFieldHintText,
-                scrollController: scrollController,
-                searchFieldController: widget.searchFieldController,
-                searchFieldWidget: widget.searchFieldWidget,
-                selectedCategoryStyle: widget.style.selectedCategoryStyle,
-                style: widget.style.searchFieldStyle,
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: widget.tabs.map((tab) => tab.view).toList(),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              controller: scrollController,
+              child: Container(
+                height: constraints.maxHeight,
+                color: widget.style.color,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const TenorDragHandle(
+                      style: TenorDragHandleStyle(),
+                    ),
+                    TenorTabBar(
+                      style: widget.style.tabBarStyle,
+                      tabController: _tabController,
+                      tabs: widget.tabs.map((tab) => tab.name).toList(),
+                    ),
+                    TenorSearchField(
+                      hintText: widget.searchFieldHintText,
+                      scrollController: scrollController,
+                      searchFieldController: widget.searchFieldController,
+                      searchFieldWidget: widget.searchFieldWidget,
+                      selectedCategoryStyle: widget.style.selectedCategoryStyle,
+                      style: widget.style.searchFieldStyle,
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: widget.tabs.map((tab) => tab.view).toList(),
+                      ),
+                    ),
+                    if (widget.attributionType ==
+                        TenorAttributionType.poweredBy)
+                      TenorAttribution(
+                        style: widget.style.attributionStyle,
+                      ),
+                  ],
                 ),
               ),
-              if (widget.attributionType == TenorAttributionType.poweredBy)
-                TenorAttribution(
-                  style: widget.style.attributionStyle,
-                ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
