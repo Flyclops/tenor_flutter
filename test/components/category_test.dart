@@ -15,7 +15,7 @@ void main() {
       expect(find.byType(GestureDetector), findsNothing);
     });
 
-    testWidgets('If category is null, find nothing', (tester) async {
+    testWidgets('Keep hashtag', (tester) async {
       final tenorCategoryTest = TenorCategory(
         name: '#test',
         searchTerm: 'test search term',
@@ -35,7 +35,32 @@ void main() {
         ),
       );
 
-      expect(find.text(tenorCategoryTest.name), findsOneWidget);
+      expect(find.text('test'), findsNothing);
+      expect(find.text('#test'), findsOneWidget);
+    });
+
+    testWidgets('Strip hashtag', (tester) async {
+      final tenorCategoryTest = TenorCategory(
+        name: '#test',
+        searchTerm: 'test search term',
+        path: 'path/to/category',
+        image: 'https://flyclops.com/images/logo.png',
+      );
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: TenorCategoryWidget(
+            category: tenorCategoryTest,
+            style: const TenorCategoryStyle(
+              stripHashtag: true,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('test'), findsOneWidget);
+      expect(find.text('#test'), findsNothing);
     });
 
     testWidgets('Make sure it renders and is tappable', (tester) async {
