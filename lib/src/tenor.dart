@@ -6,35 +6,40 @@ import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
+final tenorDefaultAnimationStyle = AnimationStyle(
+  duration: const Duration(milliseconds: 250),
+  reverseDuration: const Duration(milliseconds: 200),
+);
+
 class TenorStyle {
+  final AnimationStyle? animationStyle;
   final TenorAttributionStyle attributionStyle;
 
   /// Background color of the sheet.
   final Color color;
-
+  final TenorDragHandleStyle dragHandleStyle;
   final String? fontFamily;
+  final TenorSearchFieldStyle searchFieldStyle;
+  final TenorSelectedCategoryStyle selectedCategoryStyle;
 
   /// Shape for the sheet.
   final ShapeBorder shape;
-
-  final TenorDragHandleStyle dragHandleStyle;
-  final TenorSearchFieldStyle searchFieldStyle;
-  final TenorSelectedCategoryStyle selectedCategoryStyle;
   final TenorTabBarStyle tabBarStyle;
   final TenorTabViewStyle tabViewStyle;
 
   const TenorStyle({
+    this.animationStyle,
+    this.attributionStyle = const TenorAttributionStyle(),
     this.color = const Color(0xFFF9F8F2),
+    this.dragHandleStyle = const TenorDragHandleStyle(),
     this.fontFamily,
+    this.searchFieldStyle = const TenorSearchFieldStyle(),
+    this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
     this.shape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(8),
       ),
     ),
-    this.attributionStyle = const TenorAttributionStyle(),
-    this.dragHandleStyle = const TenorDragHandleStyle(),
-    this.searchFieldStyle = const TenorSearchFieldStyle(),
-    this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
     this.tabBarStyle = const TenorTabBarStyle(),
     this.tabViewStyle = const TenorTabViewStyle(),
   });
@@ -59,25 +64,33 @@ class Tenor extends tenor_dart.Tenor {
   Future<TenorResult?> showAsBottomSheet({
     required BuildContext context,
     TenorAttributionType attributionType = TenorAttributionType.poweredBy,
+    // Whether to cover the app bar with the bottom sheet.
+    bool coverAppBar = false,
     Duration debounce = const Duration(milliseconds: 300),
+    double? initialExtent,
     int initialTabIndex = 1,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
         ScrollViewKeyboardDismissBehavior.manual,
-    double maxExtent = 0.9,
+    double maxExtent = 1,
     double minExtent = 0.7,
     String queryText = '',
     TextEditingController? searchFieldController,
     String searchFieldHintText = 'Search Tenor',
     Widget? searchFieldWidget,
+    // A list of target sizes that the showModalBottomSheet should snap to.
+    // The [minChildSize] and [maxChildSize] are implicitly included in snap sizes and do not need to be specified here.
+    List<double>? snapSizes,
     TenorStyle style = const TenorStyle(),
     List<TenorTab>? tabs,
+    bool useSafeArea = true,
   }) {
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,
       isScrollControlled: true,
       shape: style.shape,
-      useSafeArea: true,
+      sheetAnimationStyle: style.animationStyle ?? tenorDefaultAnimationStyle,
+      useSafeArea: useSafeArea,
       builder: (context) {
         return DefaultTextStyle.merge(
           style: TextStyle(
@@ -99,6 +112,7 @@ class Tenor extends tenor_dart.Tenor {
                 ),
                 ChangeNotifierProvider(
                   create: (context) => TenorSheetProvider(
+                    initialExtent: initialExtent,
                     maxExtent: maxExtent,
                     minExtent: minExtent,
                     scrollController: DraggableScrollableController(),
@@ -113,10 +127,12 @@ class Tenor extends tenor_dart.Tenor {
               ],
               child: TenorSheet(
                 attributionType: attributionType,
+                coverAppBar: coverAppBar,
                 initialTabIndex: initialTabIndex,
                 searchFieldController: searchFieldController,
-                searchFieldWidget: searchFieldWidget,
                 searchFieldHintText: searchFieldHintText,
+                searchFieldWidget: searchFieldWidget,
+                snapSizes: snapSizes,
                 style: style,
                 tabs: tabs ??
                     [

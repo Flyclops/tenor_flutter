@@ -177,6 +177,7 @@ class _TenorTabViewState extends State<TenorTabView>
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: MasonryGridView.count(
+            shrinkWrap: true,
             controller: scrollController,
             crossAxisCount: _crossAxisCount,
             crossAxisSpacing: 8,
@@ -218,6 +219,7 @@ class _TenorTabViewState extends State<TenorTabView>
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: MasonryGridView.count(
         controller: scrollController,
+        shrinkWrap: true,
         crossAxisCount: _crossAxisCount,
         crossAxisSpacing: 8,
         keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,

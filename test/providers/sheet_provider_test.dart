@@ -4,6 +4,7 @@ import 'package:tenor_flutter/src/providers/providers.dart';
 
 void main() {
   const testMinExtent = 0.7;
+  const tesInitialExtent = 0.8;
   const testMaxExtent = 0.9;
   final testScrollController = DraggableScrollableController();
 
@@ -12,28 +13,14 @@ void main() {
       final provider = TenorSheetProvider(
         maxExtent: testMaxExtent,
         minExtent: testMinExtent,
+        initialExtent: tesInitialExtent,
         scrollController: testScrollController,
       );
 
-      expect(provider.initialExtent, testMinExtent);
+      expect(provider.initialExtent, tesInitialExtent);
       expect(provider.maxExtent, testMaxExtent);
       expect(provider.minExtent, testMinExtent);
       expect(provider.scrollController, testScrollController);
-    });
-
-    test('Can set initialExtent', () async {
-      const updatedInitialExtent = 0.5;
-      final provider = TenorSheetProvider(
-        maxExtent: testMaxExtent,
-        minExtent: testMinExtent,
-        scrollController: testScrollController,
-      );
-
-      expect(provider.initialExtent, testMinExtent);
-
-      provider.initialExtent = updatedInitialExtent;
-
-      expect(provider.initialExtent, updatedInitialExtent);
     });
 
     test('Can set scrollController', () async {

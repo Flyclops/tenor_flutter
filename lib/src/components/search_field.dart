@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/sheet_provider.dart';
 import 'package:tenor_flutter/src/tools/debouncer.dart';
+import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorSelectedCategoryStyle {
   final double height;
@@ -64,11 +65,13 @@ class TenorSearchField extends StatefulWidget {
   final TenorSelectedCategoryStyle selectedCategoryStyle;
   final TenorSearchFieldStyle style;
   final String hintText;
+  final AnimationStyle? animationStyle;
 
   const TenorSearchField({
     super.key,
     required this.hintText,
     required this.scrollController,
+    this.animationStyle,
     this.searchFieldController,
     this.searchFieldWidget,
     this.selectedCategoryStyle = const TenorSelectedCategoryStyle(),
@@ -88,7 +91,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
   @override
   void initState() {
     // Focus
-    _focus.addListener(_focusListener);
+    _focus.addListener(() => _onFocusChange(widget.animationStyle));
 
     // AppBar Provider
     _appBarProvider = Provider.of<TenorAppBarProvider>(context, listen: false);
@@ -232,11 +235,15 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
         );
   }
 
-  void _focusListener() {
-    // Set to max extent height if the search field has focus
-    if (_focus.hasFocus &&
-        _sheetProvider.initialExtent == _sheetProvider.minExtent) {
-      _sheetProvider.initialExtent = _sheetProvider.maxExtent;
+  void _onFocusChange(AnimationStyle? animationStyle) {
+    if (_focus.hasFocus) {
+      // when they focus the input, maximize viewing space
+      _sheetProvider.scrollController.animateTo(
+        _sheetProvider.maxExtent,
+        duration:
+            animationStyle?.duration ?? tenorDefaultAnimationStyle.duration!,
+        curve: animationStyle?.curve ?? Curves.linear,
+      );
     }
   }
 
