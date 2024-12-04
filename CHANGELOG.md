@@ -1,3 +1,9 @@
+## 0.0.5
+
+- fix: error when only one tab is passed in
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.4...0.0.5)
+
 ## 0.0.4
 
 - feature: add `coverAppBar` _(false)_ to disable calculations preventing bottom sheet from covering AppBar

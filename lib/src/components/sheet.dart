@@ -47,11 +47,13 @@ class _TenorSheetState extends State<TenorSheet>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-      initialIndex: widget.initialTabIndex,
-      length: widget.tabs.length,
-      vsync: this,
-    );
+    if (widget.tabs.length > 1) {
+      _tabController = TabController(
+        initialIndex: widget.initialTabIndex,
+        length: widget.tabs.length,
+        vsync: this,
+      );
+    }
   }
 
   @override
@@ -62,7 +64,9 @@ class _TenorSheetState extends State<TenorSheet>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    if (widget.tabs.length > 1) {
+      _tabController.dispose();
+    }
     super.dispose();
   }
 
@@ -120,11 +124,12 @@ class _TenorSheetState extends State<TenorSheet>
                       const TenorDragHandle(
                         style: TenorDragHandleStyle(),
                       ),
-                      TenorTabBar(
-                        style: widget.style.tabBarStyle,
-                        tabController: _tabController,
-                        tabs: widget.tabs.map((tab) => tab.name).toList(),
-                      ),
+                      if (widget.tabs.length > 1)
+                        TenorTabBar(
+                          style: widget.style.tabBarStyle,
+                          tabController: _tabController,
+                          tabs: widget.tabs.map((tab) => tab.name).toList(),
+                        ),
                       TenorSearchField(
                         animationStyle: widget.style.animationStyle,
                         hintText: widget.searchFieldHintText,
@@ -136,10 +141,13 @@ class _TenorSheetState extends State<TenorSheet>
                         style: widget.style.searchFieldStyle,
                       ),
                       Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: widget.tabs.map((tab) => tab.view).toList(),
-                        ),
+                        child: (widget.tabs.length > 1)
+                            ? TabBarView(
+                                controller: _tabController,
+                                children:
+                                    widget.tabs.map((tab) => tab.view).toList(),
+                              )
+                            : widget.tabs.first.view,
                       ),
                       if (widget.attributionType ==
                           TenorAttributionType.poweredBy)
