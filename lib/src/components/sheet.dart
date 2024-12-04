@@ -41,14 +41,17 @@ class TenorSheet extends StatefulWidget {
 
 class _TenorSheetState extends State<TenorSheet>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  late TenorSheetProvider _sheetProvider;
+  late TabController tabController;
+  late TenorSheetProvider sheetProvider;
+  late final bool canShowTabs;
 
   @override
   void initState() {
     super.initState();
-    if (widget.tabs.length > 1) {
-      _tabController = TabController(
+
+    canShowTabs = widget.tabs.length > 1;
+    if (canShowTabs) {
+      tabController = TabController(
         initialIndex: widget.initialTabIndex,
         length: widget.tabs.length,
         vsync: this,
@@ -58,27 +61,27 @@ class _TenorSheetState extends State<TenorSheet>
 
   @override
   void didChangeDependencies() {
-    _sheetProvider = Provider.of<TenorSheetProvider>(context, listen: false);
+    sheetProvider = Provider.of<TenorSheetProvider>(context, listen: false);
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    if (widget.tabs.length > 1) {
-      _tabController.dispose();
+    if (canShowTabs) {
+      tabController.dispose();
     }
     super.dispose();
   }
 
   double _calculateMaxChildSize(BuildContext context) {
-    if (widget.coverAppBar) return _sheetProvider.maxExtent;
+    if (widget.coverAppBar) return sheetProvider.maxExtent;
 
     final height = MediaQuery.of(context).size.height;
     final availableHeight = height - kToolbarHeight;
     final percentage = availableHeight / height;
     // only use the percentage if the maxExtent would cover the AppBar
-    return _sheetProvider.maxExtent < percentage
-        ? _sheetProvider.maxExtent
+    return sheetProvider.maxExtent < percentage
+        ? sheetProvider.maxExtent
         : percentage;
   }
 
@@ -91,22 +94,22 @@ class _TenorSheetState extends State<TenorSheet>
         // Ends in something like 0.5000000000000001 instead of 0.5
         final extent =
             double.parse(notification.extent.toStringAsPrecision(15));
-        if (extent == _sheetProvider.minExtent) {
-          _sheetProvider.scrollController.jumpTo(_sheetProvider.minExtent);
+        if (extent == sheetProvider.minExtent) {
+          sheetProvider.scrollController.jumpTo(sheetProvider.minExtent);
         }
         return false;
       },
       child: DraggableScrollableSheet(
-        controller: _sheetProvider.scrollController,
+        controller: sheetProvider.scrollController,
         expand: false,
         // just in case we calculate a smaller maxChildSize than initialChildSize
-        initialChildSize: _sheetProvider.initialExtent > maxChildSize
+        initialChildSize: sheetProvider.initialExtent > maxChildSize
             ? maxChildSize
-            : _sheetProvider.initialExtent,
+            : sheetProvider.initialExtent,
         maxChildSize: maxChildSize,
-        minChildSize: _sheetProvider.minExtent > maxChildSize
+        minChildSize: sheetProvider.minExtent > maxChildSize
             ? maxChildSize
-            : _sheetProvider.minExtent,
+            : sheetProvider.minExtent,
         snap: true,
         snapSizes: widget.snapSizes,
         builder: (context, scrollController) {
@@ -124,10 +127,10 @@ class _TenorSheetState extends State<TenorSheet>
                       const TenorDragHandle(
                         style: TenorDragHandleStyle(),
                       ),
-                      if (widget.tabs.length > 1)
+                      if (canShowTabs)
                         TenorTabBar(
                           style: widget.style.tabBarStyle,
-                          tabController: _tabController,
+                          tabController: tabController,
                           tabs: widget.tabs.map((tab) => tab.name).toList(),
                         ),
                       TenorSearchField(
@@ -141,9 +144,9 @@ class _TenorSheetState extends State<TenorSheet>
                         style: widget.style.searchFieldStyle,
                       ),
                       Expanded(
-                        child: (widget.tabs.length > 1)
+                        child: (canShowTabs)
                             ? TabBarView(
-                                controller: _tabController,
+                                controller: tabController,
                                 children:
                                     widget.tabs.map((tab) => tab.view).toList(),
                               )
