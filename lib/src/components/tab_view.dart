@@ -82,6 +82,9 @@ class _TenorTabViewState extends State<TenorTabView>
   // Limit of query
   late int _limit;
 
+  // Max visible limit
+  late int _maxVisibleLimit;
+
   // is Loading gifs
   bool _isLoading = false;
 
@@ -147,10 +150,14 @@ class _TenorTabViewState extends State<TenorTabView>
         ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
 
     // Calculate the visible limit
-    _limit = _crossAxisCount * mainAxisCount;
+    _maxVisibleLimit = _crossAxisCount * mainAxisCount;
 
     // Tenor has a hard limit of 50
-    if (_limit > 50) _limit = 50;
+    if (_maxVisibleLimit > 50) {
+      _limit = 50;
+    } else {
+      _limit = _maxVisibleLimit;
+    }
   }
 
   @override
@@ -215,34 +222,53 @@ class _TenorTabViewState extends State<TenorTabView>
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: MasonryGridView.count(
-        controller: scrollController,
-        shrinkWrap: true,
-        crossAxisCount: _crossAxisCount,
-        crossAxisSpacing: 8,
-        keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
-        itemBuilder: (ctx, idx) => ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: TenorSelectableGif(
-            backgroundColor: widget.style.mediaBackgroundColor,
-            onTap: (selectedResult) => _selectedGif(
-              selectedResult,
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: MasonryGridView.count(
+            controller: scrollController,
+            shrinkWrap: true,
+            crossAxisCount: _crossAxisCount,
+            crossAxisSpacing: 8,
+            keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
+            itemBuilder: (ctx, idx) => ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: TenorSelectableGif(
+                backgroundColor: widget.style.mediaBackgroundColor,
+                onTap: (selectedResult) => _selectedGif(
+                  selectedResult,
+                ),
+                result: _list[idx],
+              ),
             ),
-            result: _list[idx],
+            itemCount: _list.length,
+            mainAxisSpacing: 8,
+            // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
+            padding:
+                _tabProvider.attributionType == TenorAttributionType.poweredBy
+                    ? null
+                    : EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom,
+                      ),
+            scrollDirection: _scrollDirection,
           ),
         ),
-        itemCount: _list.length,
-        mainAxisSpacing: 8,
-        // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
-        padding: _tabProvider.attributionType == TenorAttributionType.poweredBy
-            ? null
-            : EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
-        scrollDirection: _scrollDirection,
-      ),
+
+        // Show button to load more gifs if the list is less than the max visible limit
+        Positioned(
+          bottom: 0,
+          child: _list.length <= _maxVisibleLimit
+              ? ElevatedButton(
+                  child: const Text('Load More'),
+                  onPressed: () async {
+                    await _loadMore();
+                  },
+                )
+              : const SizedBox.shrink(),
+        ),
+      ],
     );
   }
 
