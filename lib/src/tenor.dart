@@ -84,6 +84,9 @@ class Tenor extends tenor_dart.Tenor {
     List<TenorTab>? tabs,
     bool useSafeArea = true,
   }) {
+    // Finding out if the device is a tablet by checking the shortest side of the device
+    bool isTablet = MediaQuery.of(context).size.shortestSide > 600;
+
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,
@@ -140,6 +143,7 @@ class Tenor extends tenor_dart.Tenor {
                         name: 'Emojis',
                         view: TenorViewEmojis(
                           client: this,
+                          mediaWidth: isTablet ? 150 : 80,
                           style: style.tabViewStyle,
                         ),
                       ),
@@ -147,6 +151,7 @@ class Tenor extends tenor_dart.Tenor {
                         name: 'GIFs',
                         view: TenorViewGifs(
                           client: this,
+                          mediaWidth: isTablet ? 250 : 200,
                           style: style.tabViewStyle,
                         ),
                       ),
@@ -154,6 +159,7 @@ class Tenor extends tenor_dart.Tenor {
                         name: 'Stickers',
                         view: TenorViewStickers(
                           client: this,
+                          mediaWidth: isTablet ? 200 : 150,
                           style: style.tabViewStyle,
                         ),
                       ),
