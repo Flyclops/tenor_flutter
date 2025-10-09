@@ -119,7 +119,7 @@ class _TenorTabViewState extends State<TenorTabView>
       }
       // load gifs if the query text starts populated or if show categories is disabled
       if (_appBarProvider.queryText != '' || widget.showCategories == false) {
-        _loadMore();
+        _loadGifs();
       }
     });
   }
@@ -138,26 +138,6 @@ class _TenorTabViewState extends State<TenorTabView>
 
     // Initial offset
     offset = null;
-  }
-
-  void getCount() {
-    // Set items count responsive
-    _crossAxisCount =
-        (MediaQuery.of(context).size.width / widget.mediaWidth).round();
-
-    // Set vertical max items count
-    int mainAxisCount =
-        ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
-
-    // Calculate the visible limit
-    _maxVisibleLimit = _crossAxisCount * mainAxisCount;
-
-    // Tenor has a hard limit of 50
-    if (_maxVisibleLimit > 50) {
-      _limit = 50;
-    } else {
-      _limit = _maxVisibleLimit;
-    }
   }
 
   @override
@@ -251,6 +231,32 @@ class _TenorTabViewState extends State<TenorTabView>
         scrollDirection: _scrollDirection,
       ),
     );
+  }
+
+  void getCount() {
+    // Set items count responsive
+    _crossAxisCount =
+        (MediaQuery.of(context).size.width / widget.mediaWidth).round();
+
+    // Set vertical max items count
+    int mainAxisCount =
+        ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
+
+    // Calculate the visible limit
+    _maxVisibleLimit = _crossAxisCount * mainAxisCount;
+
+    // Tenor has a hard limit of 50
+    if (_maxVisibleLimit > 50) {
+      _limit = 50;
+    } else {
+      _limit = _maxVisibleLimit;
+    }
+  }
+
+  Future<void> _loadGifs() async {
+    while (_list.length <= _maxVisibleLimit) {
+      await _loadMore();
+    }
   }
 
   Future<void> _loadCatagories() async {
