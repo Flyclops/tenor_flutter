@@ -222,53 +222,34 @@ class _TenorTabViewState extends State<TenorTabView>
       );
     }
 
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: MasonryGridView.count(
-            controller: scrollController,
-            shrinkWrap: true,
-            crossAxisCount: _crossAxisCount,
-            crossAxisSpacing: 8,
-            keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
-            itemBuilder: (ctx, idx) => ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: TenorSelectableGif(
-                backgroundColor: widget.style.mediaBackgroundColor,
-                onTap: (selectedResult) => _selectedGif(
-                  selectedResult,
-                ),
-                result: _list[idx],
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: MasonryGridView.count(
+        controller: scrollController,
+        shrinkWrap: true,
+        crossAxisCount: _crossAxisCount,
+        crossAxisSpacing: 8,
+        keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
+        itemBuilder: (ctx, idx) => ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: TenorSelectableGif(
+            backgroundColor: widget.style.mediaBackgroundColor,
+            onTap: (selectedResult) => _selectedGif(
+              selectedResult,
             ),
-            itemCount: _list.length,
-            mainAxisSpacing: 8,
-            // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
-            padding:
-                _tabProvider.attributionType == TenorAttributionType.poweredBy
-                    ? null
-                    : EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom,
-                      ),
-            scrollDirection: _scrollDirection,
+            result: _list[idx],
           ),
         ),
-
-        // Show button to load more gifs if the list is less than the max visible limit
-        Positioned(
-          bottom: 0,
-          child: _list.length <= _maxVisibleLimit
-              ? ElevatedButton(
-                  child: const Text('Load More'),
-                  onPressed: () async {
-                    await _loadMore();
-                  },
-                )
-              : const SizedBox.shrink(),
-        ),
-      ],
+        itemCount: _list.length,
+        mainAxisSpacing: 8,
+        // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
+        padding: _tabProvider.attributionType == TenorAttributionType.poweredBy
+            ? null
+            : EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+        scrollDirection: _scrollDirection,
+      ),
     );
   }
 
