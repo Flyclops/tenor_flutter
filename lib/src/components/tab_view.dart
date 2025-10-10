@@ -354,8 +354,23 @@ class _TenorTabViewState extends State<TenorTabView>
     } catch (e) {
       // do nothing if it fails
     }
+
+    TenorResult newGif = gif;
+
+    if (_tabProvider.tabSelection != null) {
+      var oldUri = Uri.parse(gif.itemUrl);
+      final param = {'tabSelection': _tabProvider.tabSelection!};
+      Map<String, String> combinedParams = Map.from(oldUri.queryParameters)
+        ..addAll(param);
+      final newUri = oldUri.replace(queryParameters: combinedParams);
+      final newUrl = newUri.toString();
+
+      // add new item url to the gif
+      newGif = gif.copyWith(itemUrl: newUrl);
+    }
+
     // return result to the consumer
-    Navigator.pop(context, gif);
+    Navigator.pop(context, newGif);
   }
 
   // listener query
