@@ -357,9 +357,9 @@ class _TenorTabViewState extends State<TenorTabView>
 
     TenorResult newGif = gif;
 
-    if (_tabProvider.tabSelection != null) {
+    if (_tabProvider.selectedTab != null) {
       var oldUri = Uri.parse(gif.itemUrl);
-      final param = {'tabSelection': _tabProvider.tabSelection!};
+      final param = {'selectedTab': _tabProvider.selectedTab!};
       Map<String, String> combinedParams = Map.from(oldUri.queryParameters)
         ..addAll(param);
       final newUri = oldUri.replace(queryParameters: combinedParams);

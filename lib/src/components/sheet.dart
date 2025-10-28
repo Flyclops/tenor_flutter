@@ -51,7 +51,7 @@ class _TenorSheetState extends State<TenorSheet>
     super.initState();
 
     _tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
-    _tabProvider.tabSelection = widget.tabs[widget.initialTabIndex].name;
+    _tabProvider.selectedTab = widget.tabs[widget.initialTabIndex].name;
 
     canShowTabs = widget.tabs.length > 1;
     if (canShowTabs) {
@@ -62,7 +62,7 @@ class _TenorSheetState extends State<TenorSheet>
       );
 
       tabController.addListener(() {
-        _tabProvider.tabSelection = widget.tabs[tabController.index].name;
+        _tabProvider.selectedTab = widget.tabs[tabController.index].name;
       });
     }
   }
