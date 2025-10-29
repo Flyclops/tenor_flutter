@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/tab_provider.dart';
+import 'package:tenor_flutter/src/tools/url_utils.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 const featuredCategoryPath = '##trending-gifs';
@@ -358,12 +359,10 @@ class _TenorTabViewState extends State<TenorTabView>
     TenorResult newGif = gif;
 
     if (_tabProvider.selectedTab != null) {
-      var oldUri = Uri.parse(gif.itemUrl);
-      final param = {'selectedTab': _tabProvider.selectedTab!};
-      Map<String, String> combinedParams = Map.from(oldUri.queryParameters)
-        ..addAll(param);
-      final newUri = oldUri.replace(queryParameters: combinedParams);
-      final newUrl = newUri.toString();
+      final newUrl = addQueryParameters(
+        parameters: {'selectedTab': _tabProvider.selectedTab!},
+        url: gif.itemUrl,
+      );
 
       // add new item url to the gif
       newGif = gif.copyWith(itemUrl: newUrl);
