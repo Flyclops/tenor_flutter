@@ -43,15 +43,14 @@ class _TenorSheetState extends State<TenorSheet>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   late TenorSheetProvider sheetProvider;
-  late TenorTabProvider _tabProvider;
+  late TenorTabProvider tabProvider;
   late final bool canShowTabs;
 
   @override
   void initState() {
     super.initState();
 
-    _tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
-    _tabProvider.selectedTab = widget.tabs[widget.initialTabIndex].name;
+    tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
 
     canShowTabs = widget.tabs.length > 1;
     if (canShowTabs) {
@@ -62,7 +61,7 @@ class _TenorSheetState extends State<TenorSheet>
       );
 
       tabController.addListener(() {
-        _tabProvider.selectedTab = widget.tabs[tabController.index].name;
+        tabProvider.selectedTab = widget.tabs[tabController.index].name;
       });
     }
   }
