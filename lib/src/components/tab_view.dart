@@ -1,8 +1,8 @@
 // TODO: Not super happy with how categories exist in this file. Refactor in the future.
 // ignore_for_file: implementation_imports
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
@@ -354,8 +354,14 @@ class _TenorTabViewState extends State<TenorTabView>
     } catch (e) {
       // do nothing if it fails
     }
+
     // return result to the consumer
-    Navigator.pop(context, gif);
+    Navigator.pop(
+      context,
+      gif.copyWith(
+        source: _tabProvider.selectedTab,
+      ),
+    );
   }
 
   // listener query

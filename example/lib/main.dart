@@ -112,6 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: selectedGif.dimensions.height,
                     )
                   : const Text('No GIF selected'),
+              selectedGif != null
+                  ? Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        Text(selectedGif.url),
+                        const SizedBox(height: 16),
+                        Text(
+                            'Selected from ${selectedResult?.source ?? ''} tab'),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ],

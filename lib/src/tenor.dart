@@ -6,9 +6,9 @@ import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
-final tenorDefaultAnimationStyle = AnimationStyle(
-  duration: const Duration(milliseconds: 250),
-  reverseDuration: const Duration(milliseconds: 200),
+const tenorDefaultAnimationStyle = AnimationStyle(
+  duration: Duration(milliseconds: 250),
+  reverseDuration: Duration(milliseconds: 200),
 );
 
 class TenorStyle {
@@ -84,6 +84,31 @@ class Tenor extends tenor_dart.Tenor {
     List<TenorTab>? tabs,
     bool useSafeArea = true,
   }) {
+    final tabsToDisplay = tabs ??
+        [
+          TenorTab(
+            name: 'Emojis',
+            view: TenorViewEmojis(
+              client: this,
+              style: style.tabViewStyle,
+            ),
+          ),
+          TenorTab(
+            name: 'GIFs',
+            view: TenorViewGifs(
+              client: this,
+              style: style.tabViewStyle,
+            ),
+          ),
+          TenorTab(
+            name: 'Stickers',
+            view: TenorViewStickers(
+              client: this,
+              style: style.tabViewStyle,
+            ),
+          ),
+        ];
+
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,
@@ -122,6 +147,7 @@ class Tenor extends tenor_dart.Tenor {
                   create: (context) => TenorTabProvider(
                     attributionType: attributionType,
                     client: this,
+                    selectedTab: tabsToDisplay[initialTabIndex].name,
                   ),
                 ),
               ],
@@ -134,30 +160,7 @@ class Tenor extends tenor_dart.Tenor {
                 searchFieldWidget: searchFieldWidget,
                 snapSizes: snapSizes,
                 style: style,
-                tabs: tabs ??
-                    [
-                      TenorTab(
-                        name: 'Emojis',
-                        view: TenorViewEmojis(
-                          client: this,
-                          style: style.tabViewStyle,
-                        ),
-                      ),
-                      TenorTab(
-                        name: 'GIFs',
-                        view: TenorViewGifs(
-                          client: this,
-                          style: style.tabViewStyle,
-                        ),
-                      ),
-                      TenorTab(
-                        name: 'Stickers',
-                        view: TenorViewStickers(
-                          client: this,
-                          style: style.tabViewStyle,
-                        ),
-                      ),
-                    ],
+                tabs: tabsToDisplay,
               ),
             ),
           ),

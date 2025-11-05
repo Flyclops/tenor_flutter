@@ -1,4 +1,4 @@
-import 'package:tenor_flutter/src/tools/debouncer.dart';
+import 'package:tenor_flutter/src/utilities/debouncer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

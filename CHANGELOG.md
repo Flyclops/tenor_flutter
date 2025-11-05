@@ -1,3 +1,9 @@
+## 0.0.6
+
+- feat: Integrate [tenor_dart's](https://pub.dev/packages/tenor_dart) new `TenorResult.source` parameter to track which tab the GIF was selected from for analytics
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.5...0.0.6)
+
 ## 0.0.5
 
 - fix: error when only one tab is passed in
