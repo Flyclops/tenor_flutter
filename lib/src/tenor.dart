@@ -6,9 +6,9 @@ import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
-final tenorDefaultAnimationStyle = AnimationStyle(
-  duration: const Duration(milliseconds: 250),
-  reverseDuration: const Duration(milliseconds: 200),
+const tenorDefaultAnimationStyle = AnimationStyle(
+  duration: Duration(milliseconds: 250),
+  reverseDuration: Duration(milliseconds: 200),
 );
 
 class TenorStyle {
@@ -86,7 +86,6 @@ class Tenor extends tenor_dart.Tenor {
   }) {
     // Finding out if the device is a tablet by checking the shortest side of the device
     bool isTablet = MediaQuery.of(context).size.shortestSide > 600;
-
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,

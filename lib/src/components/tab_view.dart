@@ -82,9 +82,6 @@ class _TenorTabViewState extends State<TenorTabView>
   // Limit of query
   late int _limit;
 
-  // Max visible limit
-  late int _maxVisibleLimit;
-
   // is Loading gifs
   bool _isLoading = false;
 
@@ -98,12 +95,13 @@ class _TenorTabViewState extends State<TenorTabView>
   @override
   void initState() {
     super.initState();
-
     // sheet
     scrollController = ScrollController();
+    scrollController.addListener(_scrollListener);
 
     // AppBar Provider
     _appBarProvider = Provider.of<TenorAppBarProvider>(context, listen: false);
+    _appBarProvider.addListener(_listenerQuery);
 
     // Tab Provider
     _tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
@@ -128,16 +126,26 @@ class _TenorTabViewState extends State<TenorTabView>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // ScrollController
-    scrollController.addListener(_scrollListener);
-
-    // Listen query
-    _appBarProvider.addListener(_listenerQuery);
-
     getCount();
 
     // Initial offset
     offset = null;
+  }
+
+  void getCount() {
+    // Set items count responsive
+    _crossAxisCount =
+        (MediaQuery.of(context).size.width / widget.mediaWidth).round();
+
+    // Set vertical max items count
+    int mainAxisCount =
+        ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
+
+    // Calculate the visible limit
+    _limit = _crossAxisCount * mainAxisCount;
+
+    // Tenor has a hard limit of 50
+    if (_limit > 50) _limit = 50;
   }
 
   @override
@@ -177,12 +185,13 @@ class _TenorTabViewState extends State<TenorTabView>
                   style: widget.categoryStyle,
                   category: category,
                   onTap: (selectedCategory) {
-                    // if it's a normal category, search it up
                     if (selectedCategory.path.startsWith('##') == false) {
+                      // if it's a normal category, search it up
                       _appBarProvider.queryText = selectedCategory.searchTerm;
+                    } else {
+                      // otherwise just set it so we can make a custom view
+                      _appBarProvider.selectedCategory = selectedCategory;
                     }
-                    // otherwise just set it so we can make a custom view
-                    _appBarProvider.selectedCategory = selectedCategory;
                   },
                 ),
               );
@@ -233,30 +242,17 @@ class _TenorTabViewState extends State<TenorTabView>
     );
   }
 
-  void getCount() {
-    // Set items count responsive
-    _crossAxisCount =
-        (MediaQuery.of(context).size.width / widget.mediaWidth).round();
-
-    // Set vertical max items count
-    int mainAxisCount =
-        ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
-
-    // Calculate the visible limit
-    _maxVisibleLimit = _crossAxisCount * mainAxisCount;
-
-    // Tenor has a hard limit of 50
-    if (_maxVisibleLimit > 50) {
-      _limit = 50;
-    } else {
-      _limit = _maxVisibleLimit;
-    }
-  }
-
+  // the reason we are loading like this and not with a predictive method
+  // that calculates based on size is because iOS "Display Zoom" breaks that
   Future<void> _loadGifs() async {
-    while (_list.length <= _maxVisibleLimit) {
-      await _loadMore();
-    }
+    await _loadMore();
+
+    // wait for a frame so that we can ensure that `scrollController` is attached
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      while (scrollController.position.extentAfter == 0) {
+        await _loadMore();
+      }
+    });
   }
 
   Future<void> _loadCatagories() async {
@@ -296,6 +292,9 @@ class _TenorTabViewState extends State<TenorTabView>
 
       // return no more gifs
       if (_collection?.next == '') {
+        setState(() {
+          _isLoading = false;
+        });
         return;
       }
 
@@ -319,6 +318,10 @@ class _TenorTabViewState extends State<TenorTabView>
         if (response != null) {
           _collection = response;
         }
+      }
+
+      if (_appBarProvider.queryText == '') {
+        ///
       }
 
       // Set result to list
@@ -379,7 +382,9 @@ class _TenorTabViewState extends State<TenorTabView>
     // Reset list
     _list = [];
 
+    if (_isLoading) return;
+
     // Load data
-    _loadMore();
+    _loadGifs();
   }
 }
