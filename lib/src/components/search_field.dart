@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/sheet_provider.dart';
-import 'package:tenor_flutter/src/tools/debouncer.dart';
+import 'package:tenor_flutter/src/utilities/debouncer.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorSelectedCategoryStyle {

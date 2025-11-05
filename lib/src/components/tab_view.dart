@@ -1,13 +1,13 @@
 // TODO: Not super happy with how categories exist in this file. Refactor in the future.
 // ignore_for_file: implementation_imports
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/tab_provider.dart';
-import 'package:tenor_flutter/src/tools/url_utils.dart';
+import 'package:tenor_flutter/src/utilities/url.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 const featuredCategoryPath = '##trending-gifs';
@@ -356,20 +356,13 @@ class _TenorTabViewState extends State<TenorTabView>
       // do nothing if it fails
     }
 
-    TenorResult newGif = gif;
-
-    if (_tabProvider.selectedTab != null) {
-      final newUrl = addQueryParameters(
-        parameters: {'selectedTab': _tabProvider.selectedTab!},
-        url: gif.itemUrl,
-      );
-
-      // add new item url to the gif
-      newGif = gif.copyWith(itemUrl: newUrl);
-    }
-
     // return result to the consumer
-    Navigator.pop(context, newGif);
+    Navigator.pop(
+      context,
+      gif.copyWith(
+        source: _tabProvider.selectedTab,
+      ),
+    );
   }
 
   // listener query
