@@ -6,9 +6,9 @@ import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
-final tenorDefaultAnimationStyle = AnimationStyle(
-  duration: const Duration(milliseconds: 250),
-  reverseDuration: const Duration(milliseconds: 200),
+const tenorDefaultAnimationStyle = AnimationStyle(
+  duration: Duration(milliseconds: 250),
+  reverseDuration: Duration(milliseconds: 200),
 );
 
 class TenorStyle {
