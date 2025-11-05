@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/app_bar_provider.dart';
 import 'package:tenor_flutter/src/providers/tab_provider.dart';
-import 'package:tenor_flutter/src/utilities/url.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 const featuredCategoryPath = '##trending-gifs';
