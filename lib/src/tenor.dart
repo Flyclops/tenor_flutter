@@ -84,6 +84,31 @@ class Tenor extends tenor_dart.Tenor {
     List<TenorTab>? tabs,
     bool useSafeArea = true,
   }) {
+    final tabsToDisplay = tabs ??
+        [
+          TenorTab(
+            name: 'Emojis',
+            view: TenorViewEmojis(
+              client: this,
+              style: style.tabViewStyle,
+            ),
+          ),
+          TenorTab(
+            name: 'GIFs',
+            view: TenorViewGifs(
+              client: this,
+              style: style.tabViewStyle,
+            ),
+          ),
+          TenorTab(
+            name: 'Stickers',
+            view: TenorViewStickers(
+              client: this,
+              style: style.tabViewStyle,
+            ),
+          ),
+        ];
+
     return showModalBottomSheet<TenorResult>(
       clipBehavior: Clip.antiAlias,
       context: context,
@@ -122,6 +147,7 @@ class Tenor extends tenor_dart.Tenor {
                   create: (context) => TenorTabProvider(
                     attributionType: attributionType,
                     client: this,
+                    selectedTab: tabsToDisplay[initialTabIndex].name,
                   ),
                 ),
               ],
@@ -134,30 +160,7 @@ class Tenor extends tenor_dart.Tenor {
                 searchFieldWidget: searchFieldWidget,
                 snapSizes: snapSizes,
                 style: style,
-                tabs: tabs ??
-                    [
-                      TenorTab(
-                        name: 'Emojis',
-                        view: TenorViewEmojis(
-                          client: this,
-                          style: style.tabViewStyle,
-                        ),
-                      ),
-                      TenorTab(
-                        name: 'GIFs',
-                        view: TenorViewGifs(
-                          client: this,
-                          style: style.tabViewStyle,
-                        ),
-                      ),
-                      TenorTab(
-                        name: 'Stickers',
-                        view: TenorViewStickers(
-                          client: this,
-                          style: style.tabViewStyle,
-                        ),
-                      ),
-                    ],
+                tabs: tabsToDisplay,
               ),
             ),
           ),

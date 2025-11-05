@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorTabProvider with ChangeNotifier {
-  String? selectedTab;
-  Tenor client;
   TenorAttributionType attributionType;
+  Tenor client;
+  String selectedTab;
 
   TenorTabProvider({
-    required this.client,
     required this.attributionType,
-    this.selectedTab,
+    required this.client,
+    required this.selectedTab,
   });
 }
