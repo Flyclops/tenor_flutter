@@ -49,7 +49,7 @@ class TenorTabView extends StatefulWidget {
     this.style = const TenorTabViewStyle(),
     super.key,
   })  : featuredCategory = featuredCategory ?? '📈 Featured',
-        gifsPerRow = gifsPerRow ?? 4;
+        gifsPerRow = gifsPerRow ?? 2;
 
   @override
   State<TenorTabView> createState() => _TenorTabViewState();
