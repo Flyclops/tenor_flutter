@@ -109,7 +109,6 @@ class _TenorSheetState extends State<TenorSheet>
     if (index < 0 || index >= widget.tabs.length) return;
     // only update if changed
     if (tabProvider.selectedTab != widget.tabs[index]) {
-      print('selected tab 222: ${widget.tabs[index].name}');
       tabProvider.selectedTab = widget.tabs[index];
     }
   }
