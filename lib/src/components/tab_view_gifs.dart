@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tenor_flutter/src/components/tab_view.dart';
+import 'package:tenor_flutter/src/utilities/is_tablet.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewGifs extends StatelessWidget {
   final Tenor client;
   final String? featuredCategory;
-  final int mediaWidth;
+  final int? gifsPerRow;
   final bool showCategories;
   final TenorTabViewStyle style;
 
   const TenorViewGifs({
     required this.client,
     this.featuredCategory,
-    this.mediaWidth = 200,
+    this.gifsPerRow,
     this.showCategories = true,
     this.style = const TenorTabViewStyle(),
     super.key,
@@ -23,8 +24,8 @@ class TenorViewGifs extends StatelessWidget {
     return TenorTabView(
       client: client,
       featuredCategory: featuredCategory,
+      gifsPerRow: gifsPerRow ?? (isTablet(context) ? 3 : 2),
       keepAliveTabView: true,
-      mediaWidth: mediaWidth,
       showCategories: showCategories,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {

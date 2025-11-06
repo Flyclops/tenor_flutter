@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tenor_flutter/src/utilities/is_tablet.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 class TenorViewEmojis extends StatelessWidget {
   final Tenor client;
-  final int mediaWidth;
+  final int? gifsPerRow;
   final TenorTabViewStyle style;
 
   const TenorViewEmojis({
     required this.client,
-    this.mediaWidth = 80,
+    this.gifsPerRow,
     this.style = const TenorTabViewStyle(),
     super.key,
   });
@@ -17,8 +18,8 @@ class TenorViewEmojis extends StatelessWidget {
   Widget build(BuildContext context) {
     return TenorTabView(
       client: client,
+      gifsPerRow: gifsPerRow ?? (isTablet(context) ? 8 : 2),
       keepAliveTabView: true,
-      mediaWidth: mediaWidth,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {
           return await client.search(

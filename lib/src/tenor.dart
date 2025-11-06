@@ -4,6 +4,7 @@ import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
+import 'package:tenor_flutter/src/utilities/is_tablet.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 const tenorDefaultAnimationStyle = AnimationStyle(
@@ -84,15 +85,12 @@ class Tenor extends tenor_dart.Tenor {
     List<TenorTab>? tabs,
     bool useSafeArea = true,
   }) {
-    // Finding out if the device is a tablet by checking the shortest side of the device
-    bool isTablet = MediaQuery.of(context).size.shortestSide > 600;
     final tabsToDisplay = tabs ??
         [
           TenorTab(
             name: 'Emojis',
             view: TenorViewEmojis(
               client: this,
-              mediaWidth: isTablet ? 150 : 80,
               style: style.tabViewStyle,
             ),
           ),
@@ -100,7 +98,6 @@ class Tenor extends tenor_dart.Tenor {
             name: 'GIFs',
             view: TenorViewGifs(
               client: this,
-              mediaWidth: isTablet ? 250 : 200,
               style: style.tabViewStyle,
             ),
           ),
@@ -108,7 +105,6 @@ class Tenor extends tenor_dart.Tenor {
             name: 'Stickers',
             view: TenorViewStickers(
               client: this,
-              mediaWidth: isTablet ? 200 : 150,
               style: style.tabViewStyle,
             ),
           ),
@@ -152,7 +148,7 @@ class Tenor extends tenor_dart.Tenor {
                   create: (context) => TenorTabProvider(
                     attributionType: attributionType,
                     client: this,
-                    selectedTab: tabsToDisplay[initialTabIndex].name,
+                    selectedTab: tabsToDisplay[initialTabIndex],
                   ),
                 ),
               ],

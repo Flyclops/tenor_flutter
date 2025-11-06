@@ -61,7 +61,16 @@ class _TenorSheetState extends State<TenorSheet>
       );
 
       tabController.addListener(() {
-        tabProvider.selectedTab = widget.tabs[tabController.index].name;
+        if (tabController.indexIsChanging) {
+          // TabController will trigger this if a Tab is tapped
+          tabProvider.selectedTab = widget.tabs[tabController.index];
+        } else {
+          // TabController will trigger this when the TabView animation
+          // completes, so lets ensure that we do not have duplicate calls
+          if (tabProvider.selectedTab != widget.tabs[tabController.index]) {
+            tabProvider.selectedTab = widget.tabs[tabController.index];
+          }
+        }
       });
     }
   }
@@ -154,8 +163,21 @@ class _TenorSheetState extends State<TenorSheet>
                         child: (canShowTabs)
                             ? TabBarView(
                                 controller: tabController,
-                                children:
-                                    widget.tabs.map((tab) => tab.view).toList(),
+                                children: widget.tabs
+                                    .map(
+                                      (tab) => MultiProvider(
+                                        providers: [
+                                          Provider<BoxConstraints>(
+                                            create: (context) => constraints,
+                                          ),
+                                          Provider<TenorTab>(
+                                            create: (context) => tab,
+                                          ),
+                                        ],
+                                        child: tab.view,
+                                      ),
+                                    )
+                                    .toList(),
                               )
                             : widget.tabs.first.view,
                       ),
