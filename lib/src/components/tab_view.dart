@@ -49,7 +49,7 @@ class TenorTabView extends StatefulWidget {
     this.style = const TenorTabViewStyle(),
     super.key,
   })  : featuredCategory = featuredCategory ?? '📈 Featured',
-        gifsPerRow = gifsPerRow ?? 2;
+        gifsPerRow = gifsPerRow ?? 3;
 
   @override
   State<TenorTabView> createState() => _TenorTabViewState();
@@ -302,11 +302,12 @@ class _TenorTabViewState extends State<TenorTabView>
   }
 
   Future<void> _loadMore() async {
-    // prevent non active tabs from loading more
-    if (_tabProvider.selectedTab != tab) return;
+    // 1 - prevent non active tabs from loading more
+    // 2 - if it's loading don't load more
+    // 3 - if there are no more gifs to load, don't load more
+    if (_tabProvider.selectedTab != tab || _isLoading || !_hasMoreGifs) return;
 
     try {
-      if (_isLoading || !_hasMoreGifs) return;
       // fail safe if categories are empty when we load more (network issues)
       if (widget.showCategories && _categories.isEmpty) {
         _loadCatagories();
@@ -405,15 +406,11 @@ class _TenorTabViewState extends State<TenorTabView>
       _hasMoreGifs = true;
     });
 
-    if (_isLoading) return;
-
     _initialGifFetch();
   }
 
   /// When new tab is loaded into view
   void _tabProviderListener() {
-    if (_tabProvider.selectedTab != tab) return;
-
     _initialGifFetch();
   }
 }
