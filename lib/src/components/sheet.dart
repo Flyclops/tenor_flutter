@@ -60,16 +60,24 @@ class _TenorSheetState extends State<TenorSheet>
         vsync: this,
       );
 
-      tabController.addListener(() {
-        if (tabController.indexIsChanging) {
-          // TabController will trigger this if a Tab is tapped
-          tabProvider.selectedTab = widget.tabs[tabController.index];
-        } else {
-          // TabController will trigger this when the TabView animation
-          // completes, so lets ensure that we do not have duplicate calls
-          if (tabProvider.selectedTab != widget.tabs[tabController.index]) {
-            tabProvider.selectedTab = widget.tabs[tabController.index];
-          }
+      // Listen to the animation so it's much
+      // more responsive and does not feel laggy
+      tabController.animation?.addListener(() {
+        // default is the current index
+        int index = tabController.index;
+        // calculate which tab we're sliding towards
+        if (tabController.offset < 0) {
+          // if sliding left, subtract
+          index = tabController.index - 1;
+        } else if (tabController.offset > 0) {
+          // if sliding right, add
+          index = tabController.index + 1;
+        }
+        // don't do anything if out of bounds
+        if (index < 0 || index >= widget.tabs.length) return;
+        // only update if changed
+        if (tabProvider.selectedTab != widget.tabs[index]) {
+          tabProvider.selectedTab = widget.tabs[index];
         }
       });
     }
