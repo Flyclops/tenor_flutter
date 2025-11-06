@@ -24,7 +24,7 @@ class TenorTabView extends StatefulWidget {
   final TenorCategoryStyle categoryStyle;
   final Tenor client;
   final String featuredCategory;
-  final int mediaWidth;
+  final int gifsPerRow;
   final bool? keepAliveTabView;
   final Future<TenorResponse?> Function(
     String queryText,
@@ -38,17 +38,18 @@ class TenorTabView extends StatefulWidget {
 
   const TenorTabView({
     required this.client,
-    required this.mediaWidth,
     this.builder,
     this.categoryStyle = const TenorCategoryStyle(),
     String? featuredCategory,
+    int? gifsPerRow,
     this.keepAliveTabView,
     this.onLoad,
     this.onSelected,
     this.showCategories = false,
     this.style = const TenorTabViewStyle(),
     super.key,
-  }) : featuredCategory = featuredCategory ?? '📈 Featured';
+  })  : featuredCategory = featuredCategory ?? '📈 Featured',
+        gifsPerRow = gifsPerRow ?? 3;
 
   @override
   State<TenorTabView> createState() => _TenorTabViewState();
@@ -62,7 +63,8 @@ class _TenorTabViewState extends State<TenorTabView>
   // Tab Provider
   late TenorTabProvider _tabProvider;
 
-  late final ScrollController scrollController;
+  // Scroll Controller
+  late final ScrollController _scrollController;
 
   // AppBar Provider
   late TenorAppBarProvider _appBarProvider;
@@ -76,87 +78,67 @@ class _TenorTabViewState extends State<TenorTabView>
   // Direction
   final Axis _scrollDirection = Axis.vertical;
 
-  // Axis count
-  late int _crossAxisCount;
-
-  // Limit of query
-  late int _limit;
-
-  // is Loading gifs
+  // State to tell us if we are currently loading gifs.
   bool _isLoading = false;
+
+  /// State to tell us if we can request more gifs.
+  bool _hasMoreGifs = true;
 
   // Offset
   String? offset;
 
   List<TenorCategory?> _categories = [];
 
+  /// The Tenor client so we can use the API.
   late final Tenor client;
+
+  /// The current tabs data.
+  late final TenorTab tab;
+
+  /// The limit of gifs to request per load.
+  late int requestLimit;
 
   @override
   void initState() {
     super.initState();
+    // Setup client
+    client = widget.client;
 
-    // sheet
-    scrollController = ScrollController();
+    // Which tab are we?
+    tab = context.read<TenorTab>();
+
+    // We should update this whenever the size changes eventually
+    requestLimit = _calculateLimit();
 
     // AppBar Provider
     _appBarProvider = Provider.of<TenorAppBarProvider>(context, listen: false);
+    _appBarProvider.addListener(_appBarProviderListener);
+
+    // Scroll Controller
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollControllerListener);
 
     // Tab Provider
     _tabProvider = Provider.of<TenorTabProvider>(context, listen: false);
+    _tabProvider.addListener(_tabProviderListener);
 
-    // setup client
-    client = widget.client;
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getCount();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // load categories
       if (widget.showCategories) {
         _loadCatagories();
       }
       // load gifs if the query text starts populated or if show categories is disabled
       if (_appBarProvider.queryText != '' || widget.showCategories == false) {
-        _loadMore();
+        _initialGifFetch();
       }
     });
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // ScrollController
-    scrollController.addListener(_scrollListener);
-
-    // Listen query
-    _appBarProvider.addListener(_listenerQuery);
-
-    getCount();
-
-    // Initial offset
-    offset = null;
-  }
-
-  void getCount() {
-    // Set items count responsive
-    _crossAxisCount =
-        (MediaQuery.of(context).size.width / widget.mediaWidth).round();
-
-    // Set vertical max items count
-    int mainAxisCount =
-        ((MediaQuery.of(context).size.height - 30) / widget.mediaWidth).round();
-
-    // Calculate the visible limit
-    _limit = _crossAxisCount * mainAxisCount;
-
-    // Tenor has a hard limit of 50
-    if (_limit > 50) _limit = 50;
-  }
-
-  @override
   void dispose() {
-    scrollController.removeListener(_scrollListener);
-    _appBarProvider.removeListener(_listenerQuery);
+    _appBarProvider.removeListener(_appBarProviderListener);
+    _scrollController.removeListener(_scrollControllerListener);
+    _tabProvider.removeListener(_tabProviderListener);
     super.dispose();
   }
 
@@ -178,8 +160,8 @@ class _TenorTabViewState extends State<TenorTabView>
           borderRadius: BorderRadius.circular(8),
           child: MasonryGridView.count(
             shrinkWrap: true,
-            controller: scrollController,
-            crossAxisCount: _crossAxisCount,
+            controller: _scrollController,
+            crossAxisCount: widget.gifsPerRow,
             crossAxisSpacing: 8,
             keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
             itemBuilder: (ctx, idx) {
@@ -190,12 +172,13 @@ class _TenorTabViewState extends State<TenorTabView>
                   style: widget.categoryStyle,
                   category: category,
                   onTap: (selectedCategory) {
-                    // if it's a normal category, search it up
                     if (selectedCategory.path.startsWith('##') == false) {
+                      // if it's a normal category, search it up
                       _appBarProvider.queryText = selectedCategory.searchTerm;
+                    } else {
+                      // otherwise just set it so we can make a custom view
+                      _appBarProvider.selectedCategory = selectedCategory;
                     }
-                    // otherwise just set it so we can make a custom view
-                    _appBarProvider.selectedCategory = selectedCategory;
                   },
                 ),
               );
@@ -218,9 +201,9 @@ class _TenorTabViewState extends State<TenorTabView>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: MasonryGridView.count(
-        controller: scrollController,
+        controller: _scrollController,
         shrinkWrap: true,
-        crossAxisCount: _crossAxisCount,
+        crossAxisCount: widget.gifsPerRow,
         crossAxisSpacing: 8,
         keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
         itemBuilder: (ctx, idx) => ClipRRect(
@@ -244,6 +227,53 @@ class _TenorTabViewState extends State<TenorTabView>
         scrollDirection: _scrollDirection,
       ),
     );
+  }
+
+  // Estimate the request limit based on the visible area. Doesn't need to be precise.
+  // This function assumes all gifs are 1:1 aspect ratio for simplicity.
+  int _calculateLimit() {
+    // Tenor has a hard limit of 50 per request
+    const int tenorRequestLimit = 50;
+    // Call this here so we get updated constraints in case of size change
+    final constraints = context.read<BoxConstraints>();
+    // The width of each gif (estimated)
+    final gifWidth = constraints.maxWidth / widget.gifsPerRow;
+    // How many rows of gifs can fit on the screen (estimated)
+    final gifRowCount = (constraints.maxHeight / gifWidth).round();
+    // Based on estimates, how many gifs can we fit into the TabView
+    final calculatedRequestLimit = widget.gifsPerRow * gifRowCount;
+    // If the limit is greater than Tenor's hard limit, cap it
+    return calculatedRequestLimit > tenorRequestLimit
+        ? tenorRequestLimit
+        : calculatedRequestLimit;
+  }
+
+  // Load an initial batch of gifs and then attempt to load more until the list
+  // is full by checking if there is a scrollable area. The reason we are loading
+  // like this and not with a predictive method that calculates based on size is
+  // because iOS "Display Zoom" breaks that.
+  Future<void> _initialGifFetch() async {
+    // Prevent non active tabs from loading more
+    if (_tabProvider.selectedTab != tab) return;
+
+    // Do not fetch when categories are visible
+    if (widget.showCategories &&
+        _appBarProvider.queryText.isEmpty &&
+        _appBarProvider.selectedCategory == null) {
+      return;
+    }
+
+    // Load some gifs so that the ScrollController can become attached
+    if (_list.isEmpty) {
+      await _loadMore();
+    }
+
+    // Wait for a frame so that we can ensure that `scrollController` is attached
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      while (_scrollController.position.extentAfter == 0) {
+        await _loadMore();
+      }
+    });
   }
 
   Future<void> _loadCatagories() async {
@@ -272,17 +302,22 @@ class _TenorTabViewState extends State<TenorTabView>
   }
 
   Future<void> _loadMore() async {
-    try {
-      // return if loading
-      if (_isLoading) return;
+    // 1 - prevent non active tabs from loading more
+    // 2 - if it's loading don't load more
+    // 3 - if there are no more gifs to load, don't load more
+    if (_tabProvider.selectedTab != tab || _isLoading || !_hasMoreGifs) return;
 
-      // failsafe if categories are empty when we load more (network issues)
+    try {
+      // fail safe if categories are empty when we load more (network issues)
       if (widget.showCategories && _categories.isEmpty) {
         _loadCatagories();
       }
 
-      // return no more gifs
+      // api says there are no more gifs, so lets stop requesting
       if (_collection?.next == '') {
+        setState(() {
+          _hasMoreGifs = false;
+        });
         return;
       }
 
@@ -292,7 +327,6 @@ class _TenorTabViewState extends State<TenorTabView>
       if (_collection == null) {
         offset = null;
       } else {
-        // _collection.next
         offset = _collection!.next;
       }
 
@@ -300,7 +334,7 @@ class _TenorTabViewState extends State<TenorTabView>
         final response = await widget.onLoad?.call(
           _appBarProvider.queryText,
           offset,
-          _limit,
+          requestLimit,
           _appBarProvider.selectedCategory,
         );
         if (response != null) {
@@ -330,22 +364,6 @@ class _TenorTabViewState extends State<TenorTabView>
     }
   }
 
-  // Scroll listener. if scroll end load more gifs
-  void _scrollListener() {
-    // trending-gifs, etc
-    final customCategorySelected = _appBarProvider.selectedCategory != null &&
-        _appBarProvider.queryText == '';
-
-    if (customCategorySelected ||
-        _appBarProvider.queryText != '' ||
-        widget.showCategories == false) {
-      if (scrollController.positions.last.extentAfter.lessThan(500) &&
-          !_isLoading) {
-        _loadMore();
-      }
-    }
-  }
-
   // Return selected gif
   void _selectedGif(TenorResult gif) {
     try {
@@ -359,20 +377,40 @@ class _TenorTabViewState extends State<TenorTabView>
     Navigator.pop(
       context,
       gif.copyWith(
-        source: _tabProvider.selectedTab,
+        source: _tabProvider.selectedTab.name,
       ),
     );
   }
 
-  // listener query
-  void _listenerQuery() {
-    // Reset pagination
-    _collection = null;
+  // if you scroll within a threshhold of the bottom of the screen, load more gifs
+  void _scrollControllerListener() {
+    // trending-gifs, etc
+    final customCategorySelected = _appBarProvider.selectedCategory != null &&
+        _appBarProvider.queryText == '';
 
-    // Reset list
-    _list = [];
+    if (customCategorySelected ||
+        _appBarProvider.queryText != '' ||
+        widget.showCategories == false) {
+      if (_scrollController.positions.last.extentAfter.lessThan(500) &&
+          !_isLoading) {
+        _loadMore();
+      }
+    }
+  }
 
-    // Load data
-    _loadMore();
+  // When the text in the search input changes
+  void _appBarProviderListener() {
+    setState(() {
+      _list = [];
+      _collection = null;
+      _hasMoreGifs = true;
+    });
+
+    _initialGifFetch();
+  }
+
+  /// When new tab is loaded into view
+  void _tabProviderListener() {
+    _initialGifFetch();
   }
 }

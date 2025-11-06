@@ -60,9 +60,11 @@ class _TenorSheetState extends State<TenorSheet>
         vsync: this,
       );
 
-      tabController.addListener(() {
-        tabProvider.selectedTab = widget.tabs[tabController.index].name;
-      });
+      // make tapping a tab feel responsive
+      tabController.addListener(_tabControllerListener);
+
+      // make sliding the tab view feel responsive
+      tabController.animation?.addListener(_tabControllerAnimationListener);
     }
   }
 
@@ -78,6 +80,37 @@ class _TenorSheetState extends State<TenorSheet>
       tabController.dispose();
     }
     super.dispose();
+  }
+
+  void _tabControllerListener() {
+    // only respond to taps
+    if (tabController.indexIsChanging) {
+      // only update if changed
+      if (tabProvider.selectedTab != widget.tabs[tabController.index]) {
+        tabProvider.selectedTab = widget.tabs[tabController.index];
+      }
+    }
+  }
+
+  void _tabControllerAnimationListener() {
+    // don't do anything if the user is tapping a tab
+    if (tabController.indexIsChanging) return;
+    // default is the current index
+    int index = tabController.index;
+    // calculate which tab we're sliding towards
+    if (tabController.offset < 0) {
+      // if sliding left, subtract
+      index = tabController.index - 1;
+    } else if (tabController.offset > 0) {
+      // if sliding right, add
+      index = tabController.index + 1;
+    }
+    // don't do anything if out of bounds
+    if (index < 0 || index >= widget.tabs.length) return;
+    // only update if changed
+    if (tabProvider.selectedTab != widget.tabs[index]) {
+      tabProvider.selectedTab = widget.tabs[index];
+    }
   }
 
   double _calculateMaxChildSize(BuildContext context) {
@@ -154,8 +187,21 @@ class _TenorSheetState extends State<TenorSheet>
                         child: (canShowTabs)
                             ? TabBarView(
                                 controller: tabController,
-                                children:
-                                    widget.tabs.map((tab) => tab.view).toList(),
+                                children: widget.tabs
+                                    .map(
+                                      (tab) => MultiProvider(
+                                        providers: [
+                                          Provider<BoxConstraints>(
+                                            create: (context) => constraints,
+                                          ),
+                                          Provider<TenorTab>(
+                                            create: (context) => tab,
+                                          ),
+                                        ],
+                                        child: tab.view,
+                                      ),
+                                    )
+                                    .toList(),
                               )
                             : widget.tabs.first.view,
                       ),

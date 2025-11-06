@@ -147,7 +147,7 @@ class Tenor extends tenor_dart.Tenor {
                   create: (context) => TenorTabProvider(
                     attributionType: attributionType,
                     client: this,
-                    selectedTab: tabsToDisplay[initialTabIndex].name,
+                    selectedTab: tabsToDisplay[initialTabIndex],
                   ),
                 ),
               ],
