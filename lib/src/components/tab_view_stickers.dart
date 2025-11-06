@@ -18,7 +18,7 @@ class TenorViewStickers extends StatelessWidget {
   Widget build(BuildContext context) {
     return TenorTabView(
       client: client,
-      gifsPerRow: gifsPerRow ?? (isTablet(context) ? 6 : 2),
+      gifsPerRow: gifsPerRow ?? (isTablet(context) ? 6 : 5),
       keepAliveTabView: true,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {

@@ -4,7 +4,6 @@ import 'package:tenor_dart/tenor_dart.dart' as tenor_dart;
 
 import 'package:tenor_flutter/src/components/components.dart';
 import 'package:tenor_flutter/src/providers/providers.dart';
-import 'package:tenor_flutter/src/utilities/is_tablet.dart';
 import 'package:tenor_flutter/tenor_flutter.dart';
 
 const tenorDefaultAnimationStyle = AnimationStyle(

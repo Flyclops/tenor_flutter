@@ -18,7 +18,7 @@ class TenorViewEmojis extends StatelessWidget {
   Widget build(BuildContext context) {
     return TenorTabView(
       client: client,
-      gifsPerRow: gifsPerRow ?? (isTablet(context) ? 8 : 2),
+      gifsPerRow: gifsPerRow ?? (isTablet(context) ? 8 : 9),
       keepAliveTabView: true,
       onLoad: (queryText, pos, limit, category) async {
         if (queryText.isNotEmpty) {
