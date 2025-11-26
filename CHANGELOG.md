@@ -1,10 +1,16 @@
+## 0.1.1
+
+- fix: App freezes and crashes due to an endless loop. This happens when a different tab is selected during loading or when we reach the end of the results so there's no more loading needed.
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.1.0...0.1.1)
+
 ## 0.1.0
 
 - feat: Integrate [tenor_dart's](https://pub.dev/packages/tenor_dart) new `TenorResult.source` parameter to track which tab the GIF was selected from for analytics
 - fix: not being able to scroll down to load more on tablets or when using display zoom on iPad
 - refactor: `TenorViewEmojis`, `TenorViewGifs`, `TenorViewStickers` and `TenorTabView` now have a `gifsPerRow` parameter instead of `mediaWidth` to be more explicit and support a wider range of devices
 
-[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.5...0.0.6)
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.0.5...0.1.0)
 
 ## 0.0.5
 
