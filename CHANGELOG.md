@@ -1,6 +1,6 @@
 ## 0.1.1
 
-- fix: App freezes and crashes due to an endless loop. This happens when a different tab is selected during loading or when we reach the end of the results so there's no more loading needed.
+- fix: if you switch tabs very quickly before the initial gif fetch then you will get stuck in an endless loop and crash the app.
 
 [All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.1.0...0.1.1)
 
