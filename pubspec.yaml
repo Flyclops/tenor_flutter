@@ -1,5 +1,5 @@
 name: tenor_flutter
-version: 0.1.0
+version: 0.1.1
 description: An opinionated yet customizable Flutter package for searching and selecting from a list of GIFs/Stickers from the Tenor GIF search API.
 homepage: https://github.com/flyclops
 repository: https://github.com/flyclops/tenor_flutter

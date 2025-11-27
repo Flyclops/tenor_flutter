@@ -271,6 +271,11 @@ class _TenorTabViewState extends State<TenorTabView>
     // Wait for a frame so that we can ensure that `scrollController` is attached
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       while (_scrollController.position.extentAfter == 0) {
+        // Stop trying to load more and exit the loop if:
+        // 1 - the selected tab has changed
+        // 2 - there are no more gifs to load
+        if (_tabProvider.selectedTab != tab || !_hasMoreGifs) return;
+
         await _loadMore();
       }
     });
