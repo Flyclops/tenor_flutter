@@ -276,7 +276,7 @@ class _TenorTabViewState extends State<TenorTabView>
         // 2 - there are no more gifs to load
         if (_tabProvider.selectedTab != tab || !_hasMoreGifs) return;
 
-        // If we are already loading, then we're already in the process of loading. So wait for 100ms and then try again
+        // If we're already loading, then we don't want to load more. So wait for 100ms and then try again
         if (_isLoading) {
           await Future.delayed(const Duration(milliseconds: 100));
           continue;
