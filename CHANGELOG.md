@@ -1,3 +1,9 @@
+## 0.1.2
+
+- fix: the endless loop can still happen if you switch between tabs quickly and time it perfectly while still loading gifs.
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.1.1...0.1.2)
+
 ## 0.1.1
 
 - fix: if you switch tabs very quickly before the initial gif fetch then you will get stuck in an endless loop and crash the app.

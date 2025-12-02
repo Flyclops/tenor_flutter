@@ -270,13 +270,8 @@ class _TenorTabViewState extends State<TenorTabView>
 
     // Wait for a frame so that we can ensure that `scrollController` is attached
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      while (_scrollController.position.extentAfter == 0) {
-        // Stop trying to load more and exit the loop if:
-        // 1 - the selected tab has changed
-        // 2 - there are no more gifs to load
-        if (_tabProvider.selectedTab != tab || !_hasMoreGifs) return;
-
-        await _loadMore();
+      if (_scrollController.position.extentAfter == 0) {
+        _loadMore(fillScrollableArea: true);
       }
     });
   }
@@ -306,7 +301,7 @@ class _TenorTabViewState extends State<TenorTabView>
     }
   }
 
-  Future<void> _loadMore() async {
+  Future<void> _loadMore({bool fillScrollableArea = false}) async {
     // 1 - prevent non active tabs from loading more
     // 2 - if it's loading don't load more
     // 3 - if there are no more gifs to load, don't load more
@@ -366,6 +361,10 @@ class _TenorTabViewState extends State<TenorTabView>
     } catch (e) {
       _isLoading = false;
       rethrow;
+    }
+
+    if (fillScrollableArea && _scrollController.position.extentAfter == 0) {
+      Future.microtask(() => _loadMore(fillScrollableArea: true));
     }
   }
 
