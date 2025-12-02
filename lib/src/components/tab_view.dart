@@ -270,19 +270,8 @@ class _TenorTabViewState extends State<TenorTabView>
 
     // Wait for a frame so that we can ensure that `scrollController` is attached
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      while (_scrollController.position.extentAfter == 0) {
-        // Stop trying to load more and exit the loop if:
-        // 1 - the selected tab has changed
-        // 2 - there are no more gifs to load
-        if (_tabProvider.selectedTab != tab || !_hasMoreGifs) return;
-
-        // If we're already loading, then we don't want to load more. So wait for 100ms and then try again
-        if (_isLoading) {
-          await Future.delayed(const Duration(milliseconds: 100));
-          continue;
-        }
-
-        await _loadMore();
+      if (_scrollController.position.extentAfter == 0) {
+        _loadMore(fillScrollableArea: true);
       }
     });
   }
@@ -312,18 +301,16 @@ class _TenorTabViewState extends State<TenorTabView>
     }
   }
 
-  Future<void> _loadMore() async {
+  Future<void> _loadMore({bool fillScrollableArea = false}) async {
     // 1 - prevent non active tabs from loading more
     // 2 - if it's loading don't load more
     // 3 - if there are no more gifs to load, don't load more
     if (_tabProvider.selectedTab != tab || _isLoading || !_hasMoreGifs) return;
-
     try {
       // fail safe if categories are empty when we load more (network issues)
       if (widget.showCategories && _categories.isEmpty) {
         _loadCatagories();
       }
-
       // api says there are no more gifs, so lets stop requesting
       if (_collection?.next == '') {
         setState(() {
@@ -372,6 +359,10 @@ class _TenorTabViewState extends State<TenorTabView>
     } catch (e) {
       _isLoading = false;
       rethrow;
+    }
+
+    if (fillScrollableArea && _scrollController.position.extentAfter == 0) {
+      _loadMore(fillScrollableArea: true);
     }
   }
 
