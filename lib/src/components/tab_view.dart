@@ -306,11 +306,13 @@ class _TenorTabViewState extends State<TenorTabView>
     // 2 - if it's loading don't load more
     // 3 - if there are no more gifs to load, don't load more
     if (_tabProvider.selectedTab != tab || _isLoading || !_hasMoreGifs) return;
+
     try {
       // fail safe if categories are empty when we load more (network issues)
       if (widget.showCategories && _categories.isEmpty) {
         _loadCatagories();
       }
+
       // api says there are no more gifs, so lets stop requesting
       if (_collection?.next == '') {
         setState(() {
