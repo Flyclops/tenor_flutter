@@ -364,7 +364,7 @@ class _TenorTabViewState extends State<TenorTabView>
     }
 
     if (fillScrollableArea && _scrollController.position.extentAfter == 0) {
-      _loadMore(fillScrollableArea: true);
+      Future.microtask(() => _loadMore(fillScrollableArea: true));
     }
   }
 
