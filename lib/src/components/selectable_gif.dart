@@ -34,9 +34,7 @@ class TenorSelectableGif extends StatelessWidget {
             case LoadState.loading:
               return AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
-                child: Container(
-                  color: backgroundColor,
-                ),
+                child: Container(color: backgroundColor),
               );
             case LoadState.completed:
               return AspectRatio(
@@ -49,16 +47,7 @@ class TenorSelectableGif extends StatelessWidget {
             case LoadState.failed:
               return AspectRatio(
                 aspectRatio: mediaObject.dimensions.aspectRatio,
-                child: Container(
-                  color: backgroundColor,
-                ),
-              );
-            default:
-              return AspectRatio(
-                aspectRatio: mediaObject.dimensions.aspectRatio,
-                child: Container(
-                  color: backgroundColor,
-                ),
+                child: Container(color: backgroundColor),
               );
           }
         },
