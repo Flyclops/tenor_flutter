@@ -1,3 +1,8 @@
+## 1.0.0
+- chore: bump minimum Dart SDK version to 3.7
+- chore: bump `extended_image` to `^10.0.1`
+- chore: bump `provider` to `^6.1.5+1`
+
 ## 0.1.2
 
 - fix: the endless loop can still happen if you switch between tabs quickly and time it perfectly while still loading gifs.
