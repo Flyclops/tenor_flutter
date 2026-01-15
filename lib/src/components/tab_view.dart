@@ -152,7 +152,7 @@ class _TenorTabViewState extends State<TenorTabView>
       );
     }
 
-    if (_appBarProvider.queryText.isEmpty &&
+    if (_appBarProvider.queryText.trim().isEmpty &&
         _appBarProvider.selectedCategory == null &&
         widget.showCategories) {
       return Padding(
@@ -333,7 +333,7 @@ class _TenorTabViewState extends State<TenorTabView>
 
       if (widget.onLoad != null) {
         final response = await widget.onLoad?.call(
-          _appBarProvider.queryText,
+          _appBarProvider.queryText.trim(),
           offset,
           requestLimit,
           _appBarProvider.selectedCategory,
