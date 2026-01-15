@@ -329,7 +329,7 @@ class _TenorTabViewState extends State<TenorTabView>
 
       if (widget.onLoad != null) {
         final response = await widget.onLoad?.call(
-          _appBarProvider.queryText.trim(),
+          _appBarProvider.queryText,
           offset,
           requestLimit,
           _appBarProvider.selectedCategory,
@@ -397,11 +397,16 @@ class _TenorTabViewState extends State<TenorTabView>
 
   // When the text in the search input changes
   void _appBarProviderListener() {
+    final queryText = _appBarProvider.queryText;
+    final trimmedQueryText = _appBarProvider.queryText.trim();
+    final trimmedPreviousQueryText = _appBarProvider.previousQueryText.trim();
+
+    // do nothing if the text did not change
+    if (trimmedQueryText == trimmedPreviousQueryText) return;
+
     // Prevent searches with only spaces
-    if (_appBarProvider.queryText.isNotEmpty &&
-        _appBarProvider.queryText.trim().isEmpty) {
-      return;
-    }
+    if (queryText.isNotEmpty && trimmedQueryText.isEmpty) return;
+
     setState(() {
       _list = [];
       _collection = null;
