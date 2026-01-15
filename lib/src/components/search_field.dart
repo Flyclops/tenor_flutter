@@ -100,7 +100,8 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
     _appBarProvider.addListener(_listenerQuery);
 
     // Set Texfield Controller
-    _textEditingController = widget.searchFieldController ??
+    _textEditingController =
+        widget.searchFieldController ??
         TextEditingController(
           text: _appBarProvider.queryText,
         );
@@ -202,8 +203,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                 left: 4,
                 child: Icon(
                   Icons.search,
-                  color:
-                      widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
+                  color: widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
                   size: 22,
                 ),
               ),
@@ -218,8 +218,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                       padding: const EdgeInsets.all(8),
                       child: Icon(
                         Icons.clear,
-                        color: widget.style.hintStyle.color ??
-                            const Color(0xFF8A8A86),
+                        color: widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
                         size: 20,
                       ),
                     ),
@@ -240,8 +239,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
       // when they focus the input, maximize viewing space
       _sheetProvider.scrollController.animateTo(
         _sheetProvider.maxExtent,
-        duration:
-            animationStyle?.duration ?? tenorDefaultAnimationStyle.duration!,
+        duration: animationStyle?.duration ?? tenorDefaultAnimationStyle.duration!,
         curve: animationStyle?.curve ?? Curves.linear,
       );
     }
@@ -249,6 +247,9 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
 
   // listener query
   void _listenerQuery() {
+    // Update only when it's different. IE you tap on a category. Otherwise the cursor will jump to the end.
+    if (_textEditingController.text == _appBarProvider.queryText) return;
+
     _textEditingController.text = _appBarProvider.queryText;
   }
 }

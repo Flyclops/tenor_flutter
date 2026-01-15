@@ -25,8 +25,8 @@ class TenorAppBarProvider with ChangeNotifier {
     Duration debounce, {
     required this.keyboardDismissBehavior,
     TenorCategory? selectedCategory,
-  })  : _selectedCategory = selectedCategory,
-        super() {
+  }) : _selectedCategory = selectedCategory,
+       super() {
     _queryText = queryText;
     _debounce = debounce;
   }

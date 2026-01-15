@@ -7,3 +7,6 @@ analyzer:
 linter:
   rules:
     require_trailing_commas: true
+
+formatter:
+  trailing_commas: preserve

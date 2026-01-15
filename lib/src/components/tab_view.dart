@@ -31,7 +31,8 @@ class TenorTabView extends StatefulWidget {
     String? pos,
     int limit,
     TenorCategory? category,
-  )? onLoad;
+  )?
+  onLoad;
   final Function(TenorResult? gif)? onSelected;
   final bool showCategories;
   final TenorTabViewStyle style;
@@ -48,8 +49,8 @@ class TenorTabView extends StatefulWidget {
     this.showCategories = false,
     this.style = const TenorTabViewStyle(),
     super.key,
-  })  : featuredCategory = featuredCategory ?? '📈 Featured',
-        gifsPerRow = gifsPerRow ?? 3;
+  }) : featuredCategory = featuredCategory ?? '📈 Featured',
+       gifsPerRow = gifsPerRow ?? 3;
 
   @override
   State<TenorTabView> createState() => _TenorTabViewState();
@@ -151,7 +152,7 @@ class _TenorTabViewState extends State<TenorTabView>
       );
     }
 
-    if (_appBarProvider.queryText.isEmpty &&
+    if (_appBarProvider.queryText.trim().isEmpty &&
         _appBarProvider.selectedCategory == null &&
         widget.showCategories) {
       return Padding(
@@ -188,10 +189,10 @@ class _TenorTabViewState extends State<TenorTabView>
             // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
             padding:
                 _tabProvider.attributionType == TenorAttributionType.poweredBy
-                    ? null
+                    ? EdgeInsets.zero
                     : EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom,
-                      ),
+                      bottom: MediaQuery.of(context).padding.bottom,
+                    ),
             scrollDirection: _scrollDirection,
           ),
         ),
@@ -206,24 +207,24 @@ class _TenorTabViewState extends State<TenorTabView>
         crossAxisCount: widget.gifsPerRow,
         crossAxisSpacing: 8,
         keyboardDismissBehavior: _appBarProvider.keyboardDismissBehavior,
-        itemBuilder: (ctx, idx) => ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: TenorSelectableGif(
-            backgroundColor: widget.style.mediaBackgroundColor,
-            onTap: (selectedResult) => _selectedGif(
-              selectedResult,
+        itemBuilder:
+            (ctx, idx) => ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: TenorSelectableGif(
+                backgroundColor: widget.style.mediaBackgroundColor,
+                onTap: (selectedResult) => _selectedGif(selectedResult),
+                result: _list[idx],
+              ),
             ),
-            result: _list[idx],
-          ),
-        ),
         itemCount: _list.length,
         mainAxisSpacing: 8,
         // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
-        padding: _tabProvider.attributionType == TenorAttributionType.poweredBy
-            ? null
-            : EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
+        padding:
+            _tabProvider.attributionType == TenorAttributionType.poweredBy
+                ? null
+                : EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom,
+                ),
         scrollDirection: _scrollDirection,
       ),
     );
@@ -332,7 +333,7 @@ class _TenorTabViewState extends State<TenorTabView>
 
       if (widget.onLoad != null) {
         final response = await widget.onLoad?.call(
-          _appBarProvider.queryText,
+          _appBarProvider.queryText.trim(),
           offset,
           requestLimit,
           _appBarProvider.selectedCategory,
@@ -389,7 +390,8 @@ class _TenorTabViewState extends State<TenorTabView>
   // if you scroll within a threshhold of the bottom of the screen, load more gifs
   void _scrollControllerListener() {
     // trending-gifs, etc
-    final customCategorySelected = _appBarProvider.selectedCategory != null &&
+    final customCategorySelected =
+        _appBarProvider.selectedCategory != null &&
         _appBarProvider.queryText == '';
 
     if (customCategorySelected ||
@@ -404,6 +406,12 @@ class _TenorTabViewState extends State<TenorTabView>
 
   // When the text in the search input changes
   void _appBarProviderListener() {
+    // Prevent searches with only spaces
+    if (_appBarProvider.queryText.isNotEmpty &&
+        _appBarProvider.queryText.trim().isEmpty) {
+      return;
+    }
+
     setState(() {
       _list = [];
       _collection = null;
