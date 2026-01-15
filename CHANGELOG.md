@@ -4,6 +4,8 @@
 - fix: infinite loading when you type just white space into emoji/stickers
 - fix: cursor jumping to the end of the input if you type anywhere but the end
 
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/1.0.1...1.0.2)
+
 ## 1.0.1
 
 - chore: Add discontinued notice
