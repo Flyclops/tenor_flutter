@@ -1,5 +1,5 @@
 # ⚠️ DISCONTINUED ⚠️
-Due to [Google shutting down the Tenor API](https://support.google.com/tenor/answer/10455265#whatll-happen-to-the-tenor-api&zippy=%2Cwhatll-happen-to-the-tenor-api), we will be discontinuing development of this package. If a security issue comes up between now and June 2026 we will do our best to address it. [Please open an issue](https://github.com/Flyclops/tenor_dart/issues/new/choose) if you find anything.
+Due to [Google shutting down the Tenor API](https://support.google.com/tenor/answer/10455265#whatll-happen-to-the-tenor-api&zippy=%2Cwhatll-happen-to-the-tenor-api), we will be discontinuing development of this package. If a security issue comes up between now and June 2026 we will do our best to address it. [Please open an issue](https://github.com/Flyclops/tenor_flutter/issues/new/choose) if you find anything.
 
 If you are looking for a plug-and-play replacement please consider checking out our [KLIPY](https://klipy.com/) packages:
 - [klipy_dart](https://pub.dev/packages/klipy_dart)
