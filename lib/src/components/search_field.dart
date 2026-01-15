@@ -18,7 +18,10 @@ class TenorSelectedCategoryStyle {
 
   const TenorSelectedCategoryStyle({
     this.height = 52,
-    this.padding = const EdgeInsets.only(left: 14, top: 1),
+    this.padding = const EdgeInsets.only(
+      left: 14,
+      top: 1,
+    ),
     this.icon = const Icon(
       Icons.arrow_back_ios_new,
       size: 15,
@@ -99,11 +102,15 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
     // Set Texfield Controller
     _textEditingController =
         widget.searchFieldController ??
-        TextEditingController(text: _appBarProvider.queryText);
+        TextEditingController(
+          text: _appBarProvider.queryText,
+        );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Establish the debouncer
-      final debouncer = TenorDebouncer(delay: _appBarProvider.debounce);
+      final debouncer = TenorDebouncer(
+        delay: _appBarProvider.debounce,
+      );
 
       // Listener TextField
       _textEditingController.addListener(() {
@@ -196,8 +203,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                 left: 4,
                 child: Icon(
                   Icons.search,
-                  color:
-                      widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
+                  color: widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
                   size: 22,
                 ),
               ),
@@ -212,9 +218,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
                       padding: const EdgeInsets.all(8),
                       child: Icon(
                         Icons.clear,
-                        color:
-                            widget.style.hintStyle.color ??
-                            const Color(0xFF8A8A86),
+                        color: widget.style.hintStyle.color ?? const Color(0xFF8A8A86),
                         size: 20,
                       ),
                     ),
@@ -235,8 +239,7 @@ class _TenorSearchFieldState extends State<TenorSearchField> {
       // when they focus the input, maximize viewing space
       _sheetProvider.scrollController.animateTo(
         _sheetProvider.maxExtent,
-        duration:
-            animationStyle?.duration ?? tenorDefaultAnimationStyle.duration!,
+        duration: animationStyle?.duration ?? tenorDefaultAnimationStyle.duration!,
         curve: animationStyle?.curve ?? Curves.linear,
       );
     }

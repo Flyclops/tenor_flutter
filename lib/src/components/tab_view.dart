@@ -14,7 +14,9 @@ const featuredCategoryPath = '##trending-gifs';
 class TenorTabViewStyle {
   final Color mediaBackgroundColor;
 
-  const TenorTabViewStyle({this.mediaBackgroundColor = Colors.white});
+  const TenorTabViewStyle({
+    this.mediaBackgroundColor = Colors.white,
+  });
 }
 
 class TenorTabView extends StatefulWidget {
@@ -145,7 +147,9 @@ class _TenorTabViewState extends State<TenorTabView>
   Widget build(BuildContext context) {
     super.build(context);
     if (_list.isEmpty && _categories.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     if (_appBarProvider.queryText.isEmpty &&
@@ -375,7 +379,12 @@ class _TenorTabViewState extends State<TenorTabView>
     }
 
     // return result to the consumer
-    Navigator.pop(context, gif.copyWith(source: _tabProvider.selectedTab.name));
+    Navigator.pop(
+      context,
+      gif.copyWith(
+        source: _tabProvider.selectedTab.name,
+      ),
+    );
   }
 
   // if you scroll within a threshhold of the bottom of the screen, load more gifs
