@@ -189,7 +189,7 @@ class _TenorTabViewState extends State<TenorTabView>
             // Add safe area padding if `TenorAttributionType.poweredBy` is disabled
             padding:
                 _tabProvider.attributionType == TenorAttributionType.poweredBy
-                    ? null
+                    ? EdgeInsets.zero
                     : EdgeInsets.only(
                       bottom: MediaQuery.of(context).padding.bottom,
                     ),
