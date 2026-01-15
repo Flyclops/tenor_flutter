@@ -6,15 +6,12 @@ class TenorAppBarProvider with ChangeNotifier {
 
   String _queryText = '';
   String get queryText => _queryText;
-  String _previousQueryText = '';
-  String get previousQueryText => _previousQueryText;
   TenorCategory? _selectedCategory;
 
   Duration _debounce = Duration.zero;
   Duration get debounce => _debounce;
 
   set queryText(String queryText) {
-    _previousQueryText = _queryText;
     _queryText = queryText;
     // reset selected category
     if (_queryText.isEmpty) {
@@ -31,7 +28,6 @@ class TenorAppBarProvider with ChangeNotifier {
   }) : _selectedCategory = selectedCategory,
        super() {
     _queryText = queryText;
-    _previousQueryText = queryText;
     _debounce = debounce;
   }
 
