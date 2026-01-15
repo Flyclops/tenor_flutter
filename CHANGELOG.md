@@ -1,3 +1,9 @@
+## 1.0.2
+
+- fix: freeze when you type just white space into the input field when categories are visible
+- fix: infinite loading when you type just white space into emoji/stickers
+- fix: cursor jumping to the end of the input if you type anywhere but the end
+
 ## 1.0.1
 
 - chore: Add discontinued notice
