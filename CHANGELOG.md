@@ -1,7 +1,15 @@
+## 1.0.1
+
+- chore: Add discontinued notice
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/1.0.0...1.0.1)
+
 ## 1.0.0
 - chore: bump minimum Dart SDK version to 3.7
 - chore: bump `extended_image` to `^10.0.1`
 - chore: bump `provider` to `^6.1.5+1`
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/0.1.2...1.0.0)
 
 ## 0.1.2
 
