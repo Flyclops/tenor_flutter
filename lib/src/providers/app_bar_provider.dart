@@ -31,6 +31,7 @@ class TenorAppBarProvider with ChangeNotifier {
   }) : _selectedCategory = selectedCategory,
        super() {
     _queryText = queryText;
+    _previousQueryText = queryText;
     _debounce = debounce;
   }
 
