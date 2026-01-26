@@ -1,3 +1,9 @@
+## 1.0.3
+
+- chore: update readme
+
+[All Code Changes](https://github.com/Flyclops/tenor_flutter/compare/1.0.2...1.0.3)
+
 ## 1.0.2
 
 - fix: freeze when you type just white space into the input field when categories are visible
